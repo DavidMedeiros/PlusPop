@@ -2,6 +2,10 @@ package usuario;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import manager.Post;
 
 public class Usuario {
 	
@@ -13,6 +17,7 @@ public class Usuario {
 	private String dataDeNascimento;
 	private String foto;
 	private boolean log;
+	private List<Post> posts;
 
 	public Usuario(String nome, String email, String senha, String dataDeNascimento, String foto) {
 		this.email = email;
@@ -21,6 +26,7 @@ public class Usuario {
 		this.dataDeNascimento = dataDeNascimento;
 		this.foto = foto;
 		this.log = false;
+		this.posts = new ArrayList<Post>();
 	}
 
 	public Usuario(String nome, String email, String senha, String dataDeNascimento) {
@@ -30,6 +36,7 @@ public class Usuario {
 		this.dataDeNascimento = dataDeNascimento;
 		this.foto = "resources/default.jpg";
 		this.log = true;
+		this.posts = new ArrayList<Post>();
 	}
 
 	public boolean login() {
@@ -46,6 +53,10 @@ public class Usuario {
 		}
 	}
 
+	public void postar(Post novoPost) {
+		this.posts.add(novoPost);
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -112,6 +123,14 @@ public class Usuario {
 		this.log = log;
 	}
 	
+	public List<Post> getPosts() {
+		return posts;
+	}
+
+	public void setPosts(List<Post> posts) {
+		this.posts = posts;
+	}
+
 	public String toString() {
 		String EOL = System.getProperty("line.separator");
 		String saida = "Usuario: " + this.nome + EOL + "Email: " + this.email;

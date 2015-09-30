@@ -81,6 +81,10 @@ public class Facade {
 		systemPop.atualizaPerfil(atributo, valor, velhaSenha);
 	}
 
+	public void criaPost(String mensagem, String data) throws EntradaException, LogicaException {
+		systemPop.criaPost(mensagem, data);
+	}
+	
 	public Usuario buscarUsuario(String email) throws LogicaException {
 		return this.systemPop.buscarUsuario(email);
 	}
@@ -94,7 +98,8 @@ public class Facade {
 	}
 	
 	public static void main(String[] args) {
-	 	args = new String[] {"manager.Facade", "teste_aceitacao/usecase_1.txt", "teste_aceitacao/usecase_2.txt"};
+	 	args = new String[] {"manager.Facade", "teste_aceitacao/usecase_1.txt", "teste_aceitacao/usecase_2.txt", "teste_aceitacao/usecase_3.txt"};
+
 	 	EasyAccept.main(args);
 	 }
 	

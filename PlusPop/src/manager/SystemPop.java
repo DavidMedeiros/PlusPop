@@ -9,6 +9,7 @@ import usuario.Usuario;
 import usuario.UsuarioFactory;
 import exceptions.AtualizacaoPerfilException;
 import exceptions.CadastroDeUsuariosException;
+import exceptions.CriaPostException;
 import exceptions.EntradaException;
 import exceptions.FecharSistemaException;
 import exceptions.LogicaException;
@@ -38,7 +39,7 @@ public class SystemPop {
 	}
 
 	public void iniciaSistema() {
-		//  Ser√° utilizado para Carregar/armazenar os dados do sistema nos arquivos de dados.		
+		//  Ser· utilizado para Carregar/armazenar os dados do sistema nos arquivos de dados.		
 	}
 
 	public void fechaSistema() throws LogicaException {
@@ -217,6 +218,16 @@ public class SystemPop {
 		//salvarAlteracoesDoUsuario(usuarioLogado);
 	}
 	
+	public void criaPost(String mensagem, String data) throws LogicaException, EntradaException {
+		if (usuarioLogado == null) {
+			throw new LogicaException("Nao eh possivel criar o post. Nenhum usuarix esta logadx no +pop.");
+		}
+		
+		Post novoPost = new Post(mensagem, data);
+		usuarioLogado.postar(novoPost);
+		
+	}
+	
 	public Usuario buscarUsuario(String email) throws LogicaException {
 		for (Usuario usuario : usuariosCadastrados) {
 			if (usuario.getEmail().equals(email)) {
@@ -258,14 +269,6 @@ public class SystemPop {
 
 	public void adicionarUsuario(Usuario novoUsuario) {
 		this.usuariosCadastrados.add(novoUsuario);
-	}
-
-	public void salvarAlteracoesDoUsuario(Usuario usuarioModificado) {
-		int indiceDoUsuarioLogado = usuariosCadastrados
-				.indexOf(this.usuarioLogado);
-
-		usuariosCadastrados.remove(indiceDoUsuarioLogado);
-		usuariosCadastrados.add(indiceDoUsuarioLogado, usuarioModificado);
 	}
 
 	public String getInfoUsuario(String atributo) throws LogicaException {

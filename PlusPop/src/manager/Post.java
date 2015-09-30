@@ -1,5 +1,6 @@
 package manager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import exceptions.CriaPostException;
@@ -15,23 +16,25 @@ public class Post {
 	private List<String> conteudoDoPost;
 	private List<String> listaDeHashtags;
 		
-	Post(String mensagem, String data) throws EntradaException {
-		validaMensagem(mensagem);
-		validaHashtags(mensagem);
-		separaConteudoDaMensagem(mensagem);
-		validaTexto();
-		
+	public Post(String mensagem, String data) throws EntradaException {
 		this.mensagem = mensagem;
 		this.curtidas = 0;
 		this.rejeicoes = 0;
 		this.popularidade = 0;
 		this.data = data;
+		this.conteudoDoPost = new ArrayList<String>();
+		this.listaDeHashtags = new ArrayList<String>();
+		
+		validaMensagem(mensagem);
+		validaHashtags(mensagem);
+		separaConteudoDaMensagem(mensagem);
+		validaTexto();
 	}
 
 	public void separaConteudoDaMensagem(String mensagem) {
 		filtraTexto(mensagem);
-		filtraHashtags(mensagem);
 		filtraMidia(mensagem);
+		filtraHashtags(mensagem);
 	}
 
 	public void filtraTexto(String mensagem){
@@ -39,11 +42,11 @@ public class Post {
 		String textoFiltrado = "";
 		
 		for (String palavra : palavras) {
-			if (!palavra.startsWith("#") || (!palavra.startsWith("<") & !palavra.endsWith(">"))) {
+			if (!(palavra.startsWith("#") || (palavra.startsWith("<") & palavra.endsWith(">")))) {
 				textoFiltrado = textoFiltrado + palavra + " ";
 			}
 		}
-		this.conteudoDoPost.add(textoFiltrado.substring(0, textoFiltrado.length()));
+		conteudoDoPost.add(textoFiltrado.substring(0, textoFiltrado.length()));
 	}
 
 	public void filtraHashtags(String mensagem) {
