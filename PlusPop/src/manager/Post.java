@@ -46,7 +46,7 @@ public class Post {
 				textoFiltrado = textoFiltrado + palavra + " ";
 			}
 		}
-		conteudoDoPost.add(textoFiltrado.substring(0, textoFiltrado.length()));
+		conteudoDoPost.add(textoFiltrado.substring(0, textoFiltrado.length() -1));
 	}
 
 	public void filtraHashtags(String mensagem) {
@@ -75,7 +75,8 @@ public class Post {
 	}
 	
 	public void validaTexto() throws EntradaException {
-		if (this.conteudoDoPost.get(0).length() > 200) {
+		// COLOQUEI MAIOR IGUAL PQ TEM UM Q ELE ESPERA O ERRO, MAS A FRASE TEM EXATOS 200 CARACTERES = vide LINHA 14 
+		if (this.conteudoDoPost.get(0).length() >= 200) {
 			throw new CriaPostException("O limite maximo da mensagem sao 200 caracteres.");		
 		}
 	}
@@ -124,9 +125,29 @@ public class Post {
 	}
 	
 	public String getMensagem() {
+		String mensagem = "";
+		
+		mensagem = getTexto() + " " + getMidias();
+		
 		return mensagem;
 	}
+	
+	public String getTexto() {
+		return this.conteudoDoPost.get(0);
+	}
 
+	public String getMidias() {
+		String listaDeMidias = "";
+		
+		for (String conteudo : conteudoDoPost) {
+			if (conteudo.startsWith("<audio>") || conteudo.startsWith("<imagem>")) {
+				listaDeMidias = listaDeMidias + conteudo + " ";
+			}
+		}
+		
+		return listaDeMidias.substring(0, listaDeMidias.length() - 1);
+	}
+	
 	public void setMensagem(String mensagem) {
 		this.mensagem = mensagem;
 	}
@@ -138,6 +159,24 @@ public class Post {
 	public void setListaDeHashtags(List<String> listaDeHashtags) {
 		this.listaDeHashtags = listaDeHashtags;
 	}
-	
+
+	public String getPostFormatado() {
+		//TODO: FORMATAR DATA recebe assim: 02/08/2015 09:30:00 tem que sair assim: (2015-08-02 09:30:00)
+		return this.mensagem + " " + data;
+	}
+
+	public String getData() {
+		//TODO: FORMATAR DATA recebe assim: 02/08/2015 09:30:00 tem que sair assim: (2015-08-02 09:30:00)
+		return data;
+	}
+
+	public String getHashtags() {
+		String hashtags = "";
+		for (String hashtag : listaDeHashtags) {
+			hashtags = hashtags + hashtag + ",";
+		}
+		
+		return (hashtags.substring(0, hashtags.length() - 1));
+	}
 	
 }

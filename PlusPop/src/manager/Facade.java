@@ -97,6 +97,14 @@ public class Facade {
 		return this.systemPop.getInfoUsuario(atributo, email);
 	}
 	
+	public String getPost(int nPost) {
+		return this.systemPop.getPost(nPost);
+	}
+	
+	public String getPost(String atributo, int nPost) {
+		return this.systemPop.getPost(atributo, nPost);
+	}
+	
 	public static void main(String[] args) {
 	 	args = new String[] {"manager.Facade", "teste_aceitacao/usecase_1.txt", "teste_aceitacao/usecase_2.txt", "teste_aceitacao/usecase_3.txt"};
 

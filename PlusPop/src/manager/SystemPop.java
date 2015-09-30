@@ -306,4 +306,24 @@ public class SystemPop {
 			return null;
 		}
 	}
+	
+	public String getPost(int nPost) {
+		return usuarioLogado.getPosts().get(nPost).getPostFormatado();
+	}
+	
+	public String getPost(String atributo, int nPost) {
+		if (atributo.toLowerCase().equals("mensagem")) {
+			return usuarioLogado.getPosts().get(nPost).getMensagem();
+		}
+		
+		if (atributo.toLowerCase().equals("data")) {
+			return usuarioLogado.getPosts().get(nPost).getData();
+		}
+		
+		if (atributo.toLowerCase().equals("hashtags")) {
+			return usuarioLogado.getPosts().get(nPost).getHashtags();
+		}
+		
+		return null;
+	}
 }
