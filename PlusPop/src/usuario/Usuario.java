@@ -1,8 +1,10 @@
 package usuario;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import manager.Post;
@@ -14,26 +16,26 @@ public class Usuario {
 	private String email;
 	private String senha;
 	private String nome;
-	private String dataDeNascimento;
+	private Date dataDeNascimento;
 	private String foto;
 	private boolean log;
 	private List<Post> posts;
 
-	public Usuario(String nome, String email, String senha, String dataDeNascimento, String foto) {
+	public Usuario(String nome, String email, String senha, String dataDeNascimento, String foto) throws ParseException {
 		this.email = email;
 		this.senha = senha;
 		this.nome = nome;
-		this.dataDeNascimento = dataDeNascimento;
+		this.dataDeNascimento = formataDataDeNascimento(dataDeNascimento);
 		this.foto = foto;
 		this.log = false;
 		this.posts = new ArrayList<Post>();
 	}
 
-	public Usuario(String nome, String email, String senha, String dataDeNascimento) {
+	public Usuario(String nome, String email, String senha, String dataDeNascimento) throws ParseException  {
 		this.email = email;
 		this.senha = senha;
 		this.nome = nome;
-		this.dataDeNascimento = dataDeNascimento;
+		this.dataDeNascimento = formataDataDeNascimento(dataDeNascimento);
 		this.foto = "resources/default.jpg";
 		this.log = true;
 		this.posts = new ArrayList<Post>();
@@ -99,14 +101,28 @@ public class Usuario {
 	}
 
 	public String getDataDeNascimento() {
-		DateFormat dataFormat = new SimpleDateFormat("dd/MM/yyyy"); 
-		return dataFormat.format(this.dataDeNascimento);
+		DateFormat dataFormatada = new SimpleDateFormat("yyyy-MM-dd"); 
+		return dataFormatada.format(this.dataDeNascimento);
 	}
 
-	public void setDataDeNascimento(String novaDataDeNascimento) {
-		this.dataDeNascimento = novaDataDeNascimento;
+	public void setDataDeNascimento(String novaDataDeNascimento) throws ParseException {
+		this.dataDeNascimento = formataDataDeNascimento(novaDataDeNascimento);
 	}
 
+	private Date formataDataDeNascimento(String data) throws ParseException {
+		if (data == null || data.equals(""))
+			return null;
+
+		Date date = null;
+		try {
+			DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+			date = (java.util.Date) formatter.parse(data);
+		} catch (ParseException e) {
+			throw e;
+		}
+		return date;
+	}
+	
 	public String getFoto() {
 		return foto;
 	}
