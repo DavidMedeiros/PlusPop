@@ -105,12 +105,16 @@ public class Facade {
 		return this.systemPop.getInfoUsuario(atributo, email);
 	}
 
-	public String getPost(int nPost) {
-		return this.systemPop.getPost(nPost);
+	public String getPost(int post) {
+		return this.systemPop.getPost(post);
 	}
 
-	public String getPost(String atributo, int nPost) {
-		return this.systemPop.getPost(atributo, nPost);
+	public String getPost(String atributo, int post) {
+		return this.systemPop.getPost(atributo, post);
+	}
+	
+	public String getConteudoPost(int indice, int post) throws LogicaException {
+		return this.systemPop.getConteudoPost(indice, post);
 	}
 
 	public static void main(String[] args) {
