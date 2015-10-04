@@ -1,10 +1,6 @@
 package manager;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import exceptions.CriaPostException;
@@ -72,18 +68,6 @@ public class Post {
 		}
 	}
 	
-	public String filtraConteudoDoPost(int indice) {
-		String conteudo = this.conteudoDoPost.get(indice);
-	
-		if (conteudo.startsWith("<imagem>")) {
-			return "$arquivo_imagem:" + conteudo.substring(8, conteudo.length() - 9);
-		} if (conteudo.startsWith("<audio>")) {
-			return "$arquivo_audio:" + conteudo.substring(7, conteudo.length() - 8);
-		} else {
-			return conteudo;
-		}
-	}
-	
 	public void validaMensagem(String mensagem) throws EntradaException {
 		if (mensagem.equals("") || mensagem == null) {
 			throw new CriaPostException("A mensagem não pode ser vazia");
@@ -108,16 +92,6 @@ public class Post {
 		}
 	}
 
-	public String formataData(String data) {
-		String[] valoresData = data.split("[/, ]");
-		String dia = valoresData[0];
-		String mes = valoresData[1];
-		String ano = valoresData[2];
-		String hora = valoresData[3];
-
-		return ano + "-" + mes + "-" + dia + " " + hora;
-	}
-	
 	public int getCurtidas() {
 		return curtidas;
 	}
@@ -142,12 +116,8 @@ public class Post {
 		this.popularidade = popularidade;
 	}
 
-	public String getConteudoDoPost(int indice) {
-		return filtraConteudoDoPost(indice);
-	}
-	
 	public List<String> getConteudoDoPost() {
-		return this.conteudoDoPost;
+		return conteudoDoPost;
 	}
 
 	public void setConteudoDoPost(List<String> conteudoDoPost) {
@@ -155,11 +125,11 @@ public class Post {
 	}
 	
 	public String getMensagem() {
-		if (getMidias() == null) {
-			return getTexto();
-		} else {
-			return getTexto() + " " + getMidias();
-		}
+		String mensagem = "";
+		
+		mensagem = getTexto() + " " + getMidias();
+		
+		return mensagem;
 	}
 	
 	public String getTexto() {
@@ -174,12 +144,8 @@ public class Post {
 				listaDeMidias = listaDeMidias + conteudo + " ";
 			}
 		}
-		if (listaDeMidias.equals("")) {
-			return null;
-		} else {
-			return listaDeMidias.substring(0, listaDeMidias.length() - 1);
-		}
 		
+		return listaDeMidias.substring(0, listaDeMidias.length() - 1);
 	}
 	
 	public void setMensagem(String mensagem) {
@@ -195,11 +161,13 @@ public class Post {
 	}
 
 	public String getPostFormatado() {
-		return this.mensagem + " (" + formataData(this.data) + ")";
+		//TODO: FORMATAR DATA recebe assim: 02/08/2015 09:30:00 tem que sair assim: (2015-08-02 09:30:00)
+		return this.mensagem + " " + data;
 	}
 
 	public String getData() {
-		return formataData(data);
+		//TODO: FORMATAR DATA recebe assim: 02/08/2015 09:30:00 tem que sair assim: (2015-08-02 09:30:00)
+		return data;
 	}
 
 	public String getHashtags() {
