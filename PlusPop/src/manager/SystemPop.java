@@ -107,7 +107,7 @@ public class SystemPop {
 		throw new LoginDeUsuariosException("Um usuarix com email " + email
 				+ " nao esta cadastradx.");
 	}
-		
+
 	public boolean logout() throws EntradaException {
 
 		if (usuarioLogado == null) {
@@ -128,21 +128,21 @@ public class SystemPop {
 					"Nome dx usuarix nao pode ser vazio.");
 		}
 	}
-	
+
 	public void validaEmailCadastro(String email) throws EntradaException {
 		if (!validaEmails(email)) {
 			throw new CadastroDeUsuariosException(
 					"Formato de e-mail esta invalido.");
 		}
 	}
-	
+
 	public void validaSenhaCadastro(String senha) throws EntradaException {
 		if (senha.equals("") || senha.trim().equals("") || senha == null) {
 			throw new CadastroDeUsuariosException(
 					"Senha dx usuarix nao pode ser vazia.");
 		}
 	}
-	
+
 	public void validaDataCadastro(String dataDeNascimento)
 			throws EntradaException {
 		if (dataDeNascimento.equals("") || dataDeNascimento.trim().equals("")
@@ -159,7 +159,7 @@ public class SystemPop {
 			throw new CadastroDeUsuariosException("Data nao existe.");
 		}
 	}
-	
+
 	private boolean validaEmails(String email) {
 		if (email.equals("") || email.trim().equals("") || email == null) {
 			return false;
@@ -213,7 +213,7 @@ public class SystemPop {
 
 		return true;
 	}
-		
+
 	public void atualizaPerfil(String atributo, String valor)
 			throws EntradaException, ParseException {
 		if (!verificaSeHaUsuarioLogado()) {
@@ -257,7 +257,7 @@ public class SystemPop {
 			usuarioLogado.setFoto(valor);
 		}
 	}
-	
+
 	public void atualizaPerfil(String atributo, String valor, String velhaSenha)
 			throws EntradaException {
 		if (!verificaSeHaUsuarioLogado()) {
@@ -272,7 +272,7 @@ public class SystemPop {
 					"Erro na atualizacao de perfil. A senha fornecida esta incorreta.");
 		}
 	}
-	
+
 	public void criaPost(String mensagem, String data) throws LogicaException,
 			EntradaException {
 		if (usuarioLogado == null) {
@@ -284,7 +284,7 @@ public class SystemPop {
 		usuarioLogado.postar(novoPost);
 
 	}
-	
+
 	public Usuario buscarUsuario(String email) throws LogicaException {
 		for (Usuario usuario : usuariosCadastrados) {
 			if (usuario.getEmail().equals(email)) {
@@ -293,7 +293,7 @@ public class SystemPop {
 		}
 		throw new UsuarioNaoEncontradoException(email);
 	}
-	
+
 	public boolean removeUsuario(String emailDoUsuario) throws LogicaException {
 		Usuario usuarioParaRemocao = buscarUsuario(emailDoUsuario);
 		usuariosCadastrados.remove(usuarioParaRemocao);
@@ -351,11 +351,12 @@ public class SystemPop {
 			return null;
 		}
 	}
-	
-	public String getInfoUsuario(String atributo, String email) throws LogicaException {
+
+	public String getInfoUsuario(String atributo, String email)
+			throws LogicaException {
 
 		Usuario usuario = buscarUsuario(email);
-				
+
 		if (atributo.equals("Nome")) {
 			return usuario.getNome();
 		} else if (atributo.equals("Email")) {
@@ -370,24 +371,39 @@ public class SystemPop {
 			return null;
 		}
 	}
-	
-	public String getPost(int nPost) {
-		return usuarioLogado.getPosts().get(nPost).getPostFormatado();
+
+	public String getPost(int post) {
+		return usuarioLogado.getPosts().get(post).getPostFormatado();
 	}
-	
-	public String getPost(String atributo, int nPost) {
+
+	public String getPost(String atributo, int post) {	
 		if (atributo.toLowerCase().equals("mensagem")) {
-			return usuarioLogado.getPosts().get(nPost).getMensagem();
+			return usuarioLogado.getPosts().get(post).getMensagem();
 		}
 		
 		if (atributo.toLowerCase().equals("data")) {
-			return usuarioLogado.getPosts().get(nPost).getData();
+			return usuarioLogado.getPosts().get(post).getData();
 		}
 		
 		if (atributo.toLowerCase().equals("hashtags")) {
-			return usuarioLogado.getPosts().get(nPost).getHashtags();
+			return usuarioLogado.getPosts().get(post).getHashtags();
 		}
 		
 		return null;
+	}
+	
+	public String getConteudoPost(int indice, int post) throws LogicaException {
+		
+		List<String> conteudosDoPost = usuarioLogado.getPosts().get(post).getConteudoDoPost(); 
+		
+		if (indice < 0) {
+			throw new LogicaException("Requisicao invalida. O indice deve ser maior ou igual a zero.");
+		}
+		
+		if (indice >= conteudosDoPost.size()) {
+			throw new LogicaException("Item #" + indice + " nao existe nesse post, ele possui apenas " + conteudosDoPost.size() + " itens distintos.");
+		}
+		
+		return usuarioLogado.getPosts().get(post).getConteudoDoPost(indice);
 	}
 }
