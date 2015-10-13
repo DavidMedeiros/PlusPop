@@ -6,6 +6,7 @@ import usuario.Usuario;
 import easyaccept.EasyAccept;
 import exceptions.EntradaException;
 import exceptions.LogicaException;
+import exceptions.NotificacoesException;
 
 public class Facade {
 
@@ -116,12 +117,48 @@ public class Facade {
 	public String getConteudoPost(int indice, int post) throws LogicaException {
 		return this.systemPop.getConteudoPost(indice, post);
 	}
+	
+	public void curtirPost(String emailAmigo, int indice) throws LogicaException {
+		this.systemPop.curtirPost(emailAmigo, indice);
+	}
+	
+	public void adicionaAmigo(String email) throws LogicaException {
+		this.systemPop.adicionaAmigo(email);
+	}
+	
+	public void removeAmigo(String emailAmigoExcluido) throws LogicaException {
+		this.systemPop.removeAmigo(emailAmigoExcluido);
+	}
+	
+	public void aceitaAmizade (String emailDoUsuarioAceito) throws LogicaException {
+		this.systemPop.aceitaAmizade(emailDoUsuarioAceito);
+	}
+	
+	public void rejeitaAmizade(String emailDoUsuarioRejeitado) throws LogicaException {
+		this.systemPop.rejeitaAmizade(emailDoUsuarioRejeitado);
+	}
+
+	public int getNotificacoes() throws NotificacoesException {
+		return this.systemPop.getNotificacoes();
+		
+	}
+	
+	public String getNextNotificacao() throws NotificacoesException {
+		return this.systemPop.getNextNotificacao();
+		
+	}
+	
+	public int getQtdAmigos() {
+		return this.systemPop.getQtdAmigos();
+	}
+	
 
 	public static void main(String[] args) {
 		args = new String[] { "manager.Facade",
 				"teste_aceitacao/usecase_1.txt",
 				"teste_aceitacao/usecase_2.txt",
-				"teste_aceitacao/usecase_3.txt" };
+				"teste_aceitacao/usecase_3.txt",
+				"teste_aceitacao/usecase_4.txt"};
 
 		EasyAccept.main(args);
 	}

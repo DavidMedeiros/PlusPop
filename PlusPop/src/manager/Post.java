@@ -1,10 +1,6 @@
 package manager;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import exceptions.CriaPostException;
@@ -90,8 +86,7 @@ public class Post {
 		}
 	}
 	
-	public void validaTexto() throws EntradaException {
-		// COLOQUEI MAIOR IGUAL PQ TEM UM Q ELE ESPERA O ERRO, MAS A FRASE TEM EXATOS 200 CARACTERES = vide LINHA 14 
+	public void validaTexto() throws EntradaException { 
 		if (this.conteudoDoPost.get(0).length() >= 200) {
 			throw new CriaPostException("O limite maximo da mensagem sao 200 caracteres.");		
 		}
@@ -118,6 +113,14 @@ public class Post {
 		return ano + "-" + mes + "-" + dia + " " + hora;
 	}
 	
+	public void curtir() {
+		this.curtidas += 1;
+	}
+	
+	public void rejeitar() {
+		this.rejeicoes += 1;
+	}
+
 	public int getCurtidas() {
 		return curtidas;
 	}
@@ -125,7 +128,7 @@ public class Post {
 	public void setCurtidas(int curtidas) {
 		this.curtidas = curtidas;
 	}
-
+	
 	public int getRejeicoes() {
 		return rejeicoes;
 	}

@@ -18,6 +18,7 @@ import exceptions.FecharSistemaException;
 import exceptions.LogicaException;
 import exceptions.LoginDeUsuariosException;
 import exceptions.LogoutDeUsuariosException;
+import exceptions.NotificacoesException;
 import exceptions.SenhaProtegidaException;
 import exceptions.UsuarioNaoEncontradoException;
 
@@ -87,7 +88,7 @@ public class SystemPop {
 	}
 
 	public boolean login(String email, String senha) throws EntradaException {
-
+		boolean usuarioEhCadastrado = false;
 		if (!(usuarioLogado == null)) {
 			throw new LoginDeUsuariosException("Um usuarix ja esta logadx: "
 					+ usuarioLogado.getNome() + ".");
@@ -98,14 +99,18 @@ public class SystemPop {
 				if (usuario.getSenha().equals(senha)) {
 					usuario.login();
 					this.usuarioLogado = usuario;
-					return true;
+					usuarioEhCadastrado = true;
 				} else {
 					throw new LoginDeUsuariosException("Senha invalida.");
 				}
 			}
 		}
-		throw new LoginDeUsuariosException("Um usuarix com email " + email
-				+ " nao esta cadastradx.");
+		if (usuarioEhCadastrado) {
+			return true;
+		} else {
+			throw new LoginDeUsuariosException("Um usuarix com email " + email
+					+ " nao esta cadastradx.");
+		}
 	}
 
 	public boolean logout() throws EntradaException {
@@ -376,34 +381,119 @@ public class SystemPop {
 		return usuarioLogado.getPosts().get(post).getPostFormatado();
 	}
 
-	public String getPost(String atributo, int post) {	
+	public String getPost(String atributo, int post) {
 		if (atributo.toLowerCase().equals("mensagem")) {
 			return usuarioLogado.getPosts().get(post).getMensagem();
 		}
-		
+
 		if (atributo.toLowerCase().equals("data")) {
 			return usuarioLogado.getPosts().get(post).getData();
 		}
-		
+
 		if (atributo.toLowerCase().equals("hashtags")) {
 			return usuarioLogado.getPosts().get(post).getHashtags();
 		}
-		
+
 		return null;
 	}
-	
+
 	public String getConteudoPost(int indice, int post) throws LogicaException {
-		
-		List<String> conteudosDoPost = usuarioLogado.getPosts().get(post).getConteudoDoPost(); 
-		
+
+		List<String> conteudosDoPost = usuarioLogado.getPosts().get(post)
+				.getConteudoDoPost();
+
 		if (indice < 0) {
-			throw new LogicaException("Requisicao invalida. O indice deve ser maior ou igual a zero.");
+			throw new LogicaException(
+					"Requisicao invalida. O indice deve ser maior ou igual a zero.");
 		}
-		
+
 		if (indice >= conteudosDoPost.size()) {
-			throw new LogicaException("Item #" + indice + " nao existe nesse post, ele possui apenas " + conteudosDoPost.size() + " itens distintos.");
+			throw new LogicaException("Item #" + indice
+					+ " nao existe nesse post, ele possui apenas "
+					+ conteudosDoPost.size() + " itens distintos.");
 		}
-		
+
 		return usuarioLogado.getPosts().get(post).getConteudoDoPost(indice);
 	}
+
+	public void curtirPost(String emailAmigo, int indice)
+			throws LogicaException {
+		Usuario amigo = buscarUsuario(emailAmigo);
+		amigo.getPosts().get(indice).curtir();
+		amigo.addNotificacao(usuarioLogado.getNome() + " curtiu seu post de "
+				+ amigo.getPosts().get(indice).getData() + ".");
+	}
+
+	public void adicionaAmigo(String emailPossivelAmigo) throws LogicaException {
+		Usuario possivelAmigo = buscarUsuario(emailPossivelAmigo);
+
+		if (usuarioLogado.buscaAmigo(emailPossivelAmigo) != null) {
+			throw new LogicaException("Um usuarix com email "
+					+ emailPossivelAmigo + " ja eh seu amigo.");
+		}
+
+		possivelAmigo.addNotificacao(usuarioLogado.getNome()
+				+ " quer sua amizade.");
+		possivelAmigo.addSolicitacao(usuarioLogado);
+	}
+
+	public void removeAmigo(String emailAmigoExcluido) throws LogicaException {
+		Usuario amigoExcluido = buscarUsuario(emailAmigoExcluido);
+
+		if (usuarioLogado.buscaAmigo(emailAmigoExcluido) == null) {
+			throw new LogicaException("Um usuarix com email "
+					+ emailAmigoExcluido + " nao eh seu amigo.");
+		}
+
+		usuarioLogado.removeAmigo(amigoExcluido);
+		amigoExcluido.removeAmigo(usuarioLogado);
+		amigoExcluido.addNotificacao(usuarioLogado.getNome()
+				+ " removeu a sua amizade.");
+	}
+
+	public void aceitaAmizade(String emailDoUsuarioAceito)
+			throws LogicaException {
+		Usuario usuarioAceito = buscarUsuario(emailDoUsuarioAceito);
+
+		usuarioLogado.aceitaAmigo(usuarioAceito);
+		usuarioAceito.aceitaAmigo(usuarioLogado);
+		usuarioAceito.addNotificacao(usuarioLogado.getNome()
+				+ " aceitou sua amizade.");
+		// Necessário remover solicitação de amizade?
+	}
+
+	public void rejeitaAmizade(String emailDoUsuarioRejeitado)
+			throws LogicaException {
+		Usuario usuarioRejeitado = buscarUsuario(emailDoUsuarioRejeitado);
+
+		if (!usuarioLogado.getSolicitacoesDeAmizade()
+				.contains(usuarioRejeitado)) {
+			throw new LogicaException(usuarioRejeitado.getNome()
+					+ " nao lhe enviou solicitacoes de amizade.");
+		}
+
+		usuarioRejeitado.addNotificacao(usuarioLogado.getNome()
+				+ " rejeitou sua amizade.");
+	}
+
+	public int getNotificacoes() {
+		return this.usuarioLogado.getNotificacoes().size();
+	}
+
+	public String getNextNotificacao() throws NotificacoesException {
+
+		if (this.usuarioLogado.getNotificacoes().size() == 0) {
+			throw new NotificacoesException();
+		}
+
+		String notificacao = usuarioLogado.getNotificacoes().get(0);
+		usuarioLogado.getNotificacoes().remove(0);
+
+		return notificacao;
+	}
+
+	public int getQtdAmigos() {
+		return this.usuarioLogado.getAmigos().size();
+	}
+
 }
