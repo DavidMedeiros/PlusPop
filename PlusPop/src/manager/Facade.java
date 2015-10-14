@@ -122,6 +122,10 @@ public class Facade {
 		this.systemPop.curtirPost(emailAmigo, indice);
 	}
 	
+	public void rejeitarPost(String emailAmigo, int indice) throws LogicaException {
+		this.systemPop.curtirPost(emailAmigo, indice);
+	}
+	
 	public void adicionaAmigo(String email) throws LogicaException {
 		this.systemPop.adicionaAmigo(email);
 	}

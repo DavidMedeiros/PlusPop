@@ -7,9 +7,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import manager.Post;
 import friendship.Friendship;
 import friendship.Notificacao;
+import interacao.CelebridadePOP;
+import interacao.IconePOP;
+import interacao.Normal;
+import interacao.Popularidade;
+import interacao.Post;
 
 public class Usuario implements Friendship {
 
@@ -25,6 +29,8 @@ public class Usuario implements Friendship {
 	private List<Usuario> amigos;
 	private Notificacao notificacoes;
 	private List<Usuario> solicitacoesDeAmizade;
+	private Popularidade popularidade;
+	private int pops;
 
 	public Usuario(String nome, String email, String senha, String dataDeNascimento, String foto)
 			throws ParseException {
@@ -38,6 +44,8 @@ public class Usuario implements Friendship {
 		this.amigos = new ArrayList<Usuario>();
 		this.notificacoes = new Notificacao();
 		this.solicitacoesDeAmizade = new ArrayList<Usuario>();
+		this.popularidade = new Normal();
+		this.pops = 0;
 	}
 
 	public Usuario(String nome, String email, String senha, String dataDeNascimento) throws ParseException {
@@ -51,6 +59,8 @@ public class Usuario implements Friendship {
 		this.amigos = new ArrayList<Usuario>();
 		this.notificacoes = new Notificacao();
 		this.solicitacoesDeAmizade = new ArrayList<Usuario>();
+		this.popularidade = new Normal();
+		this.pops = 0;
 	}
 
 	public boolean login() {
@@ -74,11 +84,11 @@ public class Usuario implements Friendship {
 	public void addNotificacao(String mensagem) {
 		this.notificacoes.addNotificacao(mensagem);
 	}
-	
+
 	public void removeNotificacao(String notificacao) {
 		this.notificacoes.removeNotificacao(notificacao);
 	}
-	
+
 	private Date formataDataDeNascimento(String data) throws ParseException {
 		if (data == null || data.equals(""))
 			return null;
@@ -92,7 +102,7 @@ public class Usuario implements Friendship {
 		}
 		return date;
 	}
-	
+
 	public String getEmail() {
 		return email;
 	}
@@ -159,11 +169,73 @@ public class Usuario implements Friendship {
 	}
 
 	public List<String> getNotificacoes() {
-		return this.notificacoes.getNotificacoes();		
+		return this.notificacoes.getNotificacoes();
 	}
 
 	public List<Usuario> getSolicitacoesDeAmizade() {
 		return solicitacoesDeAmizade;
+	}
+
+	public Popularidade getPopularidade() {
+		return popularidade;
+	}
+
+	public void atualizaPopularidade() {
+		this.atualizaPops();
+		if (this.popularidade instanceof Normal) {
+			if (this.pops >= 500 && this.pops <= 1000) {
+				this.popularidade = new CelebridadePOP();
+			}
+			if (this.pops > 1000) {
+				this.popularidade = new IconePOP();
+			}
+		} else if (this.popularidade instanceof CelebridadePOP) {
+			if (this.pops < 500) {
+				this.popularidade = new Normal();
+			}
+			if (this.pops > 1000) {
+				this.popularidade = new IconePOP();
+			}
+		} else if (this.popularidade instanceof IconePOP) {
+			if (this.pops < 500) {
+				this.popularidade = new Normal();
+			}
+			if (this.pops >= 500 && this.pops <= 1000) {
+				this.popularidade = new CelebridadePOP();
+			}
+		}
+	}
+
+	public int getPops() {
+		return pops;
+	}
+
+	public void setPops(int pops) {
+		this.pops = pops;
+	}
+
+	public void addPops(int popsAcumulados) {
+		this.pops += popsAcumulados;
+	}
+
+	public void atualizaPops() {
+		int popsAcumulados = 0;
+		for (Post post : this.posts) {
+			popsAcumulados += post.getPopularidade();
+		}
+		this.addPops(popsAcumulados);
+	}
+
+	public void setDataDeNascimento(Date dataDeNascimento) {
+		this.dataDeNascimento = dataDeNascimento;
+	}
+
+	private void setNotificacoes(Notificacao notificacoes) {
+		this.notificacoes = notificacoes;
+	}
+
+	private void setSolicitacoesDeAmizade(List<Usuario> solicitacoesDeAmizade) {
+		this.solicitacoesDeAmizade = solicitacoesDeAmizade;
 	}
 
 	public String toString() {
@@ -171,7 +243,7 @@ public class Usuario implements Friendship {
 		String saida = "Usuario: " + this.nome + EOL + "Email: " + this.email;
 		return saida;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -187,7 +259,7 @@ public class Usuario implements Friendship {
 			return this.email.equals(outroUsuario.getEmail());
 		}
 		return false;
-	}	
+	}
 
 	// Implementation of Friendship interface;
 
@@ -200,7 +272,7 @@ public class Usuario implements Friendship {
 	public void removeAmigo(Usuario amigoRemovido) {
 		this.amigos.remove(amigoRemovido);
 	}
-	
+
 	@Override
 	public void addSolicitacao(Usuario usuario) {
 		this.solicitacoesDeAmizade.add(usuario);
@@ -215,4 +287,17 @@ public class Usuario implements Friendship {
 		}
 		return null;
 	}
+
+	// Beginning of Interaction
+
+	public void curtir(Post post) {
+		this.atualizaPopularidade();
+		this.popularidade.curtir(post);
+	}
+
+	public void rejeitar(Post post) {
+		this.atualizaPopularidade();
+		this.popularidade.rejeitar(post);
+	}
+
 }

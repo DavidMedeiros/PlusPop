@@ -21,6 +21,7 @@ import exceptions.LogoutDeUsuariosException;
 import exceptions.NotificacoesException;
 import exceptions.SenhaProtegidaException;
 import exceptions.UsuarioNaoEncontradoException;
+import interacao.Post;
 
 public class SystemPop {
 
@@ -419,8 +420,16 @@ public class SystemPop {
 	public void curtirPost(String emailAmigo, int indice)
 			throws LogicaException {
 		Usuario amigo = buscarUsuario(emailAmigo);
-		amigo.getPosts().get(indice).curtir();
+		this.usuarioLogado.curtir(amigo.getPosts().get(indice));
 		amigo.addNotificacao(usuarioLogado.getNome() + " curtiu seu post de "
+				+ amigo.getPosts().get(indice).getData() + ".");
+	}
+	
+	public void rejeitarPost(String emailAmigo, int indice)
+			throws LogicaException {
+		Usuario amigo = buscarUsuario(emailAmigo);
+		this.usuarioLogado.rejeitar(amigo.getPosts().get(indice));
+		amigo.addNotificacao(usuarioLogado.getNome() + " rejeitou seu post de "
 				+ amigo.getPosts().get(indice).getData() + ".");
 	}
 
