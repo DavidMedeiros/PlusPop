@@ -3,11 +3,12 @@ package interacao;
 import java.util.ArrayList;
 import java.util.List;
 
+import util.UtilPost;
 import exceptions.CriaPostException;
 import exceptions.EntradaException;
 
 public class Post {
-	
+
 	private int curtidas;
 	private int rejeicoes;
 	private int popularidade;
@@ -15,7 +16,15 @@ public class Post {
 	private String mensagem;
 	private List<String> conteudoDoPost;
 	private List<String> listaDeHashtags;
-		
+
+	/**
+	 * Construtor da classe Post.
+	 * 
+	 * @param mensagem
+	 * @param data
+	 * @throws EntradaException
+	 */
+
 	public Post(String mensagem, String data) throws EntradaException {
 		this.mensagem = mensagem;
 		this.curtidas = 0;
@@ -24,84 +33,33 @@ public class Post {
 		this.data = data;
 		this.conteudoDoPost = new ArrayList<String>();
 		this.listaDeHashtags = new ArrayList<String>();
-		
-		validaMensagem(mensagem);
-		validaHashtags(mensagem);
+
+		UtilPost.validaMensagem(mensagem);
+		UtilPost.validaHashtags(mensagem);
 		separaConteudoDaMensagem(mensagem);
-		validaTexto();
+		UtilPost.validaTexto(conteudoDoPost);
 	}
+
+	/**
+	 * Metodo utilizado para filtrar a mensagem quando um post eh criado e
+	 * separar o conteudo da mensagem, por texto, midia e hashtags.
+	 * 
+	 * @param mensagem
+	 */
 
 	public void separaConteudoDaMensagem(String mensagem) {
-		filtraTexto(mensagem);
-		filtraMidia(mensagem);
-		filtraHashtags(mensagem);
+		UtilPost.filtraTexto(mensagem, conteudoDoPost);
+		UtilPost.filtraMidia(mensagem, conteudoDoPost);
+		UtilPost.filtraHashtags(mensagem, listaDeHashtags);
 	}
 
-	public void filtraTexto(String mensagem){
-		String[] palavras = mensagem.split(" ");
-		String textoFiltrado = "";
-		
-		for (String palavra : palavras) {
-			if (!(palavra.startsWith("#") || (palavra.startsWith("<") & palavra.endsWith(">")))) {
-				textoFiltrado = textoFiltrado + palavra + " ";
-			}
-		}
-		conteudoDoPost.add(textoFiltrado.substring(0, textoFiltrado.length() -1));
-	}
-
-	public void filtraHashtags(String mensagem) {
-		String[] palavras = mensagem.split(" ");
-		for (String palavra : palavras) {
-			if (palavra.startsWith("#")) {
-				listaDeHashtags.add(palavra);
-			}
-		}
-	}
-	
-	public void filtraMidia(String mensagem) {
-		String[] palavras = mensagem.split(" ");
-		
-		for (String palavra : palavras) {
-			if (palavra.startsWith("<audio>") || palavra.startsWith("<imagem>")) {
-				this.conteudoDoPost.add(palavra);
-			}
-		}
-	}
-	
-	public String filtraConteudoDoPost(int indice) {
-		String conteudo = this.conteudoDoPost.get(indice);
-	
-		if (conteudo.startsWith("<imagem>")) {
-			return "$arquivo_imagem:" + conteudo.substring(8, conteudo.length() - 9);
-		} if (conteudo.startsWith("<audio>")) {
-			return "$arquivo_audio:" + conteudo.substring(7, conteudo.length() - 8);
-		} else {
-			return conteudo;
-		}
-	}
-	
-	public void validaMensagem(String mensagem) throws EntradaException {
-		if (mensagem.equals("") || mensagem == null) {
-			throw new CriaPostException("A mensagem não pode ser vazia");
-		}
-	}
-	
-	public void validaTexto() throws EntradaException { 
-		if (this.conteudoDoPost.get(0).length() >= 200) {
-			throw new CriaPostException("O limite maximo da mensagem sao 200 caracteres.");		
-		}
-	}
-	
-	public void validaHashtags(String mensagem) throws EntradaException {
-		String textoDeHashtags = mensagem.substring(mensagem.indexOf("#"), mensagem.length());
-		String[] hashtags = textoDeHashtags.split(" ");
-		
-		for (String hashtag : hashtags) {
-			if (!hashtag.startsWith("#")) {
-				throw new CriaPostException("As hashtags devem comecar com '#'. Erro na hashtag: '" + hashtag + "'.");
-			}
-		}
-	}
+	/**
+	 * Metodo utilizado para formatar a data de um post, no padrao ano/mes/dia
+	 * hora.
+	 * 
+	 * @param data
+	 * @return
+	 */
 
 	public String formataData(String data) {
 		String[] valoresData = data.split("[/, ]");
@@ -112,59 +70,141 @@ public class Post {
 
 		return ano + "-" + mes + "-" + dia + " " + hora;
 	}
-	
+
+	/**
+	 * Metodo utilizado para adicionar uma curtida ao post.
+	 */
+
 	public void curtir() {
 		this.curtidas += 1;
 	}
-	
+
+	/**
+	 * Metodo utilizado para adicionar uma popularidade.
+	 * 
+	 * @param pops
+	 */
+
 	public void addPopularidade(int pops) {
 		this.popularidade += pops;
 	}
-	
+
+	/**
+	 * Metodo utilizado para adicionar uma rejeicao ao post.
+	 */
+
 	public void rejeitar() {
 		this.rejeicoes += 1;
 	}
-	
+
+	/**
+	 * Metodo utilizado para remover a popularidade de um post.
+	 * 
+	 * @param pops
+	 */
+
 	public void removePopularidade(int pops) {
 		this.popularidade -= pops;
 	}
+
+	/**
+	 * Metodo utilizado para obter a quantidade de curtidas tem um post.
+	 * 
+	 * @return
+	 */
 
 	public int getCurtidas() {
 		return curtidas;
 	}
 
+	/**
+	 * Metodo utilizado para alterar as curtidas de um post.
+	 * 
+	 * @param curtidas
+	 */
+
 	public void setCurtidas(int curtidas) {
 		this.curtidas = curtidas;
 	}
-	
+
+	/**
+	 * Metodo utilizado para obter a quantidade de rejeicoes de um post.
+	 * 
+	 * @return
+	 */
+
 	public int getRejeicoes() {
 		return rejeicoes;
 	}
+
+	/**
+	 * Metodo utilizado para alterar as rejeicoes de um post.
+	 * 
+	 * @return
+	 */
 
 	public void setRejeicoes(int rejeicoes) {
 		this.rejeicoes = rejeicoes;
 	}
 
+	/**
+	 * Metodo utilizado para obter a popularidade de um post.
+	 * 
+	 * @return
+	 */
+
 	public int getPopularidade() {
 		return popularidade;
 	}
+
+	/**
+	 * Metodo utilizado para alterar a popularidade de um post.
+	 * 
+	 * @return
+	 */
 
 	public void setPopularidade(int popularidade) {
 		this.popularidade = popularidade;
 	}
 
+	/**
+	 * Metodo utilizado para obter um determinado conteudo do post.
+	 * 
+	 * @param indice
+	 * @return
+	 */
+
 	public String getConteudoDoPost(int indice) {
-		return filtraConteudoDoPost(indice);
+		return UtilPost.obtemConteudoDoPost(indice, conteudoDoPost);
 	}
-	
+
+	/**
+	 * Metodo utilizado para obter a lista de conteudos do post.
+	 * 
+	 * @return
+	 */
+
 	public List<String> getConteudoDoPost() {
 		return this.conteudoDoPost;
 	}
 
+	/**
+	 * Metodo utilizado para alterar a lista de conteudos do post.
+	 * 
+	 * @return
+	 */
+
 	public void setConteudoDoPost(List<String> conteudoDoPost) {
 		this.conteudoDoPost = conteudoDoPost;
 	}
-	
+
+	/**
+	 * Metodo utilizado para obter a mensagem de um post, por mensagem
+	 * entende-se o texto juntamente com as midias.
+	 * 
+	 * @return
+	 */
+
 	public String getMensagem() {
 		if (getMidias() == null) {
 			return getTexto();
@@ -172,16 +212,29 @@ public class Post {
 			return getTexto() + " " + getMidias();
 		}
 	}
-	
+
+	/**
+	 * Metodo utilizado para obter o texto de um post.
+	 * 
+	 * @return
+	 */
+
 	public String getTexto() {
 		return this.conteudoDoPost.get(0);
 	}
 
+	/**
+	 * Metodo utilizado para obter as midias de um post.
+	 * 
+	 * @return
+	 */
+
 	public String getMidias() {
 		String listaDeMidias = "";
-		
+
 		for (String conteudo : conteudoDoPost) {
-			if (conteudo.startsWith("<audio>") || conteudo.startsWith("<imagem>")) {
+			if (conteudo.startsWith("<audio>")
+					|| conteudo.startsWith("<imagem>")) {
 				listaDeMidias = listaDeMidias + conteudo + " ";
 			}
 		}
@@ -190,40 +243,85 @@ public class Post {
 		} else {
 			return listaDeMidias.substring(0, listaDeMidias.length() - 1);
 		}
-		
+
 	}
-	
+
+	/**
+	 * Metodo utilizado para alterar a mensagem de um post, esta mensagem
+	 * refere-se a mensagem original passada na hora de criacao de um post.
+	 * Texto e/ou midia e/ou hashtags.
+	 * 
+	 * @param mensagem
+	 */
+
 	public void setMensagem(String mensagem) {
 		this.mensagem = mensagem;
 	}
+
+	/**
+	 * Metodo utilizado para obter a lista de hashtags de um post.
+	 * 
+	 * @return
+	 */
 
 	public List<String> getListaDeHashtags() {
 		return listaDeHashtags;
 	}
 
+	/**
+	 * Metodo utilizado para alterar a lista de hashtags de um post.
+	 * 
+	 * @param listaDeHashtags
+	 */
+
 	public void setListaDeHashtags(List<String> listaDeHashtags) {
 		this.listaDeHashtags = listaDeHashtags;
 	}
 
+	/**
+	 * Metodo utilizado para adicionar uma nova hashtag a lista de hashtags do
+	 * post.
+	 * 
+	 * @param novaHashtag
+	 */
+
 	public void addHashTag(String novaHashtag) {
 		this.listaDeHashtags.add(novaHashtag);
 	}
-	
+
+	/**
+	 * Metodo utilizado para obter o post formatado, seguindo o padrao mensagem
+	 * original (contendo hashtags e midia) juntamente com a data formatada.
+	 * 
+	 * @return
+	 */
+
 	public String getPostFormatado() {
 		return this.mensagem + " (" + formataData(this.data) + ")";
 	}
+	
+	/**
+	 * Metodo utilizado para obter a data formatada de um post.
+	 * 
+	 * @return
+	 */
 
 	public String getData() {
 		return formataData(data);
 	}
 
+	/**
+	 * Metodo utilizado para obter as hashtags de um post.
+	 * @return
+	 */
+	
 	public String getHashtags() {
 		String hashtags = "";
 		for (String hashtag : listaDeHashtags) {
 			hashtags = hashtags + hashtag + ",";
 		}
-		
+
 		return (hashtags.substring(0, hashtags.length() - 1));
 	}
-	
+
 }

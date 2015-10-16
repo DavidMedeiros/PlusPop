@@ -28,22 +28,12 @@ public class Facade {
 			String dataDeNascimento, String foto) throws EntradaException,
 			ParseException {
 
-		validaNomeCadastro(nome);
-		validaDataCadastro(dataDeNascimento);
-		validaEmailCadastro(email);
-		validaSenhaCadastro(senha);
-
 		return this.systemPop.cadastraUsuario(nome, email, senha,
 				dataDeNascimento, foto);
 	}
 
 	public String cadastraUsuario(String nome, String email, String senha,
 			String dataDeNascimento) throws EntradaException, ParseException {
-
-		validaNomeCadastro(nome);
-		validaDataCadastro(dataDeNascimento);
-		validaEmailCadastro(email);
-		validaSenhaCadastro(senha);
 
 		return this.systemPop.cadastraUsuario(nome, email, senha,
 				dataDeNascimento);
@@ -55,23 +45,6 @@ public class Facade {
 
 	public boolean logout() throws EntradaException {
 		return this.systemPop.logout();
-	}
-
-	private void validaNomeCadastro(String nome) throws EntradaException {
-		this.systemPop.validaNomeCadastro(nome);
-	}
-
-	private void validaEmailCadastro(String email) throws EntradaException {
-		this.systemPop.validaEmailCadastro(email);
-	}
-
-	private void validaSenhaCadastro(String senha) throws EntradaException {
-		this.systemPop.validaSenhaCadastro(senha);
-	}
-
-	private void validaDataCadastro(String dataDeNascimento)
-			throws EntradaException {
-		this.systemPop.validaDataCadastro(dataDeNascimento);
 	}
 
 	public void atualizaPerfil(String atributo, String valor)

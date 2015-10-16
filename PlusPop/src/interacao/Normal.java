@@ -1,5 +1,6 @@
 package interacao;
 
+
 public class Normal extends Popularidade implements Interacao {
 
 	@Override

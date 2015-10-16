@@ -1,5 +1,6 @@
 package interacao;
 
+
 public interface Interacao {
 	
 	public void curtir (Post post);

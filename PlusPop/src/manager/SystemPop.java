@@ -1,16 +1,14 @@
 package manager;
 
-import java.text.DateFormat;
+import interacao.Post;
+
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import usuario.Usuario;
 import usuario.UsuarioFactory;
+import util.UtilUsuario;
 import exceptions.AtualizacaoPerfilException;
 import exceptions.CadastroDeUsuariosException;
 import exceptions.EntradaException;
@@ -21,7 +19,6 @@ import exceptions.LogoutDeUsuariosException;
 import exceptions.NotificacoesException;
 import exceptions.SenhaProtegidaException;
 import exceptions.UsuarioNaoEncontradoException;
-import interacao.Post;
 
 public class SystemPop {
 
@@ -30,10 +27,8 @@ public class SystemPop {
 	private List<Usuario> usuariosCadastrados;
 
 	/**
-	 * Construtor da classe SystemPop; A classe contem os atributos:
-	 * usuariosCadastrados, usuarioLogado e usuarioFactory; No construtor, o
-	 * usuarioLogado eh inicializado como null, ja que inicialmente, nao ha
-	 * usuario logado.
+	 * Construtor da classe SystemPop. Classe essa que funciona como Controller,
+	 * fazendo toda a comunicação com a façade;
 	 *
 	 */
 
@@ -43,11 +38,22 @@ public class SystemPop {
 		this.usuariosCadastrados = new ArrayList<Usuario>();
 	}
 
+	/**
+	 * Metodo que sera utilizado para carregar/armazenar os dados do sistema nos
+	 * arquivos de dados.
+	 */
+	
 	public void iniciaSistema() {
-		// Será utilizado para Carregar/armazenar os dados do sistema nos
-		// arquivos de dados.
+		
 	}
 
+	/**
+	 * Metodo utilizado para fechar o sistema, so eh possível fechar o sistema
+	 * caso haja algum usuario logado.
+	 * 
+	 * @throws LogicaException - Lançada quando não há usuario logado.
+	 */
+	
 	public void fechaSistema() throws LogicaException {
 		if (usuarioLogado == null) {
 			// fechar sistema
@@ -55,6 +61,19 @@ public class SystemPop {
 			throw new FecharSistemaException();
 		}
 	}
+	
+	/**
+	 * Metodo utilizado para cadastro de um novo usuario no sistema.
+	 * 
+	 * @param nome
+	 * @param email
+	 * @param senha
+	 * @param dataDeNascimento
+	 * @param foto
+	 * @return
+	 * @throws EntradaException
+	 * @throws ParseException
+	 */
 
 	public String cadastraUsuario(String nome, String email, String senha,
 			String dataDeNascimento, String foto) throws EntradaException,
@@ -72,6 +91,19 @@ public class SystemPop {
 		}
 	}
 
+	/**
+	 * Metodo utilizado para cadastro de um novo usuario no sistema utilizando
+	 * uma foto padrão.
+	 * 
+	 * @param nome
+	 * @param email
+	 * @param senha
+	 * @param dataDeNascimento
+	 * @return
+	 * @throws EntradaException
+	 * @throws ParseException
+	 */
+	
 	public String cadastraUsuario(String nome, String email, String senha,
 			String dataDeNascimento) throws EntradaException, ParseException {
 
@@ -88,8 +120,19 @@ public class SystemPop {
 		}
 	}
 
+	/**
+	 * Metodo utilizado para realizar login de usuario. O usuario necessita
+	 * possuir cadastro para realizar login.
+	 * 
+	 * @param email
+	 * @param senha
+	 * @return
+	 * @throws EntradaException
+	 */
+
 	public boolean login(String email, String senha) throws EntradaException {
 		boolean usuarioEhCadastrado = false;
+		
 		if (!(usuarioLogado == null)) {
 			throw new LoginDeUsuariosException("Um usuarix ja esta logadx: "
 					+ usuarioLogado.getNome() + ".");
@@ -106,6 +149,7 @@ public class SystemPop {
 				}
 			}
 		}
+		
 		if (usuarioEhCadastrado) {
 			return true;
 		} else {
@@ -114,6 +158,15 @@ public class SystemPop {
 		}
 	}
 
+	/**
+	 * 
+	 * Metodo utilizado para logout de usuario no sistema. Eh necessario um
+	 * usuario logado para realizar logout.
+	 * 
+	 * @return
+	 * @throws EntradaException
+	 */
+
 	public boolean logout() throws EntradaException {
 
 		if (usuarioLogado == null) {
@@ -121,105 +174,22 @@ public class SystemPop {
 					"Nenhum usuarix esta logadx no +pop.");
 		}
 
-		usuarioLogado.logout(); // TODO Nao entendi muito bem esses metodos de
-								// login e logout no usuario.
+		usuarioLogado.logout();
 		this.usuarioLogado = null;
 
 		return true;
 	}
 
-	public void validaNomeCadastro(String nome) throws EntradaException {
-		if (nome.equals("") || nome.trim().equals("") || nome == null) {
-			throw new CadastroDeUsuariosException(
-					"Nome dx usuarix nao pode ser vazio.");
-		}
-	}
-
-	public void validaEmailCadastro(String email) throws EntradaException {
-		if (!validaEmails(email)) {
-			throw new CadastroDeUsuariosException(
-					"Formato de e-mail esta invalido.");
-		}
-	}
-
-	public void validaSenhaCadastro(String senha) throws EntradaException {
-		if (senha.equals("") || senha.trim().equals("") || senha == null) {
-			throw new CadastroDeUsuariosException(
-					"Senha dx usuarix nao pode ser vazia.");
-		}
-	}
-
-	public void validaDataCadastro(String dataDeNascimento)
-			throws EntradaException {
-		if (dataDeNascimento.equals("") || dataDeNascimento.trim().equals("")
-				|| dataDeNascimento == null) {
-			throw new CadastroDeUsuariosException("Data nao existe.");
-		}
-
-		if (!diaEhValido(dataDeNascimento)) {
-			throw new CadastroDeUsuariosException(
-					"Formato de data esta invalida.");
-		}
-
-		if (!dataEhValida(dataDeNascimento)) {
-			throw new CadastroDeUsuariosException("Data nao existe.");
-		}
-	}
-
-	private boolean validaEmails(String email) {
-		if (email.equals("") || email.trim().equals("") || email == null) {
-			return false;
-		}
-
-		Pattern pattern = Pattern
-				.compile("^[\\w-]+(\\.[\\w-]+)*@([\\w-]+\\.)+[a-zA-Z]{2,7}$");
-		Matcher emailFiltrado = pattern.matcher(email);
-
-		if (emailFiltrado.find()) {
-			return true;
-		}
-
-		return false;
-	}
-
-	private boolean validaFormatoDeData(String data) {
-		if (!data.matches("([0-9]{2})/([0-9]{2})/([0-9]{4})")) {
-			return false;
-		}
-
-		String[] valores = data.split("/");
-		int dia = Integer.parseInt(valores[0]);
-		int mes = Integer.parseInt(valores[1]);
-		int ano = Integer.parseInt(valores[2]);
-		;
-
-		if (dia < 1 || dia > 31 || mes < 1 || mes > 12 || ano < 1) {
-			return false;
-		}
-
-		return true;
-	}
-
-	private boolean dataEhValida(String dataStr) {
-		DateFormat dataFormatter = new SimpleDateFormat("dd/MM/yyyy");
-		dataFormatter.setLenient(false);
-		try {
-			Date date = dataFormatter.parse(dataStr);
-			return true;
-		} catch (ParseException e) {
-			return false;
-		}
-	}
-
-	private boolean diaEhValido(String dataStr) {
-		String dia = dataStr.split("/")[0];
-
-		if (dia.length() > 2)
-			return false;
-
-		return true;
-	}
-
+	/**
+	 * Metodo utilizado para atualizar um perfil, ficando a criterio do usuario
+	 * logado escolher o tipo de informacao a ser atualizada e o valor.
+	 * 
+	 * @param atributo
+	 * @param valor
+	 * @throws EntradaException
+	 * @throws ParseException
+	 */
+	
 	public void atualizaPerfil(String atributo, String valor)
 			throws EntradaException, ParseException {
 		if (!verificaSeHaUsuarioLogado()) {
@@ -236,7 +206,7 @@ public class SystemPop {
 		}
 
 		if (atributo.equals("E-mail")) {
-			if (!validaEmails(valor)) {
+			if (!UtilUsuario.validaEmails(valor)) {
 				throw new AtualizacaoPerfilException(
 						"Erro na atualizacao de perfil. Formato de e-mail esta invalido.");
 			}
@@ -244,11 +214,11 @@ public class SystemPop {
 		}
 
 		if (atributo.equals("Data de Nascimento")) {
-			if (!validaFormatoDeData(valor)) {
+			if (!UtilUsuario.validaFormatoDeData(valor)) {
 				throw new AtualizacaoPerfilException(
 						"Erro na atualizacao de perfil. Formato de data esta invalida.");
 			}
-			if (!dataEhValida(valor)) {
+			if (!UtilUsuario.dataEhValida(valor)) {
 				throw new AtualizacaoPerfilException(
 						"Erro na atualizacao de perfil. Data nao existe.");
 			}
@@ -263,6 +233,16 @@ public class SystemPop {
 			usuarioLogado.setFoto(valor);
 		}
 	}
+	
+	/**
+	 * Metodo utilizado para atualizar a senha de um perfil, eh necessario
+	 * informar a senha antiga.
+	 * 
+	 * @param atributo
+	 * @param valor
+	 * @param velhaSenha
+	 * @throws EntradaException
+	 */
 
 	public void atualizaPerfil(String atributo, String valor, String velhaSenha)
 			throws EntradaException {
@@ -278,6 +258,16 @@ public class SystemPop {
 					"Erro na atualizacao de perfil. A senha fornecida esta incorreta.");
 		}
 	}
+	
+	/**
+	 * Metodo utilizado para criar um post. O usuario deve passar uma mensagem
+	 * que pode conter texto, midia e hashtags.
+	 * 
+	 * @param mensagem
+	 * @param data
+	 * @throws LogicaException
+	 * @throws EntradaException
+	 */
 
 	public void criaPost(String mensagem, String data) throws LogicaException,
 			EntradaException {
@@ -291,6 +281,15 @@ public class SystemPop {
 
 	}
 
+	/**
+	 * Metodo utilizado para verificar se o usuario com o email pesquisado esta
+	 * cadastrado no sistema.
+	 * 
+	 * @param email
+	 * @return
+	 * @throws LogicaException
+	 */
+	
 	public Usuario buscarUsuario(String email) throws LogicaException {
 		for (Usuario usuario : usuariosCadastrados) {
 			if (usuario.getEmail().equals(email)) {
@@ -300,12 +299,27 @@ public class SystemPop {
 		throw new UsuarioNaoEncontradoException(email);
 	}
 
+	/**
+	 * Metodo utilizado para remover um usuario dos usuarios cadastrados no
+	 * sistema.
+	 * 
+	 * @param emailDoUsuario
+	 * @return
+	 * @throws LogicaException
+	 */
+	
 	public boolean removeUsuario(String emailDoUsuario) throws LogicaException {
 		Usuario usuarioParaRemocao = buscarUsuario(emailDoUsuario);
 		usuariosCadastrados.remove(usuarioParaRemocao);
 
 		return true;
 	}
+	
+	/**
+	 * Metodo utilizado para verificar se ha usuario logado no sistema.
+	 * 
+	 * @return
+	 */
 
 	public boolean verificaSeHaUsuarioLogado() {
 		if (usuarioLogado == null) {
@@ -313,6 +327,12 @@ public class SystemPop {
 		}
 		return true;
 	}
+
+	/**
+	 * Metodo utilizado para obter a lista de usuarios cadastrados no sistema.
+	 * 
+	 * @return
+	 */
 
 	public List<Usuario> getUsuariosCadastrados() {
 		return usuariosCadastrados;
@@ -329,17 +349,44 @@ public class SystemPop {
 		this.usuariosCadastrados = usuariosCadastrados;
 	}
 
+	/** 
+	 * Metodo utilizado para obter o usuario logado.
+	 * 
+	 * @return
+	 */
+	
 	public Usuario getUsuarioLogado() {
 		return usuarioLogado;
 	}
 
+	/**
+	 * Metodo utilizado para alterar o usuario logado.
+	 * 
+	 * @param usuarioLogado
+	 */
+	
 	public void setUsuarioLogado(Usuario usuarioLogado) {
 		this.usuarioLogado = usuarioLogado;
 	}
 
+	/**
+	 * Metodo utilizado para adicionar um usuario a lista de usuarios
+	 * cadastrados no sistema.
+	 * 
+	 * @param novoUsuario
+	 */
+	
 	public void adicionarUsuario(Usuario novoUsuario) {
 		this.usuariosCadastrados.add(novoUsuario);
 	}
+	
+	/**
+	 * Metodo utilizado para obter informacoes do usuario logado.
+	 * 
+	 * @param atributo
+	 * @return
+	 * @throws LogicaException
+	 */
 
 	public String getInfoUsuario(String atributo) throws LogicaException {
 
@@ -357,6 +404,15 @@ public class SystemPop {
 			return null;
 		}
 	}
+	
+	/**
+	 * Metodo utilizado para obter informacoes de algum usuario cadastrado no
+	 * sistema.
+	 * 
+	 * @param atributo
+	 * @return
+	 * @throws LogicaException
+	 */
 
 	public String getInfoUsuario(String atributo, String email)
 			throws LogicaException {
@@ -378,30 +434,55 @@ public class SystemPop {
 		}
 	}
 
+	/**
+	 * Metodo utilizado para obter algum post na lista de posts do usuario. O
+	 * post vem no formato: mensagem + data formatada.
+	 * 
+	 * @param post
+	 * @return
+	 */
+	
 	public String getPost(int post) {
-		return usuarioLogado.getPosts().get(post).getPostFormatado();
+		return usuarioLogado.getPostFormatado(post);
 	}
+	
+	/**
+	 * Metodo utilizado para obter informacoes do post, como data, mensagem,
+	 * hashtags...
+	 * 
+	 * @param atributo
+	 * @param post
+	 * @return
+	 */
 
 	public String getPost(String atributo, int post) {
 		if (atributo.toLowerCase().equals("mensagem")) {
-			return usuarioLogado.getPosts().get(post).getMensagem();
+			return usuarioLogado.getMensagemPost(post);
 		}
 
 		if (atributo.toLowerCase().equals("data")) {
-			return usuarioLogado.getPosts().get(post).getData();
+			return usuarioLogado.getDataPost(post);
 		}
 
 		if (atributo.toLowerCase().equals("hashtags")) {
-			return usuarioLogado.getPosts().get(post).getHashtags();
+			return usuarioLogado.getHashtagPost(post);
 		}
 
 		return null;
 	}
 
+	/**
+	 * Metodo utilizado para obter o conteudo de um post, mensagem/midia/hashtags
+	 * 
+	 * @param indice
+	 * @param post
+	 * @return
+	 * @throws LogicaException
+	 */
+
 	public String getConteudoPost(int indice, int post) throws LogicaException {
 
-		List<String> conteudosDoPost = usuarioLogado.getPosts().get(post)
-				.getConteudoDoPost();
+		List<String> conteudosDoPost = usuarioLogado.getConteudoPost(post);
 
 		if (indice < 0) {
 			throw new LogicaException(
@@ -414,24 +495,76 @@ public class SystemPop {
 					+ conteudosDoPost.size() + " itens distintos.");
 		}
 
-		return usuarioLogado.getPosts().get(post).getConteudoDoPost(indice);
+		return usuarioLogado.getConteudoPost(post, indice);
 	}
+	
+	/**
+	 * Metodo utilizado para curtir o post de algum amigo.
+	 * 
+	 * @param emailAmigo
+	 * @param indice
+	 * @throws LogicaException
+	 */
 
 	public void curtirPost(String emailAmigo, int indice)
 			throws LogicaException {
 		Usuario amigo = buscarUsuario(emailAmigo);
-		this.usuarioLogado.curtir(amigo.getPosts().get(indice));
-		amigo.addNotificacao(usuarioLogado.getNome() + " curtiu seu post de "
-				+ amigo.getPosts().get(indice).getData() + ".");
+		this.usuarioLogado.curtir(amigo.getPostIndex(indice));
+		amigo.addNotificacao(getMsgCurte(amigo, indice));
 	}
+	
+	/**
+	 * Metodo utilizado para melhorar o Expert, tendo como objetivo fornecer a
+	 * mensagem formatada para a notificacao de post curtido.
+	 * 
+	 * @param amigo
+	 * @param indice
+	 * @return
+	 */
+	
+	private String getMsgCurte(Usuario amigo, int indice) {
+		String saida = usuarioLogado.getNome() + " curtiu seu post de "
+				+ amigo.getDataPost(indice) + ".";
+		return saida;
+	}
+
+	/**
+	 * Metodo utilizado para rejeitar o post de algum amigo.
+	 * 
+	 * @param emailAmigo
+	 * @param indice
+	 * @throws LogicaException
+	 */
 	
 	public void rejeitarPost(String emailAmigo, int indice)
 			throws LogicaException {
 		Usuario amigo = buscarUsuario(emailAmigo);
-		this.usuarioLogado.rejeitar(amigo.getPosts().get(indice));
-		amigo.addNotificacao(usuarioLogado.getNome() + " rejeitou seu post de "
-				+ amigo.getPosts().get(indice).getData() + ".");
+		this.usuarioLogado.rejeitar(amigo.getPostIndex(indice));
+		amigo.addNotificacao(getMsgRejeita(amigo, indice));
 	}
+
+	/**
+	 * Metodo utilizado para melhorar o Expert, tendo como objetivo fornecer a
+	 * mensagem formatada para a notificacao de post rejeitado.
+	 * 
+	 * @param amigo
+	 * @param indice
+	 * @return
+	 */
+	
+	private String getMsgRejeita(Usuario amigo, int indice) {
+		String saida = usuarioLogado.getNome() + " rejeitou seu post de "
+				+ amigo.getDataPost(indice) + ".";
+		return saida;
+	}
+	
+	/**
+	 * Metodo utilizado para enviar uma solicitacao de amizade para um outro
+	 * usuario cadastrado no sistema.
+	 * 
+	 * @param emailPossivelAmigo
+	 * @throws LogicaException
+	 */
 
 	public void adicionaAmigo(String emailPossivelAmigo) throws LogicaException {
 		Usuario possivelAmigo = buscarUsuario(emailPossivelAmigo);
@@ -446,6 +579,13 @@ public class SystemPop {
 		possivelAmigo.addSolicitacao(usuarioLogado);
 	}
 
+	/**
+	 * Metodo utilizado para desfazer amizades.
+	 * 
+	 * @param emailAmigoExcluido
+	 * @throws LogicaException
+	 */
+	
 	public void removeAmigo(String emailAmigoExcluido) throws LogicaException {
 		Usuario amigoExcluido = buscarUsuario(emailAmigoExcluido);
 
@@ -460,6 +600,13 @@ public class SystemPop {
 				+ " removeu a sua amizade.");
 	}
 
+	/**
+	 * Metodo utilizado para aceitar uma solicitacao de amizade.
+	 * 
+	 * @param emailDoUsuarioAceito
+	 * @throws LogicaException
+	 */
+	
 	public void aceitaAmizade(String emailDoUsuarioAceito)
 			throws LogicaException {
 		Usuario usuarioAceito = buscarUsuario(emailDoUsuarioAceito);
@@ -468,8 +615,13 @@ public class SystemPop {
 		usuarioAceito.aceitaAmigo(usuarioLogado);
 		usuarioAceito.addNotificacao(usuarioLogado.getNome()
 				+ " aceitou sua amizade.");
-		// Necessário remover solicitação de amizade?
 	}
+	
+	/**
+	 * Metodo utilizado para rejeitar uma solicitaao de amizade.
+	 * @param emailDoUsuarioRejeitado
+	 * @throws LogicaException
+	 */
 
 	public void rejeitaAmizade(String emailDoUsuarioRejeitado)
 			throws LogicaException {
@@ -484,11 +636,25 @@ public class SystemPop {
 		usuarioRejeitado.addNotificacao(usuarioLogado.getNome()
 				+ " rejeitou sua amizade.");
 	}
+	
+	/**
+	 * Metodo utilizado para obter a quantidade de notificacoes do usuario
+	 * logado no sistema.
+	 * 
+	 * @return
+	 */
 
 	public int getNotificacoes() {
 		return this.usuarioLogado.getNotificacoes().size();
 	}
 
+	/**
+	 * Metodo utilizado para obter as notificacoes e remove-las.
+	 * 
+	 * @return
+	 * @throws NotificacoesException
+	 */
+	
 	public String getNextNotificacao() throws NotificacoesException {
 
 		if (this.usuarioLogado.getNotificacoes().size() == 0) {
@@ -501,6 +667,12 @@ public class SystemPop {
 		return notificacao;
 	}
 
+	/** 
+	 * Metodo utilizado para obter a quantidade de amigos.
+	 * 
+	 * @return
+	 */
+	
 	public int getQtdAmigos() {
 		return this.usuarioLogado.getAmigos().size();
 	}
