@@ -11,11 +11,11 @@ import util.UtilUsuario;
 import exceptions.EntradaException;
 import friendship.Friendship;
 import friendship.Notificacao;
-import interacao.CelebridadePOP;
-import interacao.IconePOP;
-import interacao.Normal;
-import interacao.Popularidade;
-import interacao.Post;
+import interaction.CelebridadePOP;
+import interaction.IconePOP;
+import interaction.Interacao;
+import interaction.Normal;
+import interaction.Post;
 
 public class Usuario implements Friendship {
 
@@ -29,7 +29,7 @@ public class Usuario implements Friendship {
 	private List<Usuario> amigos;
 	private Notificacao notificacoes;
 	private List<Usuario> solicitacoesDeAmizade;
-	private Popularidade popularidade;
+	private Interacao popularidade;
 	private int pops;
 
 	/**
@@ -267,7 +267,7 @@ public class Usuario implements Friendship {
 	}
 	
 	/**
-	 * Metodo para verificar se o usuario est· logado no sistema.
+	 * Metodo para verificar se o usuario est√° logado no sistema.
 	 * 
 	 * @return
 	 */
@@ -277,7 +277,7 @@ public class Usuario implements Friendship {
 	}
 
 	/**
-	 * Metodo utilizado para alterar quando o usuario est· ou nao logado no sistema.
+	 * Metodo utilizado para alterar quando o usuario est√° ou nao logado no sistema.
 	 * 
 	 * @param log
 	 */
@@ -430,7 +430,7 @@ public class Usuario implements Friendship {
 	 * @return
 	 */
 	
-	public Popularidade getPopularidade() {
+	public Interacao getPopularidade() {
 		return popularidade;
 	}
 	
@@ -576,7 +576,7 @@ public class Usuario implements Friendship {
 	}
 
 	/**
-	 * Metodo utilizado para verificar se o usuario informado È amigo do usuario atual.
+	 * Metodo utilizado para verificar se o usuario informado √© amigo do usuario atual.
 	 */
 	
 	@Override

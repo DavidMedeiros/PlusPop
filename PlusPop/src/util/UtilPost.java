@@ -2,9 +2,10 @@ package util;
 
 import java.util.List;
 
-import midias.Audio;
-import midias.Imagem;
-import midias.MidiaPost;
+import media.Audio;
+import media.Imagem;
+import media.MidiaPost;
+import media.Video;
 import exceptions.CriaPostException;
 import exceptions.EntradaException;
 
@@ -23,7 +24,7 @@ public class UtilPost {
 		String textoFiltrado = "";
 
 		for (String palavra : palavras) {
-			if (!(palavra.startsWith("#") || (palavra.startsWith("<") & palavra
+			if (!(palavra.startsWith("#") || (palavra.startsWith("<") && palavra
 					.endsWith(">")))) {
 				textoFiltrado = textoFiltrado + palavra + " ";
 			}
@@ -67,6 +68,9 @@ public class UtilPost {
 			} else if (palavra.startsWith("<imagem>")) {
 				MidiaPost midia = new Imagem(palavra);
 				conteudoDoPost.add(midia);
+			} else if (palavra.startsWith("<video>")) {
+				MidiaPost midia = new Video(palavra);
+				conteudoDoPost.add(midia);
 			}
 		}
 	}
@@ -80,7 +84,7 @@ public class UtilPost {
 
 	public static void validaMensagem(String mensagem) throws EntradaException {
 		if (mensagem.equals("") || mensagem == null) {
-			throw new CriaPostException("A mensagem n„o pode ser vazia");
+			throw new CriaPostException("A mensagem n√£o pode ser vazia");
 		}
 	}
 

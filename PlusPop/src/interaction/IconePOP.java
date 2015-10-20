@@ -1,10 +1,10 @@
-package interacao;
+package interaction;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class IconePOP extends Popularidade implements Interacao {
+public class IconePOP implements Interacao {
 
 	@Override
 	public void curtir(Post post) {

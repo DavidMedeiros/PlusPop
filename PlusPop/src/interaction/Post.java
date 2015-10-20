@@ -1,11 +1,11 @@
-package interacao;
+package interaction;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import midias.Audio;
-import midias.Imagem;
-import midias.MidiaPost;
+import media.Audio;
+import media.Imagem;
+import media.MidiaPost;
 import util.UtilPost;
 import exceptions.CriaPostException;
 import exceptions.EntradaException;

@@ -1,7 +1,6 @@
-package interacao;
+package interaction;
 
-
-public class Normal extends Popularidade implements Interacao {
+public class Normal implements Interacao {
 
 	@Override
 	public void curtir(Post post) {

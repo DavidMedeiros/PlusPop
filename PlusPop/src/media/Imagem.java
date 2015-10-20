@@ -1,4 +1,4 @@
-package midias;
+package media;
 
 public class Imagem extends MidiaPost {
 

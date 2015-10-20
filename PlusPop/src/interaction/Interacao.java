@@ -1,4 +1,4 @@
-package interacao;
+package interaction;
 
 
 public interface Interacao {

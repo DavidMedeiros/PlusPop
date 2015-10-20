@@ -1,6 +1,6 @@
 package manager;
 
-import interacao.Post;
+import interaction.Post;
 
 import java.text.ParseException;
 import java.util.ArrayList;
