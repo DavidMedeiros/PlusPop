@@ -84,7 +84,7 @@ public class UtilPost {
 
 	public static void validaMensagem(String mensagem) throws EntradaException {
 		if (mensagem.equals("") || mensagem == null) {
-			throw new CriaPostException("A mensagem não pode ser vazia");
+			throw new CriaPostException("A mensagem nao pode ser vazia");
 		}
 	}
 

@@ -8,7 +8,7 @@ public class Audio extends MidiaPost {
 	
 	@Override
 	public String toString() {
-		return "$arquivo_audio:" + caminhoDaMidia.substring(7, caminhoDaMidia.length() - 8);
+		return "$arquivo_audio:" + caminhoDaMidiaFiltrado;
 	}
 	
 }

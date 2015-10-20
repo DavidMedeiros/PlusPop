@@ -141,7 +141,6 @@ public class SystemPop {
 		for (Usuario usuario : usuariosCadastrados) {
 			if (usuario.getEmail().equals(email)) {
 				if (usuario.getSenha().equals(senha)) {
-					usuario.login();
 					this.usuarioLogado = usuario;
 					usuarioEhCadastrado = true;
 				} else {
@@ -174,7 +173,6 @@ public class SystemPop {
 					"Nenhum usuarix esta logadx no +pop.");
 		}
 
-		usuarioLogado.logout();
 		this.usuarioLogado = null;
 
 		return true;

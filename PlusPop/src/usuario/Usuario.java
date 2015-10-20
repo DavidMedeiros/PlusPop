@@ -24,7 +24,6 @@ public class Usuario implements Friendship {
 	private String nome;
 	private Date dataDeNascimento;
 	private String foto;
-	private boolean log;
 	private List<Post> posts;
 	private List<Usuario> amigos;
 	private Notificacao notificacoes;
@@ -56,7 +55,6 @@ public class Usuario implements Friendship {
 		this.nome = nome;
 		this.dataDeNascimento = formataDataDeNascimento(dataDeNascimento);
 		this.foto = foto;
-		this.log = false;
 		this.posts = new ArrayList<Post>();
 		this.amigos = new ArrayList<Usuario>();
 		this.notificacoes = new Notificacao();
@@ -77,39 +75,12 @@ public class Usuario implements Friendship {
 		this.nome = nome;
 		this.dataDeNascimento = formataDataDeNascimento(dataDeNascimento);
 		this.foto = "resources/default.jpg";
-		this.log = true;
 		this.posts = new ArrayList<Post>();
 		this.amigos = new ArrayList<Usuario>();
 		this.notificacoes = new Notificacao();
 		this.solicitacoesDeAmizade = new ArrayList<Usuario>();
 		this.popularidade = new Normal();
 		this.pops = 0;
-	}
-
-	/**
-	 * Metodo utilizado para definir quando um usuario esta logado.
-	 * 
-	 * @return
-	 */
-	
-	public boolean login() {
-		this.log = true;
-		return this.log;
-	}
-
-	/**
-	 * Metodo utilizado para definir quando um usuario faz logout.
-	 * 
-	 * @return
-	 */
-	
-	public boolean logout() {
-		if (this.log == true) {
-			this.log = false;
-			return true;
-		} else {
-			return false;
-		}
 	}
 
 	/**
@@ -266,26 +237,6 @@ public class Usuario implements Friendship {
 		this.foto = novaFoto;
 	}
 	
-	/**
-	 * Metodo para verificar se o usuario está logado no sistema.
-	 * 
-	 * @return
-	 */
-
-	public boolean isLog() {
-		return log;
-	}
-
-	/**
-	 * Metodo utilizado para alterar quando o usuario está ou nao logado no sistema.
-	 * 
-	 * @param log
-	 */
-	
-	public void setLog(boolean log) {
-		this.log = log;
-	}
-
 	/**
 	 * Metodo utilizado para obter a lista de posts do usuario.
 	 * 
