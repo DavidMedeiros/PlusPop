@@ -2,6 +2,9 @@ package util;
 
 import java.util.List;
 
+import midias.Audio;
+import midias.Imagem;
+import midias.MidiaPost;
 import exceptions.CriaPostException;
 import exceptions.EntradaException;
 
@@ -15,7 +18,7 @@ public class UtilPost {
 	 * @param conteudoDoPost
 	 */
 
-	public static void filtraTexto(String mensagem, List<String> conteudoDoPost) {
+	public static String filtraTexto(String mensagem) {
 		String[] palavras = mensagem.split(" ");
 		String textoFiltrado = "";
 
@@ -25,8 +28,7 @@ public class UtilPost {
 				textoFiltrado = textoFiltrado + palavra + " ";
 			}
 		}
-		conteudoDoPost.add(textoFiltrado.substring(0,
-				textoFiltrado.length() - 1));
+		return textoFiltrado.substring(0, textoFiltrado.length() - 1);
 	}
 
 	/**
@@ -55,38 +57,17 @@ public class UtilPost {
 	 * @param conteudoDoPost
 	 */
 
-	public static void filtraMidia(String mensagem, List<String> conteudoDoPost) {
+	public static void filtraMidia(String mensagem, List<MidiaPost> conteudoDoPost) {
 		String[] palavras = mensagem.split(" ");
 
 		for (String palavra : palavras) {
-			if (palavra.startsWith("<audio>") || palavra.startsWith("<imagem>")) {
-				conteudoDoPost.add(palavra);
+			if (palavra.startsWith("<audio>")) {
+				MidiaPost midia = new Audio(palavra);
+				conteudoDoPost.add(midia);
+			} else if (palavra.startsWith("<imagem>")) {
+				MidiaPost midia = new Imagem(palavra);
+				conteudoDoPost.add(midia);
 			}
-		}
-	}
-
-	/**
-	 * Metodo utilizado para obter o conteudo do post, filtrando os caminhos de
-	 * audio e imagem para impressao.
-	 * 
-	 * @param indice
-	 * @param conteudoDoPost
-	 * @return
-	 */
-
-	public static String obtemConteudoDoPost(int indice,
-			List<String> conteudoDoPost) {
-		String conteudo = conteudoDoPost.get(indice);
-
-		if (conteudo.startsWith("<imagem>")) {
-			return "$arquivo_imagem:"
-					+ conteudo.substring(8, conteudo.length() - 9);
-		}
-		if (conteudo.startsWith("<audio>")) {
-			return "$arquivo_audio:"
-					+ conteudo.substring(7, conteudo.length() - 8);
-		} else {
-			return conteudo;
 		}
 	}
 
@@ -110,9 +91,9 @@ public class UtilPost {
 	 * @throws EntradaException
 	 */
 
-	public static void validaTexto(List<String> conteudoDoPost)
+	public static void validaTexto(String texto)
 			throws EntradaException {
-		if (conteudoDoPost.get(0).length() >= 200) {
+		if (texto.length() >= 200) {
 			throw new CriaPostException(
 					"O limite maximo da mensagem sao 200 caracteres.");
 		}

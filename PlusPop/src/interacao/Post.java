@@ -3,6 +3,9 @@ package interacao;
 import java.util.ArrayList;
 import java.util.List;
 
+import midias.Audio;
+import midias.Imagem;
+import midias.MidiaPost;
 import util.UtilPost;
 import exceptions.CriaPostException;
 import exceptions.EntradaException;
@@ -12,9 +15,10 @@ public class Post {
 	private int curtidas;
 	private int rejeicoes;
 	private int popularidade;
+	private String texto;
 	private String data;
 	private String mensagem;
-	private List<String> conteudoDoPost;
+	private List<MidiaPost> listaDeMidia;
 	private List<String> listaDeHashtags;
 
 	/**
@@ -30,14 +34,15 @@ public class Post {
 		this.curtidas = 0;
 		this.rejeicoes = 0;
 		this.popularidade = 0;
+		this.texto = "";
 		this.data = data;
-		this.conteudoDoPost = new ArrayList<String>();
+		this.listaDeMidia = new ArrayList<MidiaPost>();
 		this.listaDeHashtags = new ArrayList<String>();
 
 		UtilPost.validaMensagem(mensagem);
 		UtilPost.validaHashtags(mensagem);
 		separaConteudoDaMensagem(mensagem);
-		UtilPost.validaTexto(conteudoDoPost);
+		UtilPost.validaTexto(texto);
 	}
 
 	/**
@@ -48,8 +53,8 @@ public class Post {
 	 */
 
 	public void separaConteudoDaMensagem(String mensagem) {
-		UtilPost.filtraTexto(mensagem, conteudoDoPost);
-		UtilPost.filtraMidia(mensagem, conteudoDoPost);
+		this.texto = UtilPost.filtraTexto(mensagem);
+		UtilPost.filtraMidia(mensagem, listaDeMidia);
 		UtilPost.filtraHashtags(mensagem, listaDeHashtags);
 	}
 
@@ -175,7 +180,14 @@ public class Post {
 	 */
 
 	public String getConteudoDoPost(int indice) {
-		return UtilPost.obtemConteudoDoPost(indice, conteudoDoPost);
+		if (indice == 0) {
+			return texto;
+		} else if (indice >= 1 && indice <= listaDeMidia.size()) {
+			return listaDeMidia.get(indice - 1).toString();
+		} else if (indice > listaDeMidia.size() && indice <= listaDeHashtags.size()) {
+			return listaDeHashtags.get(indice - listaDeMidia.size());
+		}
+		return null;
 	}
 
 	/**
@@ -185,17 +197,14 @@ public class Post {
 	 */
 
 	public List<String> getConteudoDoPost() {
-		return this.conteudoDoPost;
-	}
-
-	/**
-	 * Metodo utilizado para alterar a lista de conteudos do post.
-	 * 
-	 * @return
-	 */
-
-	public void setConteudoDoPost(List<String> conteudoDoPost) {
-		this.conteudoDoPost = conteudoDoPost;
+		List<String> conteudoDoPost = new ArrayList<String>();
+		conteudoDoPost.add(texto);
+		
+		for (MidiaPost conteudo : listaDeMidia) {
+			conteudoDoPost.add(conteudo.getCaminho());
+		}
+		
+		return conteudoDoPost;
 	}
 
 	/**
@@ -206,7 +215,7 @@ public class Post {
 	 */
 
 	public String getMensagem() {
-		if (getMidias() == null) {
+		if (listaDeMidia.isEmpty()) {
 			return getTexto();
 		} else {
 			return getTexto() + " " + getMidias();
@@ -220,7 +229,7 @@ public class Post {
 	 */
 
 	public String getTexto() {
-		return this.conteudoDoPost.get(0);
+		return this.texto;
 	}
 
 	/**
@@ -232,18 +241,14 @@ public class Post {
 	public String getMidias() {
 		String listaDeMidias = "";
 
-		for (String conteudo : conteudoDoPost) {
-			if (conteudo.startsWith("<audio>")
-					|| conteudo.startsWith("<imagem>")) {
-				listaDeMidias = listaDeMidias + conteudo + " ";
-			}
-		}
-		if (listaDeMidias.equals("")) {
+		if (listaDeMidia.isEmpty()) {
 			return null;
-		} else {
-			return listaDeMidias.substring(0, listaDeMidias.length() - 1);
 		}
-
+		for (MidiaPost conteudo : listaDeMidia) {
+			listaDeMidias += conteudo.getCaminho() + " ";
+		}
+		
+		return listaDeMidias.substring(0, (listaDeMidias.length() - 1));
 	}
 
 	/**
