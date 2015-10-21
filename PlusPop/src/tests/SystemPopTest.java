@@ -192,7 +192,7 @@ public class SystemPopTest {
 			//NAO DEVE CHEGAR AQUI
 			Assert.fail();
 		} catch (EntradaException | ParseException e) {
-			Assert.assertEquals("Erro na atualizacao de perfil. Foto dx usuarix nao pode ser vazia.", e.getMessage());
+			Assert.assertEquals("Erro na atualizacao de perfil. Formato de e-mail esta invalido.", e.getMessage());
 		}
 		
 	}

@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,21 +57,23 @@ public class UtilUsuario {
 					"Senha dx usuarix nao pode ser vazia.");
 		}
 	}
-	
+
 	/**
-	 * Metodo utilizado para validar a data de nascimento do usuario que será cadastrado.
+	 * Metodo utilizado para validar a data de nascimento do usuario que será
+	 * cadastrado.
 	 * 
-	 * @param dataDeNascimento 
+	 * @param dataDeNascimento
 	 * @throws EntradaException
 	 */
 
 	public static void validaDataCadastro(String dataDeNascimento)
 			throws EntradaException {
-		if (dataDeNascimento == null || dataDeNascimento.equals("") || dataDeNascimento.trim().equals("")) {
+		if (dataDeNascimento == null || dataDeNascimento.equals("")
+				|| dataDeNascimento.trim().equals("")) {
 			throw new CadastroDeUsuariosException("Data nao existe.");
 		}
 
-		if (!diaEhValido(dataDeNascimento)) {
+		if (!validaFormatoDeData(dataDeNascimento)) {
 			throw new CadastroDeUsuariosException(
 					"Formato de data esta invalida.");
 		}
@@ -79,7 +82,7 @@ public class UtilUsuario {
 			throw new CadastroDeUsuariosException("Data nao existe.");
 		}
 	}
-	
+
 	/**
 	 * Metodo utilizado para validar emails.
 	 * 
@@ -102,21 +105,21 @@ public class UtilUsuario {
 
 		return false;
 	}
-	
+
 	/**
 	 * Metodo utilizado para verifiar se uma foto eh valida.
 	 * 
 	 * @param foto
 	 * @throws EntradaException
 	 */
-	
+
 	public static void validaFotoCadastro(String foto) throws EntradaException {
 		if (foto == null || foto.equals("") || foto.trim().equals("")) {
 			throw new CadastroDeUsuariosException(
-					"Foto dx usuarix nao pode ser vazia.");		
+					"Foto dx usuarix nao pode ser vazia.");
 		}
 	}
-	
+
 	/**
 	 * Metodo utilizado para verificar se uma data eh valida.
 	 * 
@@ -136,22 +139,6 @@ public class UtilUsuario {
 	}
 
 	/**
-	 * Metodo utilizado para verificar se um dia eh valido.
-	 * 
-	 * @param dataStr
-	 * @return
-	 */
-	
-	public static boolean diaEhValido(String dataStr) {
-		String dia = dataStr.split("/")[0];
-
-		if (dia.length() > 2)
-			return false;
-
-		return true;
-	}
-	
-	/**
 	 * Metodo utilizado para verificar se o formato de data eh valido.
 	 * 
 	 * @param data
@@ -162,17 +149,7 @@ public class UtilUsuario {
 		if (!data.matches("([0-9]{2})/([0-9]{2})/([0-9]{4})")) {
 			return false;
 		}
-
-		String[] valores = data.split("/");
-		int dia = Integer.parseInt(valores[0]);
-		int mes = Integer.parseInt(valores[1]);
-		int ano = Integer.parseInt(valores[2]);
-		;
-
-		if (dia < 1 || dia > 31 || mes < 1 || mes > 12 || ano < 1) {
-			return false;
-		}
-
+		
 		return true;
 	}
 }

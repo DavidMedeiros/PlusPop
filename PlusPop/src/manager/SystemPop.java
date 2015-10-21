@@ -210,13 +210,14 @@ public class SystemPop {
 			}
 			usuarioLogado.setEmail(valor);
 		} else if (atributo.equals("data de nascimento")) {
+			if (valor == null || valor.equals("") || valor.trim().equals("")) {
+				throw new AtualizacaoPerfilException(
+						"Erro na atualizacao de perfil. Data nao existe.");
+			}			
+			
 			if (!UtilUsuario.validaFormatoDeData(valor)) {
 				throw new AtualizacaoPerfilException(
 						"Erro na atualizacao de perfil. Formato de data esta invalida.");
-			}
-			if (!UtilUsuario.diaEhValido(valor)) {
-				throw new AtualizacaoPerfilException(
-						"Erro na atualizacao de perfil. Data nao existe.");
 			}
 			
 			if (!UtilUsuario.dataEhValida(valor)) {
