@@ -28,6 +28,7 @@ public class IconePOP implements Interacao {
 
 	public boolean postRecente(String dataDoPost) {
 		Date dataAtual = new Date();
+		// TODO: Data atual serve para o que?
 		DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		String dataAtualFormatada= formatter.format(dataDoPost);
 		if (dataAtualFormatada.equals(dataDoPost)) {

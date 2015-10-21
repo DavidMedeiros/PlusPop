@@ -11,6 +11,7 @@ public class CelebridadePOP implements Interacao {
 		post.curtir();
 		post.addPopularidade(25);
 		Date dataAtual = new Date();
+		//TODO: DATA ATUAL SERVE PARA O QUE?
 		if (postRecente(post.getData())) {
 			post.addPopularidade(10);
 

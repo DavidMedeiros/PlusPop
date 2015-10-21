@@ -2,7 +2,7 @@ package manager;
 
 import java.text.ParseException;
 
-import usuario.Usuario;
+import user.Usuario;
 import easyaccept.EasyAccept;
 import exceptions.EntradaException;
 import exceptions.LogicaException;
@@ -120,7 +120,7 @@ public class Facade {
 		
 	}
 	
-	public String getNextNotificacao() throws NotificacoesException {
+	public String getNextNotificacao() throws LogicaException {
 		return this.systemPop.getNextNotificacao();
 		
 	}

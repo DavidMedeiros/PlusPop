@@ -1,4 +1,4 @@
-package usuario;
+package user;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -49,6 +49,7 @@ public class Usuario implements Friendship {
 		UtilUsuario.validaDataCadastro(dataDeNascimento);
 		UtilUsuario.validaEmailCadastro(email);
 		UtilUsuario.validaSenhaCadastro(senha);
+		UtilUsuario.validaFotoCadastro(foto);
 		
 		this.email = email;
 		this.senha = senha;
@@ -506,6 +507,7 @@ public class Usuario implements Friendship {
 	@Override
 	public void aceitaAmigo(Usuario novoAmigo) {
 		this.amigos.add(novoAmigo);
+		removeSolicitacao(novoAmigo);
 	}
 
 	/**
@@ -525,9 +527,18 @@ public class Usuario implements Friendship {
 	public void addSolicitacao(Usuario usuario) {
 		this.solicitacoesDeAmizade.add(usuario);
 	}
-
+	
 	/**
-	 * Metodo utilizado para verificar se o usuario informado é amigo do usuario atual.
+	 * Metodo utilizado para remover uma solicitacao de amizade. 
+	 */
+	
+	@Override
+	public void removeSolicitacao(Usuario usuario) {
+		this.solicitacoesDeAmizade.remove(usuario);
+	}
+	
+	/**
+	 * Metodo utilizado para verificar se o usuario informado eh amigo do usuario atual.
 	 */
 	
 	@Override

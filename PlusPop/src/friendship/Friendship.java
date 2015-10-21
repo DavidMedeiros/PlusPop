@@ -1,6 +1,6 @@
 package friendship;
 
-import usuario.Usuario;
+import user.Usuario;
 
 public interface Friendship {
 
@@ -9,6 +9,8 @@ public interface Friendship {
 	public void removeAmigo(Usuario amigoRemovido);
 
 	public void addSolicitacao(Usuario usuario);
+	
+	public void removeSolicitacao(Usuario usuario);
 	
 	public Usuario buscaAmigo(String emailDoAmigo);
 }

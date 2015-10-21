@@ -6,8 +6,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import usuario.Usuario;
-import usuario.UsuarioFactory;
+import user.Usuario;
+import user.UsuarioFactory;
 import util.UtilUsuario;
 import exceptions.AtualizacaoPerfilException;
 import exceptions.CadastroDeUsuariosException;
@@ -191,22 +191,25 @@ public class SystemPop {
 
 	public void atualizaPerfil(String atributo, String valor)
 			throws EntradaException, ParseException {
+		
+		atributo = atributo.toLowerCase();
+		
 		if (!verificaSeHaUsuarioLogado()) {
 			throw new AtualizacaoPerfilException(
 					"Nao eh possivel atualizar um perfil. Nenhum usuarix esta logadx no +pop.");
-		} else if (atributo.equals("Nome")) {
-			if (valor.equals("") || valor == null) {
+		} else if (atributo.equals("nome")) {
+			if (valor.equals("") || valor.trim().equals("") || valor == null) {
 				throw new AtualizacaoPerfilException(
 						"Erro na atualizacao de perfil. Nome dx usuarix nao pode ser vazio.");
 			}
 			usuarioLogado.setNome(valor);
-		} else if (atributo.equals("E-mail")) {
+		} else if (atributo.equals("e-mail")) {
 			if (!UtilUsuario.validaEmails(valor)) {
 				throw new AtualizacaoPerfilException(
 						"Erro na atualizacao de perfil. Formato de e-mail esta invalido.");
 			}
 			usuarioLogado.setEmail(valor);
-		} else if (atributo.equals("Data de Nascimento")) {
+		} else if (atributo.equals("data de nascimento")) {
 			if (!UtilUsuario.validaFormatoDeData(valor)) {
 				throw new AtualizacaoPerfilException(
 						"Erro na atualizacao de perfil. Formato de data esta invalida.");
@@ -216,8 +219,8 @@ public class SystemPop {
 						"Erro na atualizacao de perfil. Data nao existe.");
 			}
 			usuarioLogado.setDataDeNascimento(valor);
-		} else if (atributo.equals("Foto")) {
-			if (valor.equals("") || valor == null) {
+		} else if (atributo.equals("foto")) {
+			if (valor.equals("") || valor.trim().equals("") || valor == null) {
 				throw new AtualizacaoPerfilException(
 						"Erro na atualizacao de perfil. Foto dx usuarix nao pode ser vazia.");
 			}
@@ -241,7 +244,10 @@ public class SystemPop {
 			throw new AtualizacaoPerfilException(
 					"Nao eh possivel atualizar um perfil. Nenhum usuarix esta logadx no +pop.");
 		}
-
+		if (valor.equals("") || valor == null || valor.trim().equals("")) {
+			throw new AtualizacaoPerfilException(
+					"Erro na atualizacao de perfil. Senha dx usuarix nao pode ser vazia.");
+		}
 		if (usuarioLogado.getSenha().equals(velhaSenha)) {
 			usuarioLogado.setSenha(valor);
 		} else {
@@ -266,7 +272,7 @@ public class SystemPop {
 			throw new LogicaException(
 					"Nao eh possivel criar o post. Nenhum usuarix esta logadx no +pop.");
 		}
-
+			
 		Post novoPost = new Post(mensagem, data);
 		usuarioLogado.postar(novoPost);
 
@@ -327,17 +333,6 @@ public class SystemPop {
 
 	public List<Usuario> getUsuariosCadastrados() {
 		return usuariosCadastrados;
-	}
-
-	/**
-	 * Metodo setter do atributo usuariosCadastrados; Metodo com visibilidade
-	 * private, pois nao sera usado, a priore;
-	 * 
-	 * @param usuariosCadastrados
-	 */
-
-	private void setUsuariosCadastrados(ArrayList<Usuario> usuariosCadastrados) {
-		this.usuariosCadastrados = usuariosCadastrados;
 	}
 
 	/**
@@ -648,7 +643,7 @@ public class SystemPop {
 	 * @throws NotificacoesException
 	 */
 
-	public String getNextNotificacao() throws NotificacoesException {
+	public String getNextNotificacao() throws LogicaException {
 
 		if (this.usuarioLogado.getNotificacoes().size() == 0) {
 			throw new NotificacoesException();

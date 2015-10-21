@@ -1,5 +1,9 @@
 package util;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import media.Audio;
@@ -83,7 +87,7 @@ public class UtilPost {
 	 */
 
 	public static void validaMensagem(String mensagem) throws EntradaException {
-		if (mensagem.equals("") || mensagem == null) {
+		if (mensagem.equals("") || mensagem.trim().equals("")  || mensagem == null) {
 			throw new CriaPostException("A mensagem nao pode ser vazia");
 		}
 	}
@@ -111,8 +115,7 @@ public class UtilPost {
 	 */
 
 	public static void validaHashtags(String mensagem) throws EntradaException {
-		String textoDeHashtags = mensagem.substring(mensagem.indexOf("#"),
-				mensagem.length());
+		String textoDeHashtags = separaTextoHashtags(mensagem);
 		String[] hashtags = textoDeHashtags.split(" ");
 
 		for (String hashtag : hashtags) {
@@ -121,6 +124,56 @@ public class UtilPost {
 						"As hashtags devem comecar com '#'. Erro na hashtag: '"
 								+ hashtag + "'.");
 			}
+		}
+	}
+
+	/**
+	 * Recebe mensagem original e separa em uma mensagem com hashtags, para que possa ser analisada.
+	 *  
+	 * @param mensagem
+	 * @return
+	 */
+	
+	private static String separaTextoHashtags(String mensagem) {
+		String textoDeHashtags = mensagem.substring(mensagem.indexOf("#"),
+				mensagem.length());
+		
+		return textoDeHashtags;
+	}
+	
+	/**
+	 * Valida se a data de criacao do post esta correta.
+	 * @param dataDeNascimento
+	 * @throws EntradaException
+	 */
+	
+	public static void validaDataPost(String dataPost)
+			throws EntradaException {
+		if (dataPost.equals("") || dataPost.trim().equals("")
+				|| dataPost == null) {
+			throw new CriaPostException("Data nao existe.");
+		}
+
+		if (!dataEhValida(dataPost)) {
+			throw new CriaPostException("Data nao existe.");
+		}
+	}
+
+	/**
+	 * Metodo utilizado para verificar se uma data eh valida
+	 * 
+	 * @param dataStr
+	 * @return
+	 */
+	
+	public static boolean dataEhValida(String dataStr) {
+		DateFormat dataFormatter = new SimpleDateFormat("dd/MM/yyyy");
+		dataFormatter.setLenient(false);
+		try {
+			Date date = dataFormatter.parse(dataStr);
+			return true;
+		} catch (ParseException e) {
+			return false;
 		}
 	}
 

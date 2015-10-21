@@ -13,7 +13,7 @@ import exceptions.EntradaException;
 public class UtilUsuario {
 
 	/**
-	 * Metodo utilizado para validar o nome do usuario que ser· cadastrado.
+	 * Metodo utilizado para validar o nome do usuario que ser√° cadastrado.
 	 * 
 	 * @param nome
 	 * @throws EntradaException
@@ -28,7 +28,7 @@ public class UtilUsuario {
 
 	/**
 	 * 
-	 * Metodo utilizado para validar o email do usuario que ser· cadastrado.
+	 * Metodo utilizado para validar o email do usuario que ser√° cadastrado.
 	 * 
 	 * @param email
 	 * @throws EntradaException
@@ -43,7 +43,7 @@ public class UtilUsuario {
 	}
 
 	/**
-	 * Metodo utilizado para validar a senha do usuario que ser· cadastrado.
+	 * Metodo utilizado para validar a senha do usuario que ser√° cadastrado.
 	 * 
 	 * @param senha
 	 * @throws EntradaException
@@ -58,7 +58,7 @@ public class UtilUsuario {
 	}
 	
 	/**
-	 * Metodo utilizado para validar a data de nascimento do usuario que ser· cadastrado.
+	 * Metodo utilizado para validar a data de nascimento do usuario que ser√° cadastrado.
 	 * 
 	 * @param dataDeNascimento 
 	 * @throws EntradaException
@@ -102,6 +102,20 @@ public class UtilUsuario {
 		}
 
 		return false;
+	}
+	
+	/**
+	 * Metodo utilizado para verifiar se uma foto eh valida.
+	 * 
+	 * @param foto
+	 * @throws EntradaException
+	 */
+	
+	public static void validaFotoCadastro(String foto) throws EntradaException {
+		if (foto.equals("") || foto.trim().equals("") || foto == null) {
+			throw new CadastroDeUsuariosException(
+					"Foto dx usuarix nao pode ser vazia.");		
+		}
 	}
 	
 	/**

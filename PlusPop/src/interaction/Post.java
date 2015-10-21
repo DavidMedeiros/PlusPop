@@ -3,11 +3,8 @@ package interaction;
 import java.util.ArrayList;
 import java.util.List;
 
-import media.Audio;
-import media.Imagem;
 import media.MidiaPost;
 import util.UtilPost;
-import exceptions.CriaPostException;
 import exceptions.EntradaException;
 
 public class Post {
@@ -40,9 +37,12 @@ public class Post {
 		this.listaDeHashtags = new ArrayList<String>();
 
 		UtilPost.validaMensagem(mensagem);
-		UtilPost.validaHashtags(mensagem);
 		separaConteudoDaMensagem(mensagem);
 		UtilPost.validaTexto(texto);
+		UtilPost.validaDataPost(data);
+		if (mensagem.contains("#")) {
+			UtilPost.validaHashtags(mensagem);
+		}
 	}
 
 	/**
@@ -321,6 +321,10 @@ public class Post {
 	 */
 	
 	public String getHashtags() {
+		if (listaDeHashtags.isEmpty()) {
+			return "";
+		}
+		
 		String hashtags = "";
 		for (String hashtag : listaDeHashtags) {
 			hashtags = hashtags + hashtag + ",";
