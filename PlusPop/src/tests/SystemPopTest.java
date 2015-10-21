@@ -194,5 +194,21 @@ public class SystemPopTest {
 			Assert.assertEquals("Erro na atualizacao de perfil. Formato de e-mail esta invalido.", e.getMessage());
 		}
 		
+		// REALIZA LOGOUT DO USUARIO
+		try {
+			systemPop.logout();
+		} catch (EntradaException e) {
+			// NAO DEVE CAPTURAR EXCESSAO
+			Assert.fail();
+		}
+		
+		// TENTA ATUALIZAR INFORMACOES DO PERFIL SEM USUARIO LOGADO
+		try {
+			systemPop.atualizaPerfil("e-mail", null);
+			//NAO DEVE CHEGAR AQUI
+			Assert.fail();
+		} catch (EntradaException | ParseException e) {
+			Assert.assertEquals("Nao eh possivel atualizar um perfil. Nenhum usuarix esta logadx no +pop.", e.getMessage());
+		}
 	}
 }
