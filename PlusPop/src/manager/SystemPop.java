@@ -191,47 +191,20 @@ public class SystemPop {
 
 	public void atualizaPerfil(String atributo, String valor)
 			throws EntradaException, ParseException {
-		
+
 		atributo = atributo.toLowerCase();
-		
+
 		if (!verificaSeHaUsuarioLogado()) {
 			throw new AtualizacaoPerfilException(
 					"Nao eh possivel atualizar um perfil. Nenhum usuarix esta logadx no +pop.");
 		} else if (atributo.equals("nome")) {
-			if (valor == null || valor.equals("") || valor.trim().equals("")) {
-				throw new AtualizacaoPerfilException(
-						"Erro na atualizacao de perfil. Nome dx usuarix nao pode ser vazio.");
-			}
-			usuarioLogado.setNome(valor);
+			atualizaNomePerfil(valor);
 		} else if (atributo.equals("e-mail")) {
-			if (!UtilUsuario.validaEmails(valor)) {
-				throw new AtualizacaoPerfilException(
-						"Erro na atualizacao de perfil. Formato de e-mail esta invalido.");
-			}
-			usuarioLogado.setEmail(valor);
+			atualizaEmailPerfil(valor);
 		} else if (atributo.equals("data de nascimento")) {
-			if (valor == null || valor.equals("") || valor.trim().equals("")) {
-				throw new AtualizacaoPerfilException(
-						"Erro na atualizacao de perfil. Data nao existe.");
-			}			
-			
-			if (!UtilUsuario.validaFormatoDeData(valor)) {
-				throw new AtualizacaoPerfilException(
-						"Erro na atualizacao de perfil. Formato de data esta invalida.");
-			}
-			
-			if (!UtilUsuario.dataEhValida(valor)) {
-				throw new AtualizacaoPerfilException(
-						"Erro na atualizacao de perfil. Data nao existe.");
-			}
-			
-			usuarioLogado.setDataDeNascimento(valor);
+			atualizaDataPerfil(valor);
 		} else if (atributo.equals("foto")) {
-			if (valor == null || valor.equals("") || valor.trim().equals("")) {
-				throw new AtualizacaoPerfilException(
-						"Erro na atualizacao de perfil. Foto dx usuarix nao pode ser vazia.");
-			}
-			usuarioLogado.setFoto(valor);
+			atualizaFotoPerfil(valor);
 		}
 	}
 
@@ -247,11 +220,108 @@ public class SystemPop {
 
 	public void atualizaPerfil(String atributo, String valor, String velhaSenha)
 			throws EntradaException {
+		
+		atributo = atributo.toLowerCase();
+
 		if (!verificaSeHaUsuarioLogado()) {
 			throw new AtualizacaoPerfilException(
 					"Nao eh possivel atualizar um perfil. Nenhum usuarix esta logadx no +pop.");
 		}
-		if (valor.equals("") || valor == null || valor.trim().equals("")) {
+
+		if (atributo.equals("senha")) {
+			atualizaSenhaPerfil(valor, velhaSenha);
+		}
+	}
+
+	/**
+	 * Metodo utilizado para atualizar o nome do perfil, afim de melhorar o
+	 * expert.
+	 * 
+	 * @param valor
+	 * @throws EntradaException
+	 */
+
+	private void atualizaNomePerfil(String valor) throws EntradaException {
+		if (valor == null || valor.equals("") || valor.trim().equals("")) {
+			throw new AtualizacaoPerfilException(
+					"Erro na atualizacao de perfil. Nome dx usuarix nao pode ser vazio.");
+		}
+		usuarioLogado.setNome(valor);
+	}
+
+	/**
+	 * Metodo utilizado para atualizar o email do perfil, afim de melhorar o
+	 * expert.
+	 * 
+	 * @param valor
+	 * @throws EntradaException
+	 */
+
+	private void atualizaEmailPerfil(String valor) throws EntradaException {
+		if (!UtilUsuario.validaEmails(valor)) {
+			throw new AtualizacaoPerfilException(
+					"Erro na atualizacao de perfil. Formato de e-mail esta invalido.");
+		}
+		usuarioLogado.setEmail(valor);
+	}
+
+	/**
+	 * Metodo utilizado para atualizar data do perfil, afim de melhorar o
+	 * expert.
+	 * 
+	 * @param valor
+	 * @throws EntradaException
+	 * @throws ParseException
+	 */
+
+	private void atualizaDataPerfil(String valor) throws EntradaException,
+			ParseException {
+		if (valor == null || valor.equals("") || valor.trim().equals("")) {
+			throw new AtualizacaoPerfilException(
+					"Erro na atualizacao de perfil. Data nao existe.");
+		}
+
+		if (!UtilUsuario.validaFormatoDeData(valor)) {
+			throw new AtualizacaoPerfilException(
+					"Erro na atualizacao de perfil. Formato de data esta invalida.");
+		}
+
+		if (!UtilUsuario.dataEhValida(valor)) {
+			throw new AtualizacaoPerfilException(
+					"Erro na atualizacao de perfil. Data nao existe.");
+		}
+
+		usuarioLogado.setDataDeNascimento(valor);
+	}
+
+	/**
+	 * Metodo utilizado para atualizar a foto do perfil, afim de melhorar o
+	 * expert.
+	 * 
+	 * @param valor
+	 * @throws EntradaException
+	 */
+
+	private void atualizaFotoPerfil(String valor) throws EntradaException {
+		if (valor == null || valor.equals("") || valor.trim().equals("")) {
+			throw new AtualizacaoPerfilException(
+					"Erro na atualizacao de perfil. Foto dx usuarix nao pode ser vazia.");
+		}
+		usuarioLogado.setFoto(valor);
+	}
+
+	/**
+	 * Metodo utilizado para atualizar a senha do perfil, afim de melhorar o
+	 * expert.
+	 * 
+	 * @param valor
+	 * @param velhaSenha
+	 * @throws AtualizacaoPerfilException
+	 */
+
+	private void atualizaSenhaPerfil(String valor, String velhaSenha)
+			throws AtualizacaoPerfilException {
+		if (valor == null || valor.equals("") || valor.trim().equals("")) {
 			throw new AtualizacaoPerfilException(
 					"Erro na atualizacao de perfil. Senha dx usuarix nao pode ser vazia.");
 		}
@@ -279,7 +349,7 @@ public class SystemPop {
 			throw new LogicaException(
 					"Nao eh possivel criar o post. Nenhum usuarix esta logadx no +pop.");
 		}
-			
+
 		Post novoPost = new Post(mensagem, data);
 		usuarioLogado.postar(novoPost);
 

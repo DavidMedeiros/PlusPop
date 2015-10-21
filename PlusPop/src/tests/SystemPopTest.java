@@ -10,7 +10,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import user.Usuario;
 import user.UsuarioFactory;
 import exceptions.EntradaException;
 

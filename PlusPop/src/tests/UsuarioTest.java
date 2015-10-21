@@ -100,7 +100,7 @@ public class UsuarioTest {
 			// NAO DEVE CHEGAR AQUI
 			Assert.fail();
 		} catch (ParseException | EntradaException e) {
-			Assert.assertEquals("Erro no cadastro de Usuarios. Data nao existe.", e.getMessage());
+			Assert.assertEquals("Erro no cadastro de Usuarios. Formato de data esta invalida.", e.getMessage());
 		}
 		
 		try {
@@ -108,7 +108,7 @@ public class UsuarioTest {
 			// NAO DEVE CHEGAR AQUI
 			Assert.fail();
 		} catch (ParseException | EntradaException e) {
-			Assert.assertEquals("Erro no cadastro de Usuarios. Data nao existe.", e.getMessage());
+			Assert.assertEquals("Erro no cadastro de Usuarios. Formato de data esta invalida.", e.getMessage());
 		}
 		
 		try {
