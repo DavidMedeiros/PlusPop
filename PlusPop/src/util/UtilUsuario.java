@@ -20,7 +20,7 @@ public class UtilUsuario {
 	 */
 
 	public static void validaNomeCadastro(String nome) throws EntradaException {
-		if (nome.equals("") || nome.trim().equals("") || nome == null) {
+		if (nome == null || nome.equals("") || nome.trim().equals("")) {
 			throw new CadastroDeUsuariosException(
 					"Nome dx usuarix nao pode ser vazio.");
 		}
@@ -51,7 +51,7 @@ public class UtilUsuario {
 
 	public static void validaSenhaCadastro(String senha)
 			throws EntradaException {
-		if (senha.equals("") || senha.trim().equals("") || senha == null) {
+		if (senha == null || senha.equals("") || senha.trim().equals("")) {
 			throw new CadastroDeUsuariosException(
 					"Senha dx usuarix nao pode ser vazia.");
 		}
@@ -66,8 +66,7 @@ public class UtilUsuario {
 
 	public static void validaDataCadastro(String dataDeNascimento)
 			throws EntradaException {
-		if (dataDeNascimento.equals("") || dataDeNascimento.trim().equals("")
-				|| dataDeNascimento == null) {
+		if (dataDeNascimento == null || dataDeNascimento.equals("") || dataDeNascimento.trim().equals("")) {
 			throw new CadastroDeUsuariosException("Data nao existe.");
 		}
 
@@ -89,7 +88,7 @@ public class UtilUsuario {
 	 */
 
 	public static boolean validaEmails(String email) {
-		if (email.equals("") || email.trim().equals("") || email == null) {
+		if (email == null || email.equals("") || email.trim().equals("")) {
 			return false;
 		}
 
@@ -112,7 +111,7 @@ public class UtilUsuario {
 	 */
 	
 	public static void validaFotoCadastro(String foto) throws EntradaException {
-		if (foto.equals("") || foto.trim().equals("") || foto == null) {
+		if (foto == null || foto.equals("") || foto.trim().equals("")) {
 			throw new CadastroDeUsuariosException(
 					"Foto dx usuarix nao pode ser vazia.");		
 		}

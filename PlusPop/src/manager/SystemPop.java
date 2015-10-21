@@ -198,7 +198,7 @@ public class SystemPop {
 			throw new AtualizacaoPerfilException(
 					"Nao eh possivel atualizar um perfil. Nenhum usuarix esta logadx no +pop.");
 		} else if (atributo.equals("nome")) {
-			if (valor.equals("") || valor.trim().equals("") || valor == null) {
+			if (valor == null || valor.equals("") || valor.trim().equals("")) {
 				throw new AtualizacaoPerfilException(
 						"Erro na atualizacao de perfil. Nome dx usuarix nao pode ser vazio.");
 			}
@@ -214,13 +214,19 @@ public class SystemPop {
 				throw new AtualizacaoPerfilException(
 						"Erro na atualizacao de perfil. Formato de data esta invalida.");
 			}
+			if (!UtilUsuario.diaEhValido(valor)) {
+				throw new AtualizacaoPerfilException(
+						"Erro na atualizacao de perfil. Data nao existe.");
+			}
+			
 			if (!UtilUsuario.dataEhValida(valor)) {
 				throw new AtualizacaoPerfilException(
 						"Erro na atualizacao de perfil. Data nao existe.");
 			}
+			
 			usuarioLogado.setDataDeNascimento(valor);
 		} else if (atributo.equals("foto")) {
-			if (valor.equals("") || valor.trim().equals("") || valor == null) {
+			if (valor == null || valor.equals("") || valor.trim().equals("")) {
 				throw new AtualizacaoPerfilException(
 						"Erro na atualizacao de perfil. Foto dx usuarix nao pode ser vazia.");
 			}
