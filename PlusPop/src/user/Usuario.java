@@ -17,7 +17,7 @@ import interaction.Interacao;
 import interaction.Normal;
 import interaction.Post;
 
-public class Usuario implements Friendship {
+public class Usuario implements Friendship, Comparable<Usuario> {
 
 	private String email;
 	private String senha;
@@ -33,6 +33,7 @@ public class Usuario implements Friendship {
 
 	/**
 	 * Construtor da classe Usuario.
+	 * 
 	 * @param nome
 	 * @param email
 	 * @param senha
@@ -41,16 +42,17 @@ public class Usuario implements Friendship {
 	 * @throws ParseException
 	 * @throws EntradaException
 	 */
-	
-	public Usuario(String nome, String email, String senha, String dataDeNascimento, String foto)
-			throws ParseException, EntradaException {
-		
+
+	public Usuario(String nome, String email, String senha,
+			String dataDeNascimento, String foto) throws ParseException,
+			EntradaException {
+
 		UtilUsuario.validaNomeCadastro(nome);
 		UtilUsuario.validaDataCadastro(dataDeNascimento);
 		UtilUsuario.validaEmailCadastro(email);
 		UtilUsuario.validaSenhaCadastro(senha);
 		UtilUsuario.validaFotoCadastro(foto);
-		
+
 		this.email = email;
 		this.senha = senha;
 		this.nome = nome;
@@ -64,13 +66,14 @@ public class Usuario implements Friendship {
 		this.pops = 0;
 	}
 
-	public Usuario(String nome, String email, String senha, String dataDeNascimento) throws ParseException, EntradaException {
-		
+	public Usuario(String nome, String email, String senha,
+			String dataDeNascimento) throws ParseException, EntradaException {
+
 		UtilUsuario.validaNomeCadastro(nome);
 		UtilUsuario.validaDataCadastro(dataDeNascimento);
 		UtilUsuario.validaEmailCadastro(email);
 		UtilUsuario.validaSenhaCadastro(senha);
-		
+
 		this.email = email;
 		this.senha = senha;
 		this.nome = nome;
@@ -85,35 +88,40 @@ public class Usuario implements Friendship {
 	}
 
 	/**
-	 * Metodo utilizado para adicionar um novo post a lista de posts do Usuario.
+	 * Metodo utilizado para adicionar um novo post a lista de posts do Usuario;
+	 * tambem armazenando as hashtags deste no atributo hashtagsDosPosts do
+	 * usuario.
 	 * 
 	 * @param novoPost
 	 */
-	
+
 	public void postar(Post novoPost) {
 		this.posts.add(novoPost);
+
 	}
 
 	/**
-	 * Metodo utilizado para adicionar uma notificacao as notificacoes do Usuario.
+	 * Metodo utilizado para adicionar uma notificacao as notificacoes do
+	 * Usuario.
 	 * 
 	 * @param mensagem
 	 */
-	
+
 	public void addNotificacao(String mensagem) {
 		this.notificacoes.addNotificacao(mensagem);
 	}
 
 	/**
-	 * Metodo utilizado para remover uma notificacao das notificacoes do Usuario.
+	 * Metodo utilizado para remover uma notificacao das notificacoes do
+	 * Usuario.
 	 * 
 	 * @param notificacao
 	 */
-	
+
 	public void removeNotificacao(String notificacao) {
 		this.notificacoes.removeNotificacao(notificacao);
 	}
-	
+
 	/**
 	 * Metodo utilizado para formatar a data de nascimento.
 	 * 
@@ -141,12 +149,12 @@ public class Usuario implements Friendship {
 	 * 
 	 * @return
 	 */
-	
+
 	public String getEmail() {
 		return email;
 	}
-	
-	/** 
+
+	/**
 	 * Metodo utilizado para alterar o email do usuario.
 	 * 
 	 * @param novoEmail
@@ -155,7 +163,7 @@ public class Usuario implements Friendship {
 	public void setEmail(String novoEmail) {
 		this.email = novoEmail;
 	}
-	
+
 	/**
 	 * Metodo utilizado para obter a senha do usuario.
 	 * 
@@ -171,7 +179,7 @@ public class Usuario implements Friendship {
 	 * 
 	 * @param novaSenha
 	 */
-	
+
 	public void setSenha(String novaSenha) {
 		this.senha = novaSenha;
 	}
@@ -181,11 +189,11 @@ public class Usuario implements Friendship {
 	 * 
 	 * @return
 	 */
-	
+
 	public String getNome() {
 		return nome;
 	}
-	
+
 	/**
 	 * Metodo utilizado para alterar o nome do usuario.
 	 * 
@@ -195,7 +203,7 @@ public class Usuario implements Friendship {
 	public void setNome(String novoNome) {
 		this.nome = novoNome;
 	}
-	
+
 	/**
 	 * Metodo utilizado para obter a data de nascimento formatada do usuario.
 	 * 
@@ -206,7 +214,7 @@ public class Usuario implements Friendship {
 		DateFormat dataFormatada = new SimpleDateFormat("yyyy-MM-dd");
 		return dataFormatada.format(this.dataDeNascimento);
 	}
-	
+
 	/**
 	 * Metodo utilizado para alterar a data de nascimento do usuario.
 	 * 
@@ -214,7 +222,8 @@ public class Usuario implements Friendship {
 	 * @throws ParseException
 	 */
 
-	public void setDataDeNascimento(String novaDataDeNascimento) throws ParseException {
+	public void setDataDeNascimento(String novaDataDeNascimento)
+			throws ParseException {
 		this.dataDeNascimento = formataDataDeNascimento(novaDataDeNascimento);
 	}
 
@@ -223,11 +232,11 @@ public class Usuario implements Friendship {
 	 * 
 	 * @return
 	 */
-	
+
 	public String getFoto() {
 		return foto;
 	}
-	
+
 	/**
 	 * Metodo utilizado para alterar a foto do usuario.
 	 * 
@@ -237,50 +246,50 @@ public class Usuario implements Friendship {
 	public void setFoto(String novaFoto) {
 		this.foto = novaFoto;
 	}
-	
+
 	/**
 	 * Metodo utilizado para obter a lista de posts do usuario.
 	 * 
 	 * @return
 	 */
-	
+
 	public List<Post> getPosts() {
 		return posts;
 	}
-	
+
 	/**
 	 * Metodo utilizado para obter um determinado post dos posts do usuario.
 	 * 
 	 * @param indiceDoPost
 	 * @return
 	 */
-		
+
 	public Post getPostIndex(int indiceDoPost) {
 		return this.posts.get(indiceDoPost);
 	}
-	
+
 	/**
 	 * Metodo utilizado para obter um determinado post formatado.
 	 * 
 	 * @param index
 	 * @return
 	 */
-	
+
 	public String getPostFormatado(int index) {
 		return posts.get(index).getPostFormatado();
 	}
-	
+
 	/**
 	 * Metodo utilizado para obter a data de um determinado post do usuario.
 	 * 
 	 * @param indexPost
 	 * @return
 	 */
-	
+
 	public String getDataPost(int indexPost) {
 		return this.posts.get(indexPost).getData();
 	}
-	
+
 	/**
 	 * Metodo utilizado para obter a mensagem do post, a mensagem eh igual ao
 	 * texto do post juntamente com as midias.
@@ -292,28 +301,31 @@ public class Usuario implements Friendship {
 	public String getMensagemPost(int indexPost) {
 		return this.posts.get(indexPost).getMensagem();
 	}
-	
+
 	/**
-	 * Metodo utilizado para obter as hashtags de um determinado post do usuario.
-	 * @param indexPost
-	 * @return
-	 */
-	
-	public String getHashtagPost(int indexPost) {
-		return this.posts.get(indexPost).getHashtags();
-	}
-	
-	/**
-	 * Metodo utilizado para obter a lista de conteudo de um determinado post do usuario.
+	 * Metodo utilizado para obter as hashtags de um determinado post do
+	 * usuario.
 	 * 
 	 * @param indexPost
 	 * @return
 	 */
-	
+
+	public String getHashtagPost(int indexPost) {
+		return this.posts.get(indexPost).getHashtags();
+	}
+
+	/**
+	 * Metodo utilizado para obter a lista de conteudo de um determinado post do
+	 * usuario.
+	 * 
+	 * @param indexPost
+	 * @return
+	 */
+
 	public List<String> getConteudoPost(int indexPost) {
 		return this.posts.get(indexPost).getConteudoDoPost();
 	}
-	
+
 	/**
 	 * Metodo utilizado para obter o conteudo de um determinado post do usuario.
 	 * 
@@ -321,7 +333,7 @@ public class Usuario implements Friendship {
 	 * @param indiceDoConteudo
 	 * @return
 	 */
-	
+
 	public String getConteudoPost(int indexPost, int indiceDoConteudo) {
 		return this.posts.get(indexPost).getConteudoDoPost(indiceDoConteudo);
 	}
@@ -331,7 +343,7 @@ public class Usuario implements Friendship {
 	 * 
 	 * @param posts
 	 */
-	
+
 	public void setPosts(List<Post> posts) {
 		this.posts = posts;
 	}
@@ -341,7 +353,7 @@ public class Usuario implements Friendship {
 	 * 
 	 * @return
 	 */
-	
+
 	public List<Usuario> getAmigos() {
 		return amigos;
 	}
@@ -351,7 +363,7 @@ public class Usuario implements Friendship {
 	 * 
 	 * @param amigos
 	 */
-	
+
 	public void setAmigos(List<Usuario> amigos) {
 		this.amigos = amigos;
 	}
@@ -361,17 +373,18 @@ public class Usuario implements Friendship {
 	 * 
 	 * @return
 	 */
-	
+
 	public List<String> getNotificacoes() {
 		return this.notificacoes.getNotificacoes();
 	}
 
 	/**
-	 * Metodo utilizado para obter a lista de solicitacoes de amizade do usuario.
+	 * Metodo utilizado para obter a lista de solicitacoes de amizade do
+	 * usuario.
 	 * 
 	 * @return
 	 */
-	
+
 	public List<Usuario> getSolicitacoesDeAmizade() {
 		return solicitacoesDeAmizade;
 	}
@@ -381,11 +394,11 @@ public class Usuario implements Friendship {
 	 * 
 	 * @return
 	 */
-	
+
 	public Interacao getPopularidade() {
 		return popularidade;
 	}
-	
+
 	/**
 	 * Metodo utilizado para atualizar a popularidade.
 	 * 
@@ -401,7 +414,7 @@ public class Usuario implements Friendship {
 			this.popularidade = new IconePOP();
 		}
 	}
-	
+
 	/**
 	 * Metodo utilizado para obtencao dos pops do usuario.
 	 * 
@@ -411,7 +424,7 @@ public class Usuario implements Friendship {
 	public int getPops() {
 		return pops;
 	}
-	
+
 	/**
 	 * Metodo utilizado para alterar os pops do usuario.
 	 * 
@@ -422,12 +435,12 @@ public class Usuario implements Friendship {
 		this.pops = pops;
 	}
 
-	/** 
+	/**
 	 * Metodo utilizado para adicionar pops aos pops do usuario.
 	 * 
 	 * @param popsAcumulados
 	 */
-	
+
 	public void addPops(int popsAcumulados) {
 		this.pops += popsAcumulados;
 	}
@@ -436,7 +449,7 @@ public class Usuario implements Friendship {
 	 * Metodo utilizado para atualizar os pops.
 	 * 
 	 */
-	
+
 	public void atualizaPops() {
 		int popsAcumulados = 0;
 		for (Post post : this.posts) {
@@ -445,12 +458,12 @@ public class Usuario implements Friendship {
 		this.addPops(popsAcumulados);
 	}
 
-	/** 
+	/**
 	 * Metodo utilizado para alterar a data de nascimento do usuario.
 	 * 
 	 * @param dataDeNascimento
 	 */
-	
+
 	public void setDataDeNascimento(Date dataDeNascimento) {
 		this.dataDeNascimento = dataDeNascimento;
 	}
@@ -460,7 +473,7 @@ public class Usuario implements Friendship {
 	 * 
 	 * @param notificacoes
 	 */
-	
+
 	private void setNotificacoes(Notificacao notificacoes) {
 		this.notificacoes = notificacoes;
 	}
@@ -470,11 +483,11 @@ public class Usuario implements Friendship {
 	 * 
 	 * @param solicitacoesDeAmizade
 	 */
-	
+
 	private void setSolicitacoesDeAmizade(List<Usuario> solicitacoesDeAmizade) {
 		this.solicitacoesDeAmizade = solicitacoesDeAmizade;
 	}
-	
+
 	public String toString() {
 		String EOL = System.getProperty("line.separator");
 		String saida = "Usuario: " + this.nome + EOL + "Email: " + this.email;
@@ -503,7 +516,7 @@ public class Usuario implements Friendship {
 	/**
 	 * Metodo utilizado para adicionar um amigo a lista de amigos.
 	 */
-	
+
 	@Override
 	public void aceitaAmigo(Usuario novoAmigo) {
 		this.amigos.add(novoAmigo);
@@ -513,12 +526,12 @@ public class Usuario implements Friendship {
 	/**
 	 * Metodo utilizado para remover um amigo da lista de amigos.
 	 */
-	
+
 	@Override
 	public void removeAmigo(Usuario amigoRemovido) {
 		this.amigos.remove(amigoRemovido);
 	}
-	
+
 	/**
 	 * Metodo utilizado para adicionar uma nova solicitacao de amizade.
 	 */
@@ -527,20 +540,21 @@ public class Usuario implements Friendship {
 	public void addSolicitacao(Usuario usuario) {
 		this.solicitacoesDeAmizade.add(usuario);
 	}
-	
+
 	/**
-	 * Metodo utilizado para remover uma solicitacao de amizade. 
+	 * Metodo utilizado para remover uma solicitacao de amizade.
 	 */
-	
+
 	@Override
 	public void removeSolicitacao(Usuario usuario) {
 		this.solicitacoesDeAmizade.remove(usuario);
 	}
-	
+
 	/**
-	 * Metodo utilizado para verificar se o usuario informado eh amigo do usuario atual.
+	 * Metodo utilizado para verificar se o usuario informado eh amigo do
+	 * usuario atual.
 	 */
-	
+
 	@Override
 	public Usuario buscaAmigo(String emailDoAmigo) {
 		for (Usuario usuario : amigos) {
@@ -558,7 +572,7 @@ public class Usuario implements Friendship {
 	 * 
 	 * @param post
 	 */
-	
+
 	public void curtir(Post post) {
 		this.atualizaPopularidade();
 		this.popularidade.curtir(post);
@@ -569,10 +583,23 @@ public class Usuario implements Friendship {
 	 * 
 	 * @param post
 	 */
-	
+
 	public void rejeitar(Post post) {
 		this.atualizaPopularidade();
 		this.popularidade.rejeitar(post);
+	}
+
+	@Override
+	public int compareTo(Usuario novoUsuario) {
+
+		if (this.pops > novoUsuario.getPops()) {
+			return 1;
+		} else if (this.pops == novoUsuario.getPops()) {
+			return 0;
+		} else {
+			return -1;
+		}
+
 	}
 
 }

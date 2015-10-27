@@ -4,6 +4,7 @@ import interaction.Post;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import user.Usuario;
@@ -25,6 +26,7 @@ public class SystemPop {
 	private UsuarioFactory usuarioFactory;
 	private Usuario usuarioLogado;
 	private List<Usuario> usuariosCadastrados;
+	private List<String> hashtagsTrending;
 
 	/**
 	 * Construtor da classe SystemPop. Classe essa que funciona como Controller,
@@ -36,6 +38,7 @@ public class SystemPop {
 		this.usuarioFactory = new UsuarioFactory();
 		this.usuarioLogado = null;
 		this.usuariosCadastrados = new ArrayList<Usuario>();
+		this.hashtagsTrending = new ArrayList<String>();
 	}
 
 	/**
@@ -220,7 +223,7 @@ public class SystemPop {
 
 	public void atualizaPerfil(String atributo, String valor, String velhaSenha)
 			throws EntradaException {
-		
+
 		atributo = atributo.toLowerCase();
 
 		if (!verificaSeHaUsuarioLogado()) {
@@ -352,8 +355,66 @@ public class SystemPop {
 
 		Post novoPost = new Post(mensagem, data);
 		usuarioLogado.postar(novoPost);
+		hashtagsTrending(novoPost);
 
 	}
+
+	public void hashtagsTrending(Post post) {
+		List<String> hashTagsDoPost = post.getListaDeHashtags();
+		for (int i = 0; i < hashTagsDoPost.size(); i++) {
+			this.hashtagsTrending.add(hashTagsDoPost.get(i));
+		}
+
+	}
+	// TODO atualizacao de hashtags
+	public void atualizaRanking() {
+		getMaisPops();
+		getMenosPops();
+		// getTrendingHashtags
+	}
+
+	public void ordenaUsuarioCadastrados() {
+		Collections.sort(this.usuariosCadastrados);
+	}
+	
+	//TODO javadoc e tests!!! ASAP
+
+	public String getMaisPops() {
+		StringBuilder sb = new StringBuilder();
+		String EOL = System.getProperty("line.separator");
+		ordenaUsuarioCadastrados();
+		if (this.usuariosCadastrados.size() <= 3) {
+			for (int i = this.usuariosCadastrados.size() - 1; i > -1; i--) {
+				sb.append(this.usuariosCadastrados.get(i).toString() + EOL);
+			}
+
+		} else {
+			for (int i = this.usuariosCadastrados.size() - 1; i > 1; i--) {
+				sb.append(this.usuariosCadastrados.get(i).toString() + EOL);
+			}
+		}
+		
+		return sb.substring(0,sb.length()-1);
+	}
+	
+	public String getMenosPops() {
+		StringBuilder sb = new StringBuilder();
+		String EOL = System.getProperty("line.separator");
+		ordenaUsuarioCadastrados();
+		if (this.usuariosCadastrados.size() <= 3) {
+			for (int i = 0; i < this.usuariosCadastrados.size(); i++) {
+				sb.append(this.usuariosCadastrados.get(i).toString() + EOL);
+			}
+
+		} else {
+			for (int i = 0; i < 3; i++) {
+				sb.append(this.usuariosCadastrados.get(i).toString() + EOL);
+			}
+		}
+		
+		return sb.substring(0,sb.length()-1);
+	}
+	
 
 	/**
 	 * Metodo utilizado para verificar se o usuario com o email pesquisado esta
