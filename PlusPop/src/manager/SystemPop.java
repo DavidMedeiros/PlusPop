@@ -5,7 +5,9 @@ import interaction.Post;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import user.Usuario;
 import user.UsuarioFactory;
@@ -26,7 +28,7 @@ public class SystemPop {
 	private UsuarioFactory usuarioFactory;
 	private Usuario usuarioLogado;
 	private List<Usuario> usuariosCadastrados;
-	private List<String> hashtagsTrending;
+	private Map<String,Integer> hashtagsTrending;
 
 	/**
 	 * Construtor da classe SystemPop. Classe essa que funciona como Controller,
@@ -38,7 +40,7 @@ public class SystemPop {
 		this.usuarioFactory = new UsuarioFactory();
 		this.usuarioLogado = null;
 		this.usuariosCadastrados = new ArrayList<Usuario>();
-		this.hashtagsTrending = new ArrayList<String>();
+		this.hashtagsTrending = new HashMap<String, Integer>();
 	}
 
 	/**
@@ -361,11 +363,18 @@ public class SystemPop {
 
 	public void hashtagsTrending(Post post) {
 		List<String> hashTagsDoPost = post.getListaDeHashtags();
+		int valorAtual;
+		
 		for (int i = 0; i < hashTagsDoPost.size(); i++) {
-			this.hashtagsTrending.add(hashTagsDoPost.get(i));
+			if (!hashtagsTrending.containsKey(hashTagsDoPost.get(i))) {
+				hashtagsTrending.put(hashTagsDoPost.get(i), 1);
+			} else {
+				valorAtual = hashtagsTrending.get(hashTagsDoPost.get(i));
+				hashtagsTrending.put(hashTagsDoPost.get(i), valorAtual + 1);
+			}
 		}
-
 	}
+	
 	// TODO atualizacao de hashtags
 	public void atualizaRanking() {
 		getMaisPops();
