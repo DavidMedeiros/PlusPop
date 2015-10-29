@@ -1,5 +1,6 @@
 package manager;
 
+import interaction.HashtagTrending;
 import interaction.Post;
 
 import java.text.ParseException;
@@ -28,7 +29,7 @@ public class SystemPop {
 	private UsuarioFactory usuarioFactory;
 	private Usuario usuarioLogado;
 	private List<Usuario> usuariosCadastrados;
-	private Map<String,Integer> hashtagsTrending;
+	private List<HashtagTrending> hashtagsTrending;
 
 	/**
 	 * Construtor da classe SystemPop. Classe essa que funciona como Controller,
@@ -40,7 +41,7 @@ public class SystemPop {
 		this.usuarioFactory = new UsuarioFactory();
 		this.usuarioLogado = null;
 		this.usuariosCadastrados = new ArrayList<Usuario>();
-		this.hashtagsTrending = new HashMap<String, Integer>();
+		this.hashtagsTrending = new ArrayList<HashtagTrending>();
 	}
 
 	/**
@@ -363,30 +364,49 @@ public class SystemPop {
 
 	public void hashtagsTrending(Post post) {
 		List<String> hashTagsDoPost = post.getListaDeHashtags();
-		int valorAtual;
-		
+
 		for (int i = 0; i < hashTagsDoPost.size(); i++) {
-			if (!hashtagsTrending.containsKey(hashTagsDoPost.get(i))) {
-				hashtagsTrending.put(hashTagsDoPost.get(i), 1);
+			HashtagTrending novaHashtag = new HashtagTrending(
+					hashTagsDoPost.get(i));
+			if (this.hashtagsTrending.contains(novaHashtag)) {
+				novaHashtag.novaOcorrencia();
 			} else {
-				valorAtual = hashtagsTrending.get(hashTagsDoPost.get(i));
-				hashtagsTrending.put(hashTagsDoPost.get(i), valorAtual + 1);
+				this.hashtagsTrending.add(novaHashtag);
 			}
 		}
 	}
 	
+	public String getTopHashtags(int quantidadeTrends) {
+		Collections.sort(this.hashtagsTrending);
+		
+		StringBuilder sb = new StringBuilder();
+		String EOL = System.getProperty("line.separator");
+
+		if (this.hashtagsTrending.size() <= quantidadeTrends) {
+			for (int i = this.hashtagsTrending.size() - 1; i > -1; i--) {
+				sb.append(this.hashtagsTrending.get(i).toString() + EOL);
+			}
+		} else {
+			for (int i = this.hashtagsTrending.size() - 1; i > 1; i--) {
+				sb.append(this.hashtagsTrending.get(i).toString() + EOL);
+			}
+		}
+		
+		return sb.substring(0, sb.length() - 1);
+	}
+
 	// TODO atualizacao de hashtags
 	public void atualizaRanking() {
 		getMaisPops();
 		getMenosPops();
-		// getTrendingHashtags
+		getTopHashtags(3);
 	}
 
 	public void ordenaUsuarioCadastrados() {
 		Collections.sort(this.usuariosCadastrados);
 	}
-	
-	//TODO javadoc e tests!!! ASAP
+
+	// TODO javadoc e tests!!! ASAP
 
 	public String getMaisPops() {
 		StringBuilder sb = new StringBuilder();
@@ -402,10 +422,10 @@ public class SystemPop {
 				sb.append(this.usuariosCadastrados.get(i).toString() + EOL);
 			}
 		}
-		
-		return sb.substring(0,sb.length()-1);
+
+		return sb.substring(0, sb.length() - 1);
 	}
-	
+
 	public String getMenosPops() {
 		StringBuilder sb = new StringBuilder();
 		String EOL = System.getProperty("line.separator");
@@ -420,10 +440,9 @@ public class SystemPop {
 				sb.append(this.usuariosCadastrados.get(i).toString() + EOL);
 			}
 		}
-		
-		return sb.substring(0,sb.length()-1);
+
+		return sb.substring(0, sb.length() - 1);
 	}
-	
 
 	/**
 	 * Metodo utilizado para verificar se o usuario com o email pesquisado esta
