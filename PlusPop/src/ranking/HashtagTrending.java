@@ -1,4 +1,4 @@
-package interaction;
+package ranking;
 
 public class HashtagTrending implements Comparable {
 
@@ -29,7 +29,7 @@ public class HashtagTrending implements Comparable {
 			if (this.ocorrencia > novaHashtag.getOcorrencia()) {
 				return 1;
 			} else if (this.ocorrencia == novaHashtag.getOcorrencia()) {
-				return 0;
+				return this.hashtag.compareTo(novaHashtag.getHashtag());
 			} else { // this.ocorrencia < novaHashtag.getOcorrencia()
 				return -1;
 			}

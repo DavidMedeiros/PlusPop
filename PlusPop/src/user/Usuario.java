@@ -595,7 +595,7 @@ public class Usuario implements Friendship, Comparable<Usuario> {
 		if (this.pops > novoUsuario.getPops()) {
 			return 1;
 		} else if (this.pops == novoUsuario.getPops()) {
-			return 0;
+			return this.email.compareTo(novoUsuario.getEmail());
 		} else {
 			return -1;
 		}

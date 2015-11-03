@@ -1,6 +1,5 @@
 package manager;
 
-import interaction.HashtagTrending;
 import interaction.Post;
 
 import java.text.ParseException;
@@ -10,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ranking.HashtagTrending;
+import ranking.Ranking;
 import user.Usuario;
 import user.UsuarioFactory;
 import util.UtilUsuario;
@@ -30,6 +31,7 @@ public class SystemPop {
 	private Usuario usuarioLogado;
 	private List<Usuario> usuariosCadastrados;
 	private List<HashtagTrending> hashtagsTrending;
+	private Ranking ranking;
 
 	/**
 	 * Construtor da classe SystemPop. Classe essa que funciona como Controller,
@@ -42,6 +44,7 @@ public class SystemPop {
 		this.usuarioLogado = null;
 		this.usuariosCadastrados = new ArrayList<Usuario>();
 		this.hashtagsTrending = new ArrayList<HashtagTrending>();
+		this.ranking = new Ranking();
 	}
 
 	/**
@@ -358,47 +361,22 @@ public class SystemPop {
 
 		Post novoPost = new Post(mensagem, data);
 		usuarioLogado.postar(novoPost);
-		hashtagsTrending(novoPost);
+		this.ranking.hashtagsTrending(novoPost);
 
 	}
 
-	public void hashtagsTrending(Post post) {
-		List<String> hashTagsDoPost = post.getListaDeHashtags();
-
-		for (int i = 0; i < hashTagsDoPost.size(); i++) {
-			HashtagTrending novaHashtag = new HashtagTrending(
-					hashTagsDoPost.get(i));
-			if (this.hashtagsTrending.contains(novaHashtag)) {
-				novaHashtag.novaOcorrencia();
-			} else {
-				this.hashtagsTrending.add(novaHashtag);
-			}
-		}
+	public void getTopHashtags(int qntHashtags) {
+		this.ranking.getTopHashtags(qntHashtags);
 	}
-	
-	public String getTopHashtags(int quantidadeTrends) {
-		Collections.sort(this.hashtagsTrending);
-		
-		StringBuilder sb = new StringBuilder();
-		String EOL = System.getProperty("line.separator");
 
-		if (this.hashtagsTrending.size() <= quantidadeTrends) {
-			for (int i = this.hashtagsTrending.size() - 1; i > -1; i--) {
-				sb.append(this.hashtagsTrending.get(i).toString() + EOL);
-			}
-		} else {
-			for (int i = this.hashtagsTrending.size() - 1; i > 1; i--) {
-				sb.append(this.hashtagsTrending.get(i).toString() + EOL);
-			}
-		}
-		
-		return sb.substring(0, sb.length() - 1);
+	public void getTopUsuarios() {
+		getMaisPops();
+		getMenosPops();
 	}
 
 	// TODO atualizacao de hashtags
 	public void atualizaRanking() {
-		getMaisPops();
-		getMenosPops();
+		getTopUsuarios();
 		getTopHashtags(3);
 	}
 
@@ -412,7 +390,10 @@ public class SystemPop {
 		StringBuilder sb = new StringBuilder();
 		String EOL = System.getProperty("line.separator");
 		ordenaUsuarioCadastrados();
-		if (this.usuariosCadastrados.size() <= 3) {
+
+		if (this.usuariosCadastrados.size() == 0) {
+			return null;
+		} else if (this.usuariosCadastrados.size() <= 3) {
 			for (int i = this.usuariosCadastrados.size() - 1; i > -1; i--) {
 				sb.append(this.usuariosCadastrados.get(i).toString() + EOL);
 			}

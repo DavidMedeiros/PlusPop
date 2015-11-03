@@ -1,8 +1,5 @@
-/exceptions/
-/friendship/
-/interaction/
-/manager/
-/media/
 /tests/
 /user/
-/util/
+/ranking/
+/interaction/
+/manager/
