@@ -96,7 +96,7 @@ public class Facade {
 	}
 	
 	public void rejeitarPost(String emailAmigo, int indice) throws LogicaException {
-		this.systemPop.curtirPost(emailAmigo, indice);
+		this.systemPop.rejeitarPost(emailAmigo, indice);
 	}
 	
 	public void adicionaAmigo(String email) throws LogicaException {
@@ -121,21 +121,49 @@ public class Facade {
 	}
 	
 	public String getNextNotificacao() throws LogicaException {
-		return this.systemPop.getNextNotificacao();
-		
+		return this.systemPop.getNextNotificacao();	
 	}
 	
 	public int getQtdAmigos() {
 		return this.systemPop.getQtdAmigos();
 	}
 	
-
+	public void adicionaPops(int pops) throws LogicaException {
+		this.systemPop.adicionaPops(pops);
+	}
+	
+	public String getPopularidade() throws LogicaException {
+		return this.systemPop.getPopularidade();
+	}
+	
+	public int getPopsPost(int post) throws LogicaException {
+		return this.systemPop.getPopsPost(post);
+	}
+	
+	public int getPopsUsuario(String emailDoUsuario) throws LogicaException {
+		return this.systemPop.getPopsUsuario(emailDoUsuario);
+	}
+	
+	public int getPopsUsuario() throws LogicaException {
+		return this.systemPop.getPopsUsuario();
+	}
+	
+	public int qtdCurtidasDePost(int post) throws LogicaException {
+		return this.systemPop.getQtdCurtidasDoPost(post);
+	}
+	
+	public int qtdRejeicoesDePost(int post) throws LogicaException {
+		return this.systemPop.getQtdRejeicoesDoPost(post);
+	}
+	
 	public static void main(String[] args) {
 		args = new String[] { "manager.Facade",
 				"teste_aceitacao/usecase_1.txt",
 				"teste_aceitacao/usecase_2.txt",
 				"teste_aceitacao/usecase_3.txt",
-				"teste_aceitacao/usecase_4.txt"};
+				"teste_aceitacao/usecase_4.txt",
+				"teste_aceitacao/usecase_5.txt",
+				"teste_aceitacao/usecase_6.txt"};
 
 		EasyAccept.main(args);
 	}

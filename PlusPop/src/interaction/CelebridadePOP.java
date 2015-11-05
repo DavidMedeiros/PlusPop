@@ -1,6 +1,5 @@
 package interaction;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -8,34 +7,34 @@ public class CelebridadePOP implements Interacao {
 
 	@Override
 	public void curtir(Post post) {
-		post.curtir();
 		post.addPopularidade(25);
-		Date dataAtual = new Date();
-		//TODO: DATA ATUAL SERVE PARA O QUE?
-		if (postRecente(post.getData())) {
+
+		if (postRecente(post.getDataFormatada())) {
 			post.addPopularidade(10);
-
 		}
-
 	}
 
 	@Override
 	public void rejeitar(Post post) {
-		post.rejeitar();
 		post.removePopularidade(25);
-		if (!postRecente(post.getData())) {
+		if (!postRecente(post.getDataFormatada())) {
 			post.removePopularidade(10);
 		}
 	}
 
 	public boolean postRecente(String dataDoPost) {
 		Date dataAtual = new Date();
-		DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-		String dataAtualFormatada = formatter.format(dataDoPost);
-		if (dataAtualFormatada.equals(dataDoPost)) {
+		SimpleDateFormat formataDataAtual = new SimpleDateFormat("yyyy-MM-dd");
+		String dataCorrente = formataDataAtual.format(dataAtual);
+		
+		if(dataCorrente.equals(dataDoPost.substring(0, 10))){
 			return true;
 		}
 		return false;
 	}
 
+	@Override
+	public String toString() {
+		return "Celebridade Pop";
+	}
 }

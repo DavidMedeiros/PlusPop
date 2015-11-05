@@ -5,9 +5,7 @@ import interaction.Post;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import ranking.HashtagTrending;
 import ranking.Ranking;
@@ -16,12 +14,15 @@ import user.UsuarioFactory;
 import util.UtilUsuario;
 import exceptions.AtualizacaoPerfilException;
 import exceptions.CadastroDeUsuariosException;
+import exceptions.ConsultaDePopsException;
+import exceptions.CurtePostException;
 import exceptions.EntradaException;
 import exceptions.FecharSistemaException;
 import exceptions.LogicaException;
 import exceptions.LoginDeUsuariosException;
 import exceptions.LogoutDeUsuariosException;
 import exceptions.NotificacoesException;
+import exceptions.RejeitaPostException;
 import exceptions.SenhaProtegidaException;
 import exceptions.UsuarioNaoEncontradoException;
 
@@ -434,6 +435,79 @@ public class SystemPop {
 	 * @throws LogicaException
 	 */
 
+	public void adicionaPops(int pops) throws LogicaException {
+		if (usuarioLogado == null) {
+			throw new LogicaException("Nenhum usuarix esta logadx no +pop.");
+		} else {
+			usuarioLogado.setPopsMagico(pops);
+		}
+	}
+
+	public String getPopularidade() throws LogicaException {
+		if (usuarioLogado == null) {
+			throw new LogicaException("Nenhum usuarix esta logadx no +pop.");
+		} else {
+			return usuarioLogado.getPopularidade();
+		}
+	}
+	
+	public int getPopsPost(int post) throws LogicaException {
+		if (usuarioLogado == null) {
+			throw new ConsultaDePopsException("Nenhum usuarix esta logadx no +pop.");
+		} else {
+			return usuarioLogado.getPopsPost(post);
+		}
+	}
+	
+	public int getPopsUsuario(String emailDoUsuario) throws LogicaException {
+		if (!(usuarioLogado == null)) {
+			throw new ConsultaDePopsException("Um usuarix ainda esta logadx.");
+		} else {
+			Usuario usuario = buscarUsuario(emailDoUsuario);
+			return usuario.getPops();
+		}
+	}
+	
+	public int getPopsUsuario() throws LogicaException {
+		if (usuarioLogado == null) {
+			throw new ConsultaDePopsException("Nenhum usuarix esta logadx.");
+		} else {
+			return usuarioLogado.getPops();
+		}
+	}
+	
+	// TODO: MELHORAR verificacoes colocar no utilpost
+	public int getQtdCurtidasDoPost(int post) throws LogicaException {
+		
+		if (usuarioLogado == null) {
+			throw new LogicaException("Nenhum usuarix esta logadx no +pop.");
+		} else if (post < 0) {
+			throw new LogicaException(
+					"Requisicao invalida. O indice deve ser maior ou igual a zero.");
+		} else if (post >= usuarioLogado.getPosts().size()) {
+			throw new LogicaException("Post #" + post
+					+ " nao existe. Usuarix possui apenas "
+					+ usuarioLogado.getPosts().size() + " post(s).");
+		} else {
+			return usuarioLogado.getCurtidasDoPost(post);
+		}
+	}	
+
+	public int getQtdRejeicoesDoPost(int post) throws LogicaException {
+		if (usuarioLogado == null) {
+			throw new LogicaException("Nenhum usuarix esta logadx no +pop.");
+		} else if (post < 0) {
+			throw new LogicaException(
+					"Requisicao invalida. O indice deve ser maior ou igual a zero.");
+		} else if (post >= usuarioLogado.getPosts().size()) {
+			throw new LogicaException("Post #" + post
+					+ " nao existe. Usuarix possui apenas "
+					+ usuarioLogado.getPosts().size() + " post(s).");
+		} else {
+			return usuarioLogado.getRejeicoesDoPost(post);
+		}
+	}	
+	
 	public Usuario buscarUsuario(String email) throws LogicaException {
 		for (Usuario usuario : usuariosCadastrados) {
 			if (usuario.getEmail().equals(email)) {
@@ -642,6 +716,10 @@ public class SystemPop {
 
 	public void curtirPost(String emailAmigo, int indice)
 			throws LogicaException {
+		//* TODO: VERIFICAR SE O EMAIL PASSADO É REALMENTE UM AMIGO DO USUARIO.
+		if (usuarioLogado.buscaAmigo(emailAmigo) == null) {
+			throw new CurtePostException("O usuario nao eh seu amigo.");
+		}
 		Usuario amigo = buscarUsuario(emailAmigo);
 		this.usuarioLogado.curtir(amigo.getPostIndex(indice));
 		amigo.addNotificacao(getMsgCurte(amigo, indice));
@@ -672,6 +750,9 @@ public class SystemPop {
 
 	public void rejeitarPost(String emailAmigo, int indice)
 			throws LogicaException {
+		if (usuarioLogado.buscaAmigo(emailAmigo) == null) {
+			throw new RejeitaPostException("O usuario nao eh seu amigo.");
+		}
 		Usuario amigo = buscarUsuario(emailAmigo);
 		this.usuarioLogado.rejeitar(amigo.getPostIndex(indice));
 		amigo.addNotificacao(getMsgRejeita(amigo, indice));

@@ -91,7 +91,7 @@ public class Post {
 	 */
 
 	public void addPopularidade(int pops) {
-		this.popularidade += pops;
+		this.popularidade = popularidade + pops;
 	}
 
 	/**
@@ -312,6 +312,10 @@ public class Post {
 	 */
 
 	public String getData() {
+		return data;
+	}
+	
+	public String getDataFormatada() {
 		return formataData(data);
 	}
 
