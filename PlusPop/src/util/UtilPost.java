@@ -33,6 +33,8 @@ public class UtilPost {
 				textoFiltrado = textoFiltrado + palavra + " ";
 			}
 		}
+		if (textoFiltrado.equals(""))
+			return "";
 		return textoFiltrado.substring(0, textoFiltrado.length() - 1);
 	}
 

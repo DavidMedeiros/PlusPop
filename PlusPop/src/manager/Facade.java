@@ -56,7 +56,15 @@ public class Facade {
 			throws EntradaException {
 		systemPop.atualizaPerfil(atributo, valor, velhaSenha);
 	}
+	
+	public String atualizaRanking() {
+		return systemPop.atualizaRanking();
+	}
 
+	public String atualizaTrendingTopics() {
+		return systemPop.atualizaTrending(3);
+	}
+	
 	public void criaPost(String mensagem, String data) throws EntradaException,
 			LogicaException {
 		systemPop.criaPost(mensagem, data);
@@ -163,7 +171,8 @@ public class Facade {
 				"teste_aceitacao/usecase_3.txt",
 				"teste_aceitacao/usecase_4.txt",
 				"teste_aceitacao/usecase_5.txt",
-				"teste_aceitacao/usecase_6.txt"};
+				"teste_aceitacao/usecase_6.txt",
+				"teste_aceitacao/usecase_7.txt"};
 
 		EasyAccept.main(args);
 	}

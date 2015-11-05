@@ -17,6 +17,8 @@ public class Post {
 	private String mensagem;
 	private List<MidiaPost> listaDeMidia;
 	private List<String> listaDeHashtags;
+	private boolean hasEpicWin;
+	private boolean hasEpicFail;
 
 	/**
 	 * Construtor da classe Post.
@@ -35,6 +37,8 @@ public class Post {
 		this.data = data;
 		this.listaDeMidia = new ArrayList<MidiaPost>();
 		this.listaDeHashtags = new ArrayList<String>();
+		this.hasEpicWin = false;
+		this.hasEpicFail = false;
 
 		UtilPost.validaMensagem(mensagem);
 		separaConteudoDaMensagem(mensagem);
@@ -172,6 +176,22 @@ public class Post {
 		this.popularidade = popularidade;
 	}
 
+	public void setEpicWin(boolean change) {
+		this.hasEpicWin = change;
+	}
+
+	public void setEpicFail(boolean change) {
+		this.hasEpicFail = change;
+	}
+
+	public boolean hasEpicWin() {
+		return hasEpicWin;
+	}
+
+	public boolean hasEpicFail() {
+		return hasEpicFail;
+	}
+
 	/**
 	 * Metodo utilizado para obter um determinado conteudo do post.
 	 * 
@@ -184,7 +204,8 @@ public class Post {
 			return texto;
 		} else if (indice >= 1 && indice <= listaDeMidia.size()) {
 			return listaDeMidia.get(indice - 1).toString();
-		} else if (indice > listaDeMidia.size() && indice <= listaDeHashtags.size()) {
+		} else if (indice > listaDeMidia.size()
+				&& indice <= listaDeHashtags.size()) {
 			return listaDeHashtags.get(indice - listaDeMidia.size());
 		}
 		return null;
@@ -199,11 +220,11 @@ public class Post {
 	public List<String> getConteudoDoPost() {
 		List<String> conteudoDoPost = new ArrayList<String>();
 		conteudoDoPost.add(texto);
-		
+
 		for (MidiaPost conteudo : listaDeMidia) {
 			conteudoDoPost.add(conteudo.getCaminho());
 		}
-		
+
 		return conteudoDoPost;
 	}
 
@@ -247,7 +268,7 @@ public class Post {
 		for (MidiaPost conteudo : listaDeMidia) {
 			listaDeMidias += conteudo.getCaminho() + " ";
 		}
-		
+
 		return listaDeMidias.substring(0, (listaDeMidias.length() - 1));
 	}
 
@@ -292,6 +313,15 @@ public class Post {
 
 	public void addHashTag(String novaHashtag) {
 		this.listaDeHashtags.add(novaHashtag);
+		addHashTagAMensagem(novaHashtag);
+		if (this.listaDeHashtags.contains("#epicwin"))
+			this.setEpicWin(true);
+		if (this.listaDeHashtags.contains("#epicfail#"))
+			this.setEpicFail(true);
+	}
+
+	public void addHashTagAMensagem(String novaHashtag) {
+		mensagem += " " + novaHashtag;
 	}
 
 	/**
@@ -304,7 +334,7 @@ public class Post {
 	public String getPostFormatado() {
 		return this.mensagem + " (" + formataData(this.data) + ")";
 	}
-	
+
 	/**
 	 * Metodo utilizado para obter a data formatada de um post.
 	 * 
@@ -314,21 +344,22 @@ public class Post {
 	public String getData() {
 		return data;
 	}
-	
+
 	public String getDataFormatada() {
 		return formataData(data);
 	}
 
 	/**
 	 * Metodo utilizado para obter as hashtags de um post.
+	 * 
 	 * @return
 	 */
-	
+
 	public String getHashtags() {
 		if (listaDeHashtags.isEmpty()) {
 			return "";
 		}
-		
+
 		String hashtags = "";
 		for (String hashtag : listaDeHashtags) {
 			hashtags = hashtags + hashtag + ",";

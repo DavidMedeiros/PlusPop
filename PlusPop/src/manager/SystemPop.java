@@ -1,5 +1,6 @@
 package manager;
 
+import interaction.IconePOP;
 import interaction.Post;
 
 import java.text.ParseException;
@@ -8,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import ranking.HashtagTrending;
-import ranking.Ranking;
+import ranking.Trending;
 import user.Usuario;
 import user.UsuarioFactory;
 import util.UtilUsuario;
@@ -32,7 +33,7 @@ public class SystemPop {
 	private Usuario usuarioLogado;
 	private List<Usuario> usuariosCadastrados;
 	private List<HashtagTrending> hashtagsTrending;
-	private Ranking ranking;
+	private Trending trending;
 
 	/**
 	 * Construtor da classe SystemPop. Classe essa que funciona como Controller,
@@ -45,7 +46,7 @@ public class SystemPop {
 		this.usuarioLogado = null;
 		this.usuariosCadastrados = new ArrayList<Usuario>();
 		this.hashtagsTrending = new ArrayList<HashtagTrending>();
-		this.ranking = new Ranking();
+		this.trending = new Trending();
 	}
 
 	/**
@@ -362,25 +363,22 @@ public class SystemPop {
 
 		Post novoPost = new Post(mensagem, data);
 		usuarioLogado.postar(novoPost);
-		this.ranking.hashtagsTrending(novoPost);
+		this.trending.hashtagsTrending(novoPost);
 
 	}
 
-	public void getTopHashtags(int qntHashtags) {
-		this.ranking.getTopHashtags(qntHashtags);
+	public String atualizaTrending(int qntHashtags) {
+		return this.trending.getTopHashtags(qntHashtags);
 	}
 
-	public void getTopUsuarios() {
-		getMaisPops();
-		getMenosPops();
+	public String getTopUsuarios() {
+		return getMaisPops() + getMenosPops();
 	}
 
-	// TODO atualizacao de hashtags
-	public void atualizaRanking() {
-		getTopUsuarios();
-		getTopHashtags(3);
+	public String atualizaRanking() {
+		return getTopUsuarios();
 	}
-
+	
 	public void ordenaUsuarioCadastrados() {
 		Collections.sort(this.usuariosCadastrados);
 	}
@@ -389,41 +387,57 @@ public class SystemPop {
 
 	public String getMaisPops() {
 		StringBuilder sb = new StringBuilder();
-		String EOL = System.getProperty("line.separator");
 		ordenaUsuarioCadastrados();
+		int ordem = 1;
 
 		if (this.usuariosCadastrados.size() == 0) {
+			// TODO: NENHUM USUARIO CADASTRADO
 			return null;
 		} else if (this.usuariosCadastrados.size() <= 3) {
 			for (int i = this.usuariosCadastrados.size() - 1; i > -1; i--) {
-				sb.append(this.usuariosCadastrados.get(i).toString() + EOL);
+
+				Usuario usuarioPop = this.usuariosCadastrados.get(i);
+				sb.append("(" + ordem + ")" + " " + usuarioPop.toString() + " ");
+				sb.append(usuarioPop.getPops());
+				sb.append("; ");
+				ordem++;
 			}
 
 		} else {
-			for (int i = this.usuariosCadastrados.size() - 1; i > 1; i--) {
-				sb.append(this.usuariosCadastrados.get(i).toString() + EOL);
+			for (int i = this.usuariosCadastrados.size() - 1; i > this.usuariosCadastrados.size() - 4; i--) {
+				Usuario usuarioPop = this.usuariosCadastrados.get(i);
+				sb.append("(" + ordem + ")" + " " + usuarioPop.getNome().toString() + " ");
+				sb.append(usuarioPop.getPops());
+				sb.append("; ");
+				ordem++;
 			}
 		}
-
-		return sb.substring(0, sb.length() - 1);
+		String saida = "Mais Populares: " + sb.substring(0, sb.length());
+		return saida;
 	}
 
 	public String getMenosPops() {
 		StringBuilder sb = new StringBuilder();
-		String EOL = System.getProperty("line.separator");
 		ordenaUsuarioCadastrados();
 		if (this.usuariosCadastrados.size() <= 3) {
 			for (int i = 0; i < this.usuariosCadastrados.size(); i++) {
-				sb.append(this.usuariosCadastrados.get(i).toString() + EOL);
+				Usuario usuarioPop = this.usuariosCadastrados.get(i);
+				sb.append("(" + (i+1) + ") " +  usuarioPop.getNome().toString() + " ");
+				sb.append(usuarioPop.getPops());
+				sb.append("; ");
 			}
 
 		} else {
 			for (int i = 0; i < 3; i++) {
-				sb.append(this.usuariosCadastrados.get(i).toString() + EOL);
+				Usuario usuarioPop = this.usuariosCadastrados.get(i);
+				sb.append("(" + (i+1) + ") " + usuarioPop.getNome().toString() + " ");
+				sb.append(usuarioPop.getPops());
+				sb.append("; ");
 			}
 		}
 
-		return sb.substring(0, sb.length() - 1);
+		String saida = "| Menos Populares: " + sb.substring(0, sb.length() - 1);
+		return saida;
 	}
 
 	/**
@@ -450,15 +464,16 @@ public class SystemPop {
 			return usuarioLogado.getPopularidade();
 		}
 	}
-	
+
 	public int getPopsPost(int post) throws LogicaException {
 		if (usuarioLogado == null) {
-			throw new ConsultaDePopsException("Nenhum usuarix esta logadx no +pop.");
+			throw new ConsultaDePopsException(
+					"Nenhum usuarix esta logadx no +pop.");
 		} else {
 			return usuarioLogado.getPopsPost(post);
 		}
 	}
-	
+
 	public int getPopsUsuario(String emailDoUsuario) throws LogicaException {
 		if (!(usuarioLogado == null)) {
 			throw new ConsultaDePopsException("Um usuarix ainda esta logadx.");
@@ -467,7 +482,7 @@ public class SystemPop {
 			return usuario.getPops();
 		}
 	}
-	
+
 	public int getPopsUsuario() throws LogicaException {
 		if (usuarioLogado == null) {
 			throw new ConsultaDePopsException("Nenhum usuarix esta logadx.");
@@ -475,10 +490,10 @@ public class SystemPop {
 			return usuarioLogado.getPops();
 		}
 	}
-	
+
 	// TODO: MELHORAR verificacoes colocar no utilpost
 	public int getQtdCurtidasDoPost(int post) throws LogicaException {
-		
+
 		if (usuarioLogado == null) {
 			throw new LogicaException("Nenhum usuarix esta logadx no +pop.");
 		} else if (post < 0) {
@@ -491,7 +506,7 @@ public class SystemPop {
 		} else {
 			return usuarioLogado.getCurtidasDoPost(post);
 		}
-	}	
+	}
 
 	public int getQtdRejeicoesDoPost(int post) throws LogicaException {
 		if (usuarioLogado == null) {
@@ -506,8 +521,8 @@ public class SystemPop {
 		} else {
 			return usuarioLogado.getRejeicoesDoPost(post);
 		}
-	}	
-	
+	}
+
 	public Usuario buscarUsuario(String email) throws LogicaException {
 		for (Usuario usuario : usuariosCadastrados) {
 			if (usuario.getEmail().equals(email)) {
@@ -716,12 +731,18 @@ public class SystemPop {
 
 	public void curtirPost(String emailAmigo, int indice)
 			throws LogicaException {
-		//* TODO: VERIFICAR SE O EMAIL PASSADO É REALMENTE UM AMIGO DO USUARIO.
+		// * TODO: VERIFICAR SE O EMAIL PASSADO É REALMENTE UM AMIGO DO USUARIO.
 		if (usuarioLogado.buscaAmigo(emailAmigo) == null) {
 			throw new CurtePostException("O usuario nao eh seu amigo.");
 		}
 		Usuario amigo = buscarUsuario(emailAmigo);
 		this.usuarioLogado.curtir(amigo.getPostIndex(indice));
+		if (this.usuarioLogado.getPopularidade().equals("Icone Pop")) {
+			HashtagTrending epicwin = new HashtagTrending("#epicwin");
+			
+			
+		}
+		amigo.atualizaPopularidade();
 		amigo.addNotificacao(getMsgCurte(amigo, indice));
 	}
 

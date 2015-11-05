@@ -457,7 +457,7 @@ public class Usuario implements Friendship, Comparable<Usuario> {
 	 */
 
 	public void setPopsMagico(int pops) {
-		this.popsMagico = pops;
+		this.popsMagico += pops;
 		atualizaPopularidade();
 	}
 
@@ -600,9 +600,9 @@ public class Usuario implements Friendship, Comparable<Usuario> {
 	 */
 
 	public void curtir(Post post) {
+		this.atualizaPopularidade();
 		this.popularidade.curtir(post);
 		post.curtir();
-		this.atualizaPopularidade();
 	}
 
 	/**

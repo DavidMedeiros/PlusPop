@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Ranking {
+public class Trending {
 
 	public List<HashtagTrending> hashtagsTrending;
 
-	public Ranking() {
+	public Trending() {
 		this.hashtagsTrending = new ArrayList<HashtagTrending>();
 	}
 
