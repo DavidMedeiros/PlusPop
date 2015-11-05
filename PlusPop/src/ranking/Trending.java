@@ -6,49 +6,66 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import user.Usuario;
+
 public class Trending {
 
-	public List<HashtagTrending> hashtagsTrending;
+	public List<HashtagTrending> hashtagsDoSistema;
 
 	public Trending() {
-		this.hashtagsTrending = new ArrayList<HashtagTrending>();
+		this.hashtagsDoSistema = new ArrayList<HashtagTrending>();
 	}
-
-	public void hashtagsTrending(Post post) {
+	//TODO: JAVADOC
+	public void addHashtagsDoPostAoTrending(Post post) {
 		List<String> hashTagsDoPost = post.getListaDeHashtags();
 
-		for (int i = 0; i < hashTagsDoPost.size(); i++) {
-			HashtagTrending novaHashtag = new HashtagTrending(
-					hashTagsDoPost.get(i));
-			if (this.hashtagsTrending.contains(novaHashtag)) {
-				novaHashtag.novaOcorrencia();
-			} else {
-				this.hashtagsTrending.add(novaHashtag);
+		for (String hashTag : hashTagsDoPost) {
+			HashtagTrending novaHashtag = new HashtagTrending(hashTag);
+			addHashtag(novaHashtag);
+		}
+	}
+	//TODO: JAVADOC
+	public void addHashtag(HashtagTrending novaHashtag) {
+		if (!(this.hashtagsDoSistema.contains(novaHashtag))) {
+			this.hashtagsDoSistema.add(novaHashtag);
+		} else {
+			for (HashtagTrending hashtag : hashtagsDoSistema) {
+				if (novaHashtag.equals(hashtag)) {
+					hashtag.novaOcorrencia();
+				}
 			}
 		}
 	}
-
+	//TODO: JAVADOC
 	public String getTopHashtags(int quantidadeTrends) {
-		Collections.sort(this.hashtagsTrending);
-
-		StringBuilder sb = new StringBuilder();
-		String EOL = System.getProperty("line.separator");
 		
-		if (this.hashtagsTrending.size() == 0) {
+		ordenaHashtags();
+		
+		StringBuilder sb = new StringBuilder();
+
+		if (this.hashtagsDoSistema.size() == 0) {
+			//TODO: EXCEPTION 
 			return null;
-			
-		} else if (this.hashtagsTrending.size() <= quantidadeTrends) {
-			for (int i = this.hashtagsTrending.size() - 1; i > -1; i--) {
-				sb.append(this.hashtagsTrending.get(i).toString() + EOL);
+
+		} else if (this.hashtagsDoSistema.size() <= quantidadeTrends) {
+			for (int i = 0; i < this.hashtagsDoSistema.size(); i++) {
+				sb.append("(" + (i+1) + ") " + this.hashtagsDoSistema.get(i).toString() + "; ");
 			}
 		} else {
-			for (int i = this.hashtagsTrending.size() - 1; i > (this.hashtagsTrending
-					.size() - quantidadeTrends - 1); i--) {
-				sb.append(this.hashtagsTrending.get(i).toString() + EOL);
+			for (int i = 0; i < quantidadeTrends; i++) {
+				sb.append("(" + (i+1) + ") " + this.hashtagsDoSistema.get(i).toString() + "; ") ;
 			}
 		}
-
-		return sb.substring(0, sb.length() - 1);
+		String saida = "Trending Topics:  " + sb.substring(0, sb.length() - 1);
+		return saida;
+	}
+	//TODO: JAVADOC
+	public List<HashtagTrending> getHashtagsDoSistema() {
+		return hashtagsDoSistema;
+	}
+	//TODO: JAVADOC
+	public void ordenaHashtags() {
+		Collections.sort(this.hashtagsDoSistema);
 	}
 
 }

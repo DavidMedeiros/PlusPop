@@ -1,6 +1,5 @@
 package manager;
 
-import interaction.IconePOP;
 import interaction.Post;
 
 import java.text.ParseException;
@@ -13,6 +12,7 @@ import ranking.Trending;
 import user.Usuario;
 import user.UsuarioFactory;
 import util.UtilUsuario;
+import exceptions.AtualizaRankingException;
 import exceptions.AtualizacaoPerfilException;
 import exceptions.CadastroDeUsuariosException;
 import exceptions.ConsultaDePopsException;
@@ -32,12 +32,11 @@ public class SystemPop {
 	private UsuarioFactory usuarioFactory;
 	private Usuario usuarioLogado;
 	private List<Usuario> usuariosCadastrados;
-	private List<HashtagTrending> hashtagsTrending;
 	private Trending trending;
 
 	/**
 	 * Construtor da classe SystemPop. Classe essa que funciona como Controller,
-	 * fazendo toda a comunica√ß√£o com a fa√ßade;
+	 * fazendo toda a comunicaÁ„o com a faÁade;
 	 *
 	 */
 
@@ -45,7 +44,6 @@ public class SystemPop {
 		this.usuarioFactory = new UsuarioFactory();
 		this.usuarioLogado = null;
 		this.usuariosCadastrados = new ArrayList<Usuario>();
-		this.hashtagsTrending = new ArrayList<HashtagTrending>();
 		this.trending = new Trending();
 	}
 
@@ -59,11 +57,11 @@ public class SystemPop {
 	}
 
 	/**
-	 * Metodo utilizado para fechar o sistema, so eh poss√≠vel fechar o sistema
+	 * Metodo utilizado para fechar o sistema, so eh possÌvel fechar o sistema
 	 * caso haja algum usuario logado.
 	 * 
 	 * @throws LogicaException
-	 *             - Lan√ßada quando n√£o h√° usuario logado.
+	 *             - LanÁada quando n„o h· usuario logado.
 	 */
 
 	public void fechaSistema() throws LogicaException {
@@ -105,7 +103,7 @@ public class SystemPop {
 
 	/**
 	 * Metodo utilizado para cadastro de um novo usuario no sistema utilizando
-	 * uma foto padr√£o.
+	 * uma foto padr„o.
 	 * 
 	 * @param nome
 	 * @param email
@@ -205,7 +203,7 @@ public class SystemPop {
 
 		atributo = atributo.toLowerCase();
 
-		if (!verificaSeHaUsuarioLogado()) {
+		if (getUsuarioLogado() == null) {
 			throw new AtualizacaoPerfilException(
 					"Nao eh possivel atualizar um perfil. Nenhum usuarix esta logadx no +pop.");
 		} else if (atributo.equals("nome")) {
@@ -234,7 +232,7 @@ public class SystemPop {
 
 		atributo = atributo.toLowerCase();
 
-		if (!verificaSeHaUsuarioLogado()) {
+		if (getUsuarioLogado() == null) {
 			throw new AtualizacaoPerfilException(
 					"Nao eh possivel atualizar um perfil. Nenhum usuarix esta logadx no +pop.");
 		}
@@ -363,39 +361,42 @@ public class SystemPop {
 
 		Post novoPost = new Post(mensagem, data);
 		usuarioLogado.postar(novoPost);
-		this.trending.hashtagsTrending(novoPost);
+		this.trending.addHashtagsDoPostAoTrending(novoPost);
 
 	}
 
-	public String atualizaTrending(int qntHashtags) {
-		return this.trending.getTopHashtags(qntHashtags);
+	// TODO: javadoc
+
+	public String atualizaTrending(int quantidadeTrends) {
+		return this.trending.getTopHashtags(quantidadeTrends);
 	}
 
-	public String getTopUsuarios() {
+	// TODO: javadoc
+	private String getRankingDeUsuarios() throws LogicaException {
 		return getMaisPops() + getMenosPops();
 	}
 
-	public String atualizaRanking() {
-		return getTopUsuarios();
+	// TODO: javadoc
+	public String atualizaRanking() throws LogicaException {
+		return getRankingDeUsuarios();
 	}
-	
-	public void ordenaUsuarioCadastrados() {
+
+	// TODO: javadoc
+	private void ordenaUsuarioCadastrados() {
 		Collections.sort(this.usuariosCadastrados);
 	}
 
-	// TODO javadoc e tests!!! ASAP
-
-	public String getMaisPops() {
+	// TODO javadoc e tests!!! ASAP REFACTOR DO FOR!! CODIGO REPETIDO
+	private String getMaisPops() throws LogicaException {
 		StringBuilder sb = new StringBuilder();
 		ordenaUsuarioCadastrados();
 		int ordem = 1;
 
-		if (this.usuariosCadastrados.size() == 0) {
-			// TODO: NENHUM USUARIO CADASTRADO
-			return null;
+		if (this.usuariosCadastrados.isEmpty()) {
+			throw new AtualizaRankingException(
+					"Nenhum usuarix esta cadastrado no +pop.");
 		} else if (this.usuariosCadastrados.size() <= 3) {
 			for (int i = this.usuariosCadastrados.size() - 1; i > -1; i--) {
-
 				Usuario usuarioPop = this.usuariosCadastrados.get(i);
 				sb.append("(" + ordem + ")" + " " + usuarioPop.toString() + " ");
 				sb.append(usuarioPop.getPops());
@@ -404,9 +405,11 @@ public class SystemPop {
 			}
 
 		} else {
-			for (int i = this.usuariosCadastrados.size() - 1; i > this.usuariosCadastrados.size() - 4; i--) {
+			for (int i = this.usuariosCadastrados.size() - 1; i > this.usuariosCadastrados
+					.size() - 4; i--) {
 				Usuario usuarioPop = this.usuariosCadastrados.get(i);
-				sb.append("(" + ordem + ")" + " " + usuarioPop.getNome().toString() + " ");
+				sb.append("(" + ordem + ")" + " "
+						+ usuarioPop.getNome().toString() + " ");
 				sb.append(usuarioPop.getPops());
 				sb.append("; ");
 				ordem++;
@@ -416,13 +419,19 @@ public class SystemPop {
 		return saida;
 	}
 
-	public String getMenosPops() {
+	// TODO javadoc e tests!!! ASAP REFACTOR DO FOR!! CODIGO REPETIDO
+	private String getMenosPops() throws LogicaException {
 		StringBuilder sb = new StringBuilder();
 		ordenaUsuarioCadastrados();
-		if (this.usuariosCadastrados.size() <= 3) {
+
+		if (this.usuariosCadastrados.isEmpty()) {
+			throw new AtualizaRankingException(
+					"Nenhum usuarix esta cadastrado no +pop.");
+		} else if (this.usuariosCadastrados.size() <= 3) {
 			for (int i = 0; i < this.usuariosCadastrados.size(); i++) {
 				Usuario usuarioPop = this.usuariosCadastrados.get(i);
-				sb.append("(" + (i+1) + ") " +  usuarioPop.getNome().toString() + " ");
+				sb.append("(" + (i + 1) + ") "
+						+ usuarioPop.getNome().toString() + " ");
 				sb.append(usuarioPop.getPops());
 				sb.append("; ");
 			}
@@ -430,7 +439,8 @@ public class SystemPop {
 		} else {
 			for (int i = 0; i < 3; i++) {
 				Usuario usuarioPop = this.usuariosCadastrados.get(i);
-				sb.append("(" + (i+1) + ") " + usuarioPop.getNome().toString() + " ");
+				sb.append("(" + (i + 1) + ") "
+						+ usuarioPop.getNome().toString() + " ");
 				sb.append(usuarioPop.getPops());
 				sb.append("; ");
 			}
@@ -440,40 +450,25 @@ public class SystemPop {
 		return saida;
 	}
 
-	/**
-	 * Metodo utilizado para verificar se o usuario com o email pesquisado esta
-	 * cadastrado no sistema.
-	 * 
-	 * @param email
-	 * @return
-	 * @throws LogicaException
-	 */
-
+	// TODO javadoc
 	public void adicionaPops(int pops) throws LogicaException {
-		if (usuarioLogado == null) {
-			throw new LogicaException("Nenhum usuarix esta logadx no +pop.");
-		} else {
-			usuarioLogado.setPopsMagico(pops);
-		}
+		verificaSeHaUsuarioLogado();
+		usuarioLogado.setPopsMagico(pops);
 	}
 
+	// TODO javadoc
 	public String getPopularidade() throws LogicaException {
-		if (usuarioLogado == null) {
-			throw new LogicaException("Nenhum usuarix esta logadx no +pop.");
-		} else {
-			return usuarioLogado.getPopularidade();
-		}
+		verificaSeHaUsuarioLogado();
+		return usuarioLogado.getPopularidade();
 	}
 
+	// TODO javadoc
 	public int getPopsPost(int post) throws LogicaException {
-		if (usuarioLogado == null) {
-			throw new ConsultaDePopsException(
-					"Nenhum usuarix esta logadx no +pop.");
-		} else {
-			return usuarioLogado.getPopsPost(post);
-		}
+		verificaSeHaUsuarioLogado();
+		return usuarioLogado.getPopsPost(post);
 	}
 
+	// TODO javadoc
 	public int getPopsUsuario(String emailDoUsuario) throws LogicaException {
 		if (!(usuarioLogado == null)) {
 			throw new ConsultaDePopsException("Um usuarix ainda esta logadx.");
@@ -484,19 +479,15 @@ public class SystemPop {
 	}
 
 	public int getPopsUsuario() throws LogicaException {
-		if (usuarioLogado == null) {
-			throw new ConsultaDePopsException("Nenhum usuarix esta logadx.");
-		} else {
-			return usuarioLogado.getPops();
-		}
+		verificaSeHaUsuarioLogado();
+		return usuarioLogado.getPops();
 	}
 
-	// TODO: MELHORAR verificacoes colocar no utilpost
+	// TODO: JAVADOC
 	public int getQtdCurtidasDoPost(int post) throws LogicaException {
+		verificaSeHaUsuarioLogado();
 
-		if (usuarioLogado == null) {
-			throw new LogicaException("Nenhum usuarix esta logadx no +pop.");
-		} else if (post < 0) {
+		if (post < 0) {
 			throw new LogicaException(
 					"Requisicao invalida. O indice deve ser maior ou igual a zero.");
 		} else if (post >= usuarioLogado.getPosts().size()) {
@@ -508,10 +499,11 @@ public class SystemPop {
 		}
 	}
 
+	// TODO: JAVADOC
 	public int getQtdRejeicoesDoPost(int post) throws LogicaException {
-		if (usuarioLogado == null) {
-			throw new LogicaException("Nenhum usuarix esta logadx no +pop.");
-		} else if (post < 0) {
+		verificaSeHaUsuarioLogado();
+
+		if (post < 0) {
 			throw new LogicaException(
 					"Requisicao invalida. O indice deve ser maior ou igual a zero.");
 		} else if (post >= usuarioLogado.getPosts().size()) {
@@ -522,6 +514,15 @@ public class SystemPop {
 			return usuarioLogado.getRejeicoesDoPost(post);
 		}
 	}
+
+	/**
+	 * Metodo utilizado para verificar se o usuario com o email pesquisado esta
+	 * cadastrado no sistema.
+	 * 
+	 * @param email
+	 * @return
+	 * @throws LogicaException
+	 */
 
 	public Usuario buscarUsuario(String email) throws LogicaException {
 		for (Usuario usuario : usuariosCadastrados) {
@@ -552,11 +553,12 @@ public class SystemPop {
 	 * Metodo utilizado para verificar se ha usuario logado no sistema.
 	 * 
 	 * @return
+	 * @throws LogicaException
 	 */
 
-	public boolean verificaSeHaUsuarioLogado() {
+	public boolean verificaSeHaUsuarioLogado() throws LogicaException {
 		if (usuarioLogado == null) {
-			return false;
+			throw new LogicaException("Nenhum usuarix esta logadx no +pop.");
 		}
 		return true;
 	}
@@ -731,17 +733,15 @@ public class SystemPop {
 
 	public void curtirPost(String emailAmigo, int indice)
 			throws LogicaException {
-		// * TODO: VERIFICAR SE O EMAIL PASSADO √â REALMENTE UM AMIGO DO USUARIO.
 		if (usuarioLogado.buscaAmigo(emailAmigo) == null) {
 			throw new CurtePostException("O usuario nao eh seu amigo.");
 		}
+
 		Usuario amigo = buscarUsuario(emailAmigo);
-		this.usuarioLogado.curtir(amigo.getPostIndex(indice));
-		if (this.usuarioLogado.getPopularidade().equals("Icone Pop")) {
-			HashtagTrending epicwin = new HashtagTrending("#epicwin");
-			
-			
-		}
+		Post postDoAmigo = amigo.getPostIndex(indice);
+
+		adicionaHashtagEpicAoTrending("#epicwin", postDoAmigo);
+		usuarioLogado.curtir(postDoAmigo);
 		amigo.atualizaPopularidade();
 		amigo.addNotificacao(getMsgCurte(amigo, indice));
 	}
@@ -774,9 +774,23 @@ public class SystemPop {
 		if (usuarioLogado.buscaAmigo(emailAmigo) == null) {
 			throw new RejeitaPostException("O usuario nao eh seu amigo.");
 		}
+
 		Usuario amigo = buscarUsuario(emailAmigo);
-		this.usuarioLogado.rejeitar(amigo.getPostIndex(indice));
+		Post postDoAmigo = amigo.getPostIndex(indice);
+
+		adicionaHashtagEpicAoTrending("#epicfail", postDoAmigo);
+		usuarioLogado.rejeitar(postDoAmigo);
+		amigo.atualizaPopularidade();
 		amigo.addNotificacao(getMsgRejeita(amigo, indice));
+	}
+
+	private void adicionaHashtagEpicAoTrending(String epic, Post postDoAmigo) {
+		if (this.usuarioLogado.getPopularidade().equals("Icone Pop")) {
+			HashtagTrending hashtagEpic = new HashtagTrending(epic);
+			if (!(postDoAmigo.temEpic(epic))) {
+				trending.addHashtag(hashtagEpic);
+			}
+		}
 	}
 
 	/**
@@ -913,5 +927,4 @@ public class SystemPop {
 	public int getQtdAmigos() {
 		return this.usuarioLogado.getAmigos().size();
 	}
-
 }

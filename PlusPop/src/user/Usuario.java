@@ -292,15 +292,15 @@ public class Usuario implements Friendship, Comparable<Usuario> {
 	public String getDataPost(int indexPost) {
 		return this.posts.get(indexPost).getDataFormatada();
 	}
-
+	//TODO: JAVADOC
 	public int getPopsPost(int indexPost) {
 		return this.posts.get(indexPost).getPopularidade();
 	}
-	
+	//TODO: JAVADOC
 	public int getCurtidasDoPost(int indexPost) {
 		return this.posts.get(indexPost).getCurtidas();
 	}
-	
+	//TODO: JAVADOC
 	public int getRejeicoesDoPost(int indexPost) {
 		return this.posts.get(indexPost).getRejeicoes();
 	}
@@ -513,13 +513,13 @@ public class Usuario implements Friendship, Comparable<Usuario> {
 	private void setSolicitacoesDeAmizade(List<Usuario> solicitacoesDeAmizade) {
 		this.solicitacoesDeAmizade = solicitacoesDeAmizade;
 	}
-
+	//TODO: JAVADOC
 	public String toString() {
 		String EOL = System.getProperty("line.separator");
 		String saida = "Usuario: " + this.nome + EOL + "Email: " + this.email;
 		return saida;
 	}
-
+	//TODO: JAVADOC
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -527,7 +527,7 @@ public class Usuario implements Friendship, Comparable<Usuario> {
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		return result;
 	}
-
+	//TODO: JAVADOC
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Usuario) {
@@ -616,7 +616,7 @@ public class Usuario implements Friendship, Comparable<Usuario> {
 		post.rejeitar();
 		this.atualizaPopularidade();
 	}
-
+	//TODO: JAVADOC
 	@Override
 	public int compareTo(Usuario novoUsuario) {
 

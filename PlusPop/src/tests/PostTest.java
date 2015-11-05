@@ -87,7 +87,7 @@ public class PostTest {
 		Assert.assertEquals(0, post1.getCurtidas());
 		Assert.assertEquals(0, post1.getPopularidade());
 		Assert.assertEquals(0, post1.getRejeicoes());
-		Assert.assertEquals("2015-10-01 21:12:30", post1.getData());
+		Assert.assertEquals("2015-10-01 21:12:30", post1.getDataFormatada());
 		Assert.assertEquals("", post1.getHashtags());
 		Assert.assertEquals(
 				"Ouvindo Freak le bom bom! <audio>musicas/freaklebombom.mp3</audio>",

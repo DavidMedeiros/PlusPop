@@ -17,8 +17,8 @@ public class Post {
 	private String mensagem;
 	private List<MidiaPost> listaDeMidia;
 	private List<String> listaDeHashtags;
-	private boolean hasEpicWin;
-	private boolean hasEpicFail;
+	private boolean temEpicWin;
+	private boolean temEpicFail;
 
 	/**
 	 * Construtor da classe Post.
@@ -37,8 +37,8 @@ public class Post {
 		this.data = data;
 		this.listaDeMidia = new ArrayList<MidiaPost>();
 		this.listaDeHashtags = new ArrayList<String>();
-		this.hasEpicWin = false;
-		this.hasEpicFail = false;
+		this.temEpicWin = false;
+		this.temEpicFail = false;
 
 		UtilPost.validaMensagem(mensagem);
 		separaConteudoDaMensagem(mensagem);
@@ -175,23 +175,25 @@ public class Post {
 	public void setPopularidade(int popularidade) {
 		this.popularidade = popularidade;
 	}
-
-	public void setEpicWin(boolean change) {
-		this.hasEpicWin = change;
+	// TODO: JAVADOC
+	public void setEpicWin(boolean valor) {
+		this.temEpicWin = valor;
 	}
-
-	public void setEpicFail(boolean change) {
-		this.hasEpicFail = change;
+	// TODO: JAVADOC
+	public void setEpicFail(boolean valor) {
+		this.temEpicFail = valor;
 	}
-
-	public boolean hasEpicWin() {
-		return hasEpicWin;
+	// TODO: JAVADOC
+	public boolean temEpic(String epic) {
+		if (epic.equals("#epicwin")) {
+			return temEpicWin;
+		} else if (epic.equals("#epicfail")) {
+			return temEpicFail;
+		}
+		
+		return false;
 	}
-
-	public boolean hasEpicFail() {
-		return hasEpicFail;
-	}
-
+	
 	/**
 	 * Metodo utilizado para obter um determinado conteudo do post.
 	 * 
@@ -316,10 +318,11 @@ public class Post {
 		addHashTagAMensagem(novaHashtag);
 		if (this.listaDeHashtags.contains("#epicwin"))
 			this.setEpicWin(true);
-		if (this.listaDeHashtags.contains("#epicfail#"))
+		if (this.listaDeHashtags.contains("#epicfail"))
 			this.setEpicFail(true);
 	}
 
+	// TODO: JAVADOC
 	public void addHashTagAMensagem(String novaHashtag) {
 		mensagem += " " + novaHashtag;
 	}
@@ -336,7 +339,7 @@ public class Post {
 	}
 
 	/**
-	 * Metodo utilizado para obter a data formatada de um post.
+	 * Metodo utilizado para obter a data nao formatada de um post.
 	 * 
 	 * @return
 	 */
@@ -344,7 +347,12 @@ public class Post {
 	public String getData() {
 		return data;
 	}
-
+	
+	/**
+	 * Metodo utilizado para obter a data formatada de um post.
+	 * 
+	 * @return
+	 */
 	public String getDataFormatada() {
 		return formataData(data);
 	}

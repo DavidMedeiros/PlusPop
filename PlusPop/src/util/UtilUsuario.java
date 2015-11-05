@@ -14,7 +14,7 @@ import exceptions.EntradaException;
 public class UtilUsuario {
 
 	/**
-	 * Metodo utilizado para validar o nome do usuario que ser√° cadastrado.
+	 * Metodo utilizado para validar o nome do usuario que ser· cadastrado.
 	 * 
 	 * @param nome
 	 * @throws EntradaException
@@ -29,7 +29,7 @@ public class UtilUsuario {
 
 	/**
 	 * 
-	 * Metodo utilizado para validar o email do usuario que ser√° cadastrado.
+	 * Metodo utilizado para validar o email do usuario que ser· cadastrado.
 	 * 
 	 * @param email
 	 * @throws EntradaException
@@ -44,7 +44,7 @@ public class UtilUsuario {
 	}
 
 	/**
-	 * Metodo utilizado para validar a senha do usuario que ser√° cadastrado.
+	 * Metodo utilizado para validar a senha do usuario que ser· cadastrado.
 	 * 
 	 * @param senha
 	 * @throws EntradaException
@@ -59,7 +59,7 @@ public class UtilUsuario {
 	}
 
 	/**
-	 * Metodo utilizado para validar a data de nascimento do usuario que ser√°
+	 * Metodo utilizado para validar a data de nascimento do usuario que ser·
 	 * cadastrado.
 	 * 
 	 * @param dataDeNascimento

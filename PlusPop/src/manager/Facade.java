@@ -57,7 +57,7 @@ public class Facade {
 		systemPop.atualizaPerfil(atributo, valor, velhaSenha);
 	}
 	
-	public String atualizaRanking() {
+	public String atualizaRanking() throws LogicaException {
 		return systemPop.atualizaRanking();
 	}
 
