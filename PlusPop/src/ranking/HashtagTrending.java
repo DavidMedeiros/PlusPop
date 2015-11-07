@@ -4,35 +4,62 @@ public class HashtagTrending implements Comparable<HashtagTrending> {
 
 	public String hashtag;
 	public int ocorrencia;
-	//TODO: JAVADOC
+
+	/**
+	 * Construtor da classe HashtagTrending
+	 * 
+	 * @param hashtag
+	 */
+
 	public HashtagTrending(String hashtag) {
 		this.hashtag = hashtag;
 		this.ocorrencia = 1;
 	}
-	//TODO: JAVADOC
+
+	/**
+	 * Metodo utilizado para adicionar uma nova ocorrencia a Hashtag.
+	 */
+
 	public void novaOcorrencia() {
 		this.ocorrencia += 1;
 	}
-	//TODO: JAVADOC
+
+	/**
+	 * Metodo utilizado para obter a quantidade de ocorrencias de uma Hashtag.
+	 * 
+	 * @return
+	 */
+
 	public int getOcorrencia() {
 		return this.ocorrencia;
 	}
-	//TODO: JAVADOC
+
+	/**
+	 * Metodo utilizado para obter uma hashtag
+	 * 
+	 * @return
+	 */
+
 	public String getHashtag() {
 		return this.hashtag;
 	}
-	//TODO: JAVADOC
+
+	/**
+	 * Metodo para comparacao entre hashtags.
+	 */
+
 	@Override
 	public int compareTo(HashtagTrending outraHashtagTrending) {
-		if (this.ocorrencia > outraHashtagTrending.getOcorrencia()){
+		if (this.ocorrencia > outraHashtagTrending.getOcorrencia()) {
 			return -1;
-		} else if (this.ocorrencia == outraHashtagTrending.getOcorrencia()){
-			return outraHashtagTrending.getHashtag().compareTo(this.hashtag);
-		} else{ // this.ocorrencia < novaHashtag.getOcorrencia()
+		} else if (this.ocorrencia == outraHashtagTrending.getOcorrencia()) {
+			return outraHashtagTrending.getHashtag().compareToIgnoreCase(
+					this.hashtag);
+		} else { // this.ocorrencia < novaHashtag.getOcorrencia()
 			return 1;
 		}
 	}
-	//TODO: JAVADOC
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -40,7 +67,7 @@ public class HashtagTrending implements Comparable<HashtagTrending> {
 		result = prime * result + ((hashtag == null) ? 0 : hashtag.hashCode());
 		return result;
 	}
-	//TODO: JAVADOC
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof HashtagTrending) {
@@ -49,11 +76,9 @@ public class HashtagTrending implements Comparable<HashtagTrending> {
 		}
 		return false;
 	}
-	//TODO: JAVADOC
+
 	public String toString() {
 		return this.hashtag + ": " + this.ocorrencia;
 	}
-
-
 
 }

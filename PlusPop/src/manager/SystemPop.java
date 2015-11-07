@@ -205,7 +205,7 @@ public class SystemPop {
 
 		if (getUsuarioLogado() == null) {
 			throw new AtualizacaoPerfilException(
-					"Nao eh possivel atualizar um perfil. Nenhum usuarix esta logadx no +pop.");
+					"Nenhum usuarix esta logadx no +pop.");
 		} else if (atributo.equals("nome")) {
 			atualizaNomePerfil(valor);
 		} else if (atributo.equals("e-mail")) {
@@ -234,7 +234,7 @@ public class SystemPop {
 
 		if (getUsuarioLogado() == null) {
 			throw new AtualizacaoPerfilException(
-					"Nao eh possivel atualizar um perfil. Nenhum usuarix esta logadx no +pop.");
+					"Nenhum usuarix esta logadx no +pop.");
 		}
 
 		if (atributo.equals("senha")) {
@@ -253,7 +253,7 @@ public class SystemPop {
 	private void atualizaNomePerfil(String valor) throws EntradaException {
 		if (valor == null || valor.equals("") || valor.trim().equals("")) {
 			throw new AtualizacaoPerfilException(
-					"Erro na atualizacao de perfil. Nome dx usuarix nao pode ser vazio.");
+					"Nome dx usuarix nao pode ser vazio.");
 		}
 		usuarioLogado.setNome(valor);
 	}
@@ -269,7 +269,7 @@ public class SystemPop {
 	private void atualizaEmailPerfil(String valor) throws EntradaException {
 		if (!UtilUsuario.validaEmails(valor)) {
 			throw new AtualizacaoPerfilException(
-					"Erro na atualizacao de perfil. Formato de e-mail esta invalido.");
+					"Formato de e-mail esta invalido.");
 		}
 		usuarioLogado.setEmail(valor);
 	}
@@ -287,17 +287,17 @@ public class SystemPop {
 			ParseException {
 		if (valor == null || valor.equals("") || valor.trim().equals("")) {
 			throw new AtualizacaoPerfilException(
-					"Erro na atualizacao de perfil. Data nao existe.");
+					"Data nao existe.");
 		}
 
 		if (!UtilUsuario.validaFormatoDeData(valor)) {
 			throw new AtualizacaoPerfilException(
-					"Erro na atualizacao de perfil. Formato de data esta invalida.");
+					"Formato de data esta invalida.");
 		}
 
 		if (!UtilUsuario.dataEhValida(valor)) {
 			throw new AtualizacaoPerfilException(
-					"Erro na atualizacao de perfil. Data nao existe.");
+					"Data nao existe.");
 		}
 
 		usuarioLogado.setDataDeNascimento(valor);
@@ -314,7 +314,7 @@ public class SystemPop {
 	private void atualizaFotoPerfil(String valor) throws EntradaException {
 		if (valor == null || valor.equals("") || valor.trim().equals("")) {
 			throw new AtualizacaoPerfilException(
-					"Erro na atualizacao de perfil. Foto dx usuarix nao pode ser vazia.");
+					"Foto dx usuarix nao pode ser vazia.");
 		}
 		usuarioLogado.setFoto(valor);
 	}
@@ -332,13 +332,13 @@ public class SystemPop {
 			throws AtualizacaoPerfilException {
 		if (valor == null || valor.equals("") || valor.trim().equals("")) {
 			throw new AtualizacaoPerfilException(
-					"Erro na atualizacao de perfil. Senha dx usuarix nao pode ser vazia.");
+					"Senha dx usuarix nao pode ser vazia.");
 		}
 		if (usuarioLogado.getSenha().equals(velhaSenha)) {
 			usuarioLogado.setSenha(valor);
 		} else {
 			throw new AtualizacaoPerfilException(
-					"Erro na atualizacao de perfil. A senha fornecida esta incorreta.");
+					"A senha fornecida esta incorreta.");
 		}
 	}
 
@@ -365,28 +365,55 @@ public class SystemPop {
 
 	}
 
-	// TODO: javadoc
+	/** 
+	 * Metodo utilizado para atualizar o trending tops de hashtags.
+	 * 
+	 * @param quantidadeTrends
+	 * @return
+	 */
 
 	public String atualizaTrending(int quantidadeTrends) {
 		return this.trending.getTopHashtags(quantidadeTrends);
 	}
 
-	// TODO: javadoc
+	/**
+	 * Metodo utilizado para obter o ranking de usuarios.
+	 * 
+	 * @return
+	 * @throws LogicaException
+	 */
+	
 	private String getRankingDeUsuarios() throws LogicaException {
 		return getMaisPops() + getMenosPops();
 	}
 
-	// TODO: javadoc
+	/**
+	 * Metodo utilizado para atualizar o ranking de usuarios.
+	 * 
+	 * @return
+	 * @throws LogicaException
+	 */
+	
 	public String atualizaRanking() throws LogicaException {
 		return getRankingDeUsuarios();
 	}
 
-	// TODO: javadoc
+	/**
+	 * Metodo utilizado para ordenar a lista de usuarios cadastrados, a partir
+	 * da quantidade de pops.
+	 */
+	
 	private void ordenaUsuarioCadastrados() {
 		Collections.sort(this.usuariosCadastrados);
 	}
 
-	// TODO javadoc e tests!!! ASAP REFACTOR DO FOR!! CODIGO REPETIDO
+	/**
+	 * Metodo utilizado para obter os 3 usuarios mais populares da rede.
+	 * 
+	 * @return
+	 * @throws LogicaException
+	 */
+	
 	private String getMaisPops() throws LogicaException {
 		StringBuilder sb = new StringBuilder();
 		ordenaUsuarioCadastrados();
@@ -419,7 +446,13 @@ public class SystemPop {
 		return saida;
 	}
 
-	// TODO javadoc e tests!!! ASAP REFACTOR DO FOR!! CODIGO REPETIDO
+	/**
+	 * Metodo utilizado para obter os 3 usuarios menos populares da rede.
+	 * 
+	 * @return
+	 * @throws LogicaException
+	 */
+	
 	private String getMenosPops() throws LogicaException {
 		StringBuilder sb = new StringBuilder();
 		ordenaUsuarioCadastrados();
@@ -450,25 +483,52 @@ public class SystemPop {
 		return saida;
 	}
 
-	// TODO javadoc
+	/**
+	 * Metodo utilizado para adicionar pops ao usuario logado.
+	 * 
+	 * @param pops
+	 * @throws LogicaException
+	 */
+	
 	public void adicionaPops(int pops) throws LogicaException {
 		verificaSeHaUsuarioLogado();
 		usuarioLogado.setPopsMagico(pops);
 	}
 
-	// TODO javadoc
+	/**
+	 * Metodo utilizado para obter a popularidade do usuario logado. Ex: Icone
+	 * Pop.
+	 * 
+	 * @return
+	 * @throws LogicaException
+	 */
+	
 	public String getPopularidade() throws LogicaException {
 		verificaSeHaUsuarioLogado();
 		return usuarioLogado.getPopularidade();
 	}
 
-	// TODO javadoc
+	/**
+	 * Metodo utilizado para obter a quantidade de pops de um post.
+	 * 
+	 * @param post
+	 * @return
+	 * @throws LogicaException
+	 */
+	
 	public int getPopsPost(int post) throws LogicaException {
 		verificaSeHaUsuarioLogado();
 		return usuarioLogado.getPopsPost(post);
 	}
 
-	// TODO javadoc
+	/**
+	 * Metodo utilizado para obter a popularidade de um usuario. Ex: Icone
+	 * Pop.
+	 * 
+	 * @return
+	 * @throws LogicaException
+	 */
+	
 	public int getPopsUsuario(String emailDoUsuario) throws LogicaException {
 		if (!(usuarioLogado == null)) {
 			throw new ConsultaDePopsException("Um usuarix ainda esta logadx.");
@@ -478,12 +538,26 @@ public class SystemPop {
 		}
 	}
 
+	/**
+	 * Metodo utilizado para obter a quantidade de pops de um usuario.
+	 * 
+	 * @return
+	 * @throws LogicaException
+	 */
+	
 	public int getPopsUsuario() throws LogicaException {
 		verificaSeHaUsuarioLogado();
 		return usuarioLogado.getPops();
 	}
 
-	// TODO: JAVADOC
+	/**
+	 * Metodo utilizado para obter a quantidade de curtidas de um post.
+	 * 
+	 * @param post
+	 * @return
+	 * @throws LogicaException
+	 */
+	
 	public int getQtdCurtidasDoPost(int post) throws LogicaException {
 		verificaSeHaUsuarioLogado();
 
@@ -499,7 +573,14 @@ public class SystemPop {
 		}
 	}
 
-	// TODO: JAVADOC
+	/**
+	 * Metodo utilizado para obter a quantidade de rejeicoes de um post.
+	 * 
+	 * @param post
+	 * @return
+	 * @throws LogicaException
+	 */
+	
 	public int getQtdRejeicoesDoPost(int post) throws LogicaException {
 		verificaSeHaUsuarioLogado();
 
