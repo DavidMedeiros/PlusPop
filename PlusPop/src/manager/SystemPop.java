@@ -13,6 +13,7 @@ import user.Usuario;
 import user.UsuarioFactory;
 import util.UtilUsuario;
 import exceptions.AtualizaRankingException;
+import exceptions.AtualizaTrendingException;
 import exceptions.AtualizacaoPerfilException;
 import exceptions.CadastroDeUsuariosException;
 import exceptions.ConsultaDePopsException;
@@ -370,9 +371,10 @@ public class SystemPop {
 	 * 
 	 * @param quantidadeTrends
 	 * @return
+	 * @throws LogicaException 
 	 */
 
-	public String atualizaTrending(int quantidadeTrends) {
+	public String atualizaTrending(int quantidadeTrends) throws LogicaException {
 		return this.trending.getTopHashtags(quantidadeTrends);
 	}
 
@@ -492,7 +494,7 @@ public class SystemPop {
 	
 	public void adicionaPops(int pops) throws LogicaException {
 		verificaSeHaUsuarioLogado();
-		usuarioLogado.setPopsMagico(pops);
+		usuarioLogado.adicionaPopsMagico(pops);
 	}
 
 	/**
@@ -814,13 +816,14 @@ public class SystemPop {
 
 	public void curtirPost(String emailAmigo, int indice)
 			throws LogicaException {
+		
+		Usuario amigo = buscarUsuario(emailAmigo);
+
 		if (usuarioLogado.buscaAmigo(emailAmigo) == null) {
 			throw new CurtePostException("O usuario nao eh seu amigo.");
 		}
 
-		Usuario amigo = buscarUsuario(emailAmigo);
 		Post postDoAmigo = amigo.getPostIndex(indice);
-
 		adicionaHashtagEpicAoTrending("#epicwin", postDoAmigo);
 		usuarioLogado.curtir(postDoAmigo);
 		amigo.atualizaPopularidade();
@@ -852,11 +855,12 @@ public class SystemPop {
 
 	public void rejeitarPost(String emailAmigo, int indice)
 			throws LogicaException {
+		Usuario amigo = buscarUsuario(emailAmigo);
+		
 		if (usuarioLogado.buscaAmigo(emailAmigo) == null) {
 			throw new RejeitaPostException("O usuario nao eh seu amigo.");
 		}
 
-		Usuario amigo = buscarUsuario(emailAmigo);
 		Post postDoAmigo = amigo.getPostIndex(indice);
 
 		adicionaHashtagEpicAoTrending("#epicfail", postDoAmigo);

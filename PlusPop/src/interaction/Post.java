@@ -175,15 +175,31 @@ public class Post {
 	public void setPopularidade(int popularidade) {
 		this.popularidade = popularidade;
 	}
-	// TODO: JAVADOC
+	
+	/**
+	 * Metodo utilizado para alterar o valor de epicwin.
+	 * @param valor
+	 */
+	
 	public void setEpicWin(boolean valor) {
 		this.temEpicWin = valor;
 	}
-	// TODO: JAVADOC
+
+	/**
+	 * Metodo utilizado para alterar o valor de epicfail.
+	 * @param valor
+	 */
+	
 	public void setEpicFail(boolean valor) {
 		this.temEpicFail = valor;
 	}
-	// TODO: JAVADOC
+
+	/**
+	 * Metodo utilizado para verificar se já tem epicwin na lista de hashtags do trending.
+	 * @param epic
+	 * @return
+	 */
+	
 	public boolean temEpic(String epic) {
 		if (epic.equals("#epicwin")) {
 			return temEpicWin;
@@ -322,7 +338,12 @@ public class Post {
 			this.setEpicFail(true);
 	}
 
-	// TODO: JAVADOC
+	/**
+	 * Adiciona hashtag a mensagem original.
+	 * 
+	 * @param novaHashtag
+	 */
+	
 	public void addHashTagAMensagem(String novaHashtag) {
 		mensagem += " " + novaHashtag;
 	}

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import user.Usuario;
+import exceptions.AtualizaTrendingException;
 
 public class Trending {
 
@@ -61,17 +61,17 @@ public class Trending {
 	 * 
 	 * @param quantidadeTrends
 	 * @return
+	 * @throws AtualizaTrendingException 
 	 */
 
-	public String getTopHashtags(int quantidadeTrends) {
+	public String getTopHashtags(int quantidadeTrends) throws AtualizaTrendingException {
 
 		ordenaHashtags();
 
 		StringBuilder sb = new StringBuilder();
 
-		if (this.hashtagsDoSistema.size() == 0) {
-			// TODO: EXCEPTION
-			return null;
+		if (this.hashtagsDoSistema.isEmpty()) {
+			throw new AtualizaTrendingException("Nenhuma hashtag no sistema.");
 
 		} else if (this.hashtagsDoSistema.size() <= quantidadeTrends) {
 			for (int i = 0; i < this.hashtagsDoSistema.size(); i++) {

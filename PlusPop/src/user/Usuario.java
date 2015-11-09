@@ -472,12 +472,12 @@ public class Usuario implements Friendship, Comparable<Usuario> {
 	}
 	
 	/**
-	 * Metodo utilizado para alterar os pops do usuario para fins de testes
+	 * Metodo utilizado para adicionar pops ao usuario para fins de testes.
 	 * 
 	 * @param pops
 	 */
 
-	public void setPopsMagico(int pops) {
+	public void adicionaPopsMagico(int pops) {
 		this.popsMagico += pops;
 		atualizaPopularidade();
 	}
@@ -513,26 +513,6 @@ public class Usuario implements Friendship, Comparable<Usuario> {
 
 	public void setDataDeNascimento(Date dataDeNascimento) {
 		this.dataDeNascimento = dataDeNascimento;
-	}
-
-	/**
-	 * Metodo utilizado para alterar as notificacoes do usuario.
-	 * 
-	 * @param notificacoes
-	 */
-
-	private void setNotificacoes(Notificacao notificacoes) {
-		this.notificacoes = notificacoes;
-	}
-
-	/**
-	 * Metodo utilizado para alterar as solicitacoes de amizade do usuario.
-	 * 
-	 * @param solicitacoesDeAmizade
-	 */
-
-	private void setSolicitacoesDeAmizade(List<Usuario> solicitacoesDeAmizade) {
-		this.solicitacoesDeAmizade = solicitacoesDeAmizade;
 	}
 
 	public String toString() {
@@ -633,9 +613,9 @@ public class Usuario implements Friendship, Comparable<Usuario> {
 	 */
 
 	public void rejeitar(Post post) {
+		this.atualizaPopularidade();
 		this.popularidade.rejeitar(post);
 		post.rejeitar();
-		this.atualizaPopularidade();
 	}
 
 	@Override

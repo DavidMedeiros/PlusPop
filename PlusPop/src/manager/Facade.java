@@ -61,7 +61,7 @@ public class Facade {
 		return systemPop.atualizaRanking();
 	}
 
-	public String atualizaTrendingTopics() {
+	public String atualizaTrendingTopics() throws LogicaException {
 		return systemPop.atualizaTrending(3);
 	}
 	

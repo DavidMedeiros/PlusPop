@@ -41,33 +41,33 @@ public class RankingTest {
 			systemPop.login("biancasllima@gmail.com", "Bi123");
 
 			// VERIFICA A POPULARIDADE DO USUARIO
-			Assert.assertEquals("Normal", systemPop.getUsuarioLogado()
+			Assert.assertEquals("Normal Pop", systemPop.getUsuarioLogado()
 					.getPopularidade());
 
 			// ALTERA A POPULARIDADE DO USUARIO
-			systemPop.getUsuarioLogado().setPopsMagico(501);
+			systemPop.getUsuarioLogado().adicionaPopsMagico(501);
 			// VERIFICA SE A POPULARIDADE CONTINUA DO MESMO TIPO
-			Assert.assertEquals("CelebridadePOP", systemPop.getUsuarioLogado()
+			Assert.assertEquals("Celebridade Pop", systemPop.getUsuarioLogado()
 					.getPopularidade());
 			// VERIFICA NUMERO DE POPS DO USUARIO LOGADO
 			Assert.assertEquals(501, systemPop.getUsuarioLogado().getPops());
 			// VERIFICA SE A POPULARIDADE FOI ATUALIZADA
-			Assert.assertEquals("CelebridadePOP", systemPop.getUsuarioLogado()
+			Assert.assertEquals("Celebridade Pop", systemPop.getUsuarioLogado()
 					.getPopularidade());
 			// ALTERA A POPULARIDADE DO USUARIO
-			systemPop.getUsuarioLogado().setPopsMagico(1001);
+			systemPop.getUsuarioLogado().adicionaPopsMagico(1001);
 			// VERIFICA NUMERO DE POPS DO USUARIO LOGADO
-			Assert.assertEquals(1001, systemPop.getUsuarioLogado().getPops());
+			Assert.assertEquals(1502, systemPop.getUsuarioLogado().getPops());
 			// VERIFICA SE A POPULARIDADE FOI ATUALIZADA
-			Assert.assertEquals("IconePOP", systemPop.getUsuarioLogado()
+			Assert.assertEquals("Icone Pop", systemPop.getUsuarioLogado()
 					.getPopularidade());
 
 			// ALTERA A POPULARIDADE DO USUARIO
-			systemPop.getUsuarioLogado().setPopsMagico(600);
+			systemPop.getUsuarioLogado().adicionaPopsMagico(-800);
 			// VERIFICA NUMERO DE POPS DO USUARIO LOGADO
-			Assert.assertEquals(600, systemPop.getUsuarioLogado().getPops());
+			Assert.assertEquals(702, systemPop.getUsuarioLogado().getPops());
 			// VERIFICA SE A POPULARIDADE FOI ATUALIZADA
-			Assert.assertEquals("CelebridadePOP", systemPop.getUsuarioLogado()
+			Assert.assertEquals("Celebridade Pop", systemPop.getUsuarioLogado()
 					.getPopularidade());
 
 			systemPop.logout();
@@ -87,8 +87,8 @@ public class RankingTest {
 			systemPop.login("biancasllima@gmail.com", "Bi123");
 			
 			// ALTERA POPULARIDADE
-			systemPop.getUsuarioLogado().setPopsMagico(555);
-			Assert.assertEquals("CelebridadePOP", systemPop.getUsuarioLogado().getPopularidade());
+			systemPop.getUsuarioLogado().adicionaPopsMagico(555);
+			Assert.assertEquals("Celebridade Pop", systemPop.getUsuarioLogado().getPopularidade());
 			
 			// CRIA POSTS CORRETAMENTE
 			systemPop.criaPost("Sonoooo #BomDia #QueroFerias #Trabalhando #LP2", "03/11/2015 21:22:12");
@@ -122,8 +122,8 @@ public class RankingTest {
 			systemPop.login("anabarros@gmail.com", "aninha123");
 			
 			// ALTERA POPULARIDADE
-			systemPop.getUsuarioLogado().setPopsMagico(1111);
-			Assert.assertEquals("IconePOP", systemPop.getUsuarioLogado().getPopularidade());
+			systemPop.getUsuarioLogado().adicionaPopsMagico(1111);
+			Assert.assertEquals("Icone Pop", systemPop.getUsuarioLogado().getPopularidade());
 			
 			// CRIA POSTS CORRETAMENTE
 			systemPop.criaPost("Estudando! Prova amanha! #LP2", "03/11/2015 13:15:05");
@@ -155,8 +155,8 @@ public class RankingTest {
 			systemPop.login("gabimotta@gmail.com", "gabi123");
 			
 			// ALTERA POPULARIDADE
-			systemPop.getUsuarioLogado().setPopsMagico(1111);
-			Assert.assertEquals("IconePOP", systemPop.getUsuarioLogado().getPopularidade());
+			systemPop.getUsuarioLogado().adicionaPopsMagico(1111);
+			Assert.assertEquals("Icone Pop", systemPop.getUsuarioLogado().getPopularidade());
 			
 			// ACEITA AMIGO
 			systemPop.aceitaAmizade("anabarros@gmail.com");
@@ -168,6 +168,10 @@ public class RankingTest {
 			// REALIZA LOGOUT DO USUARIO
 			systemPop.logout();
 						
+			
+			//TODO: CONTINUACAO DOS TESTES 
+			// VERIFICAR RANKING DE USUARIOS
+			// VERIFICAR TRENDING TOPICS
 			
 		} catch (EntradaException e) {
 			// NAO DEVE CAPTURAR EXCESSAO
