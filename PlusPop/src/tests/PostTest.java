@@ -1,12 +1,12 @@
 package tests;
 
 import static org.junit.Assert.fail;
-import interaction.Post;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import post.Post;
 import exceptions.EntradaException;
 
 public class PostTest {

@@ -3,6 +3,8 @@ package interaction;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import post.Post;
+
 public class CelebridadePOP implements Interacao {
 	@Override
 	public void curtir(Post post) {
@@ -36,4 +38,11 @@ public class CelebridadePOP implements Interacao {
 	public String toString() {
 		return "Celebridade Pop";
 	}
+
+	@Override
+	public int quantidadeDePosts() {
+		return 4;
+	}
+	
+	
 }

@@ -1,12 +1,11 @@
 package manager;
 
-import interaction.Post;
-
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import post.Post;
 import ranking.HashtagTrending;
 import ranking.Trending;
 import user.Usuario;
@@ -37,7 +36,7 @@ public class SystemPop {
 
 	/**
 	 * Construtor da classe SystemPop. Classe essa que funciona como Controller,
-	 * fazendo toda a comunicação com a façade;
+	 * fazendo toda a comunicaï¿½ï¿½o com a faï¿½ade;
 	 *
 	 */
 
@@ -58,11 +57,11 @@ public class SystemPop {
 	}
 
 	/**
-	 * Metodo utilizado para fechar o sistema, so eh possível fechar o sistema
+	 * Metodo utilizado para fechar o sistema, so eh possï¿½vel fechar o sistema
 	 * caso haja algum usuario logado.
 	 * 
 	 * @throws LogicaException
-	 *             - Lançada quando não há usuario logado.
+	 *             - Lanï¿½ada quando nï¿½o hï¿½ usuario logado.
 	 */
 
 	public void fechaSistema() throws LogicaException {
@@ -104,7 +103,7 @@ public class SystemPop {
 
 	/**
 	 * Metodo utilizado para cadastro de um novo usuario no sistema utilizando
-	 * uma foto padrão.
+	 * uma foto padrï¿½o.
 	 * 
 	 * @param nome
 	 * @param email
@@ -360,8 +359,7 @@ public class SystemPop {
 					"Nao eh possivel criar o post. Nenhum usuarix esta logadx no +pop.");
 		}
 
-		Post novoPost = new Post(mensagem, data);
-		usuarioLogado.postar(novoPost);
+		Post novoPost = usuarioLogado.criarPost(mensagem, data);
 		this.trending.addHashtagsDoPostAoTrending(novoPost);
 
 	}
@@ -1011,5 +1009,13 @@ public class SystemPop {
 
 	public int getQtdAmigos() {
 		return this.usuarioLogado.getAmigos().size();
+	}
+
+	public void atualizaFeed(String ordenacao) {
+		this.usuarioLogado.atualizaFeed(ordenacao);
+	}
+
+	public void atualizaFeed() {
+		this.usuarioLogado.atualizaFeed();
 	}
 }

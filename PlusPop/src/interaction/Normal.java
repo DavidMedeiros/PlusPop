@@ -1,5 +1,7 @@
 package interaction;
 
+import post.Post;
+
 public class Normal implements Interacao {
 	@Override
 	public void curtir(Post post) {
@@ -14,6 +16,11 @@ public class Normal implements Interacao {
 	@Override
 	public String toString() {
 		return "Normal Pop";
+	}
+
+	@Override
+	public int quantidadeDePosts() {
+		return 2;
 	}
 
 }

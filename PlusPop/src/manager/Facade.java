@@ -164,6 +164,14 @@ public class Facade {
 		return this.systemPop.getQtdRejeicoesDoPost(post);
 	}
 	
+	public void atualizaFeed(String ordenacao) {
+		this.systemPop.atualizaFeed(ordenacao);
+	}
+	
+	public void atualizaFeed() {
+		this.systemPop.atualizaFeed();
+	}
+	
 	public static void main(String[] args) {
 		args = new String[] { "manager.Facade",
 				"teste_aceitacao/usecase_1.txt",

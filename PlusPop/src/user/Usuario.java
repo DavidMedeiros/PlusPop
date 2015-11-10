@@ -4,9 +4,12 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import post.Feed;
+import post.Post;
 import util.UtilUsuario;
 import exceptions.EntradaException;
 import friendship.Friendship;
@@ -15,7 +18,6 @@ import interaction.CelebridadePOP;
 import interaction.IconePOP;
 import interaction.Interacao;
 import interaction.Normal;
-import interaction.Post;
 
 public class Usuario implements Friendship, Comparable<Usuario> {
 
@@ -31,6 +33,7 @@ public class Usuario implements Friendship, Comparable<Usuario> {
 	private Interacao popularidade;
 	private int pops;
 	private int popsMagico;
+	private Feed feed;
 
 	/**
 	 * Construtor da classe Usuario.
@@ -66,6 +69,7 @@ public class Usuario implements Friendship, Comparable<Usuario> {
 		this.popularidade = new Normal();
 		this.pops = 0;
 		this.popsMagico = 0;
+		this.feed = new Feed();
 	}
 
 	public Usuario(String nome, String email, String senha,
@@ -88,6 +92,7 @@ public class Usuario implements Friendship, Comparable<Usuario> {
 		this.popularidade = new Normal();
 		this.pops = 0;
 		this.popsMagico = 0;
+		this.feed = new Feed();
 	}
 
 	/**
@@ -96,10 +101,14 @@ public class Usuario implements Friendship, Comparable<Usuario> {
 	 * usuario.
 	 * 
 	 * @param novoPost
+	 * @return
+	 * @throws EntradaException
 	 */
 
-	public void postar(Post novoPost) {
+	public Post criarPost(String mensagem, String data) throws EntradaException {
+		Post novoPost = new Post(mensagem, data);
 		this.posts.add(novoPost);
+		return novoPost;
 
 	}
 
@@ -299,33 +308,35 @@ public class Usuario implements Friendship, Comparable<Usuario> {
 	 * @param indexPost
 	 * @return
 	 */
-	
+
 	public int getPopsPost(int indexPost) {
 		return this.posts.get(indexPost).getPopularidade();
 	}
-	
+
 	/**
-	 * Metodo utilizado para obter a quantidade de curtidas de um post do usuario.
+	 * Metodo utilizado para obter a quantidade de curtidas de um post do
+	 * usuario.
 	 * 
 	 * @param indexPost
 	 * @return
 	 */
-	
+
 	public int getCurtidasDoPost(int indexPost) {
 		return this.posts.get(indexPost).getCurtidas();
 	}
 
 	/**
-	 * Metodo utilizado para obter a quantidade de rejeicoes de um post do usuario.
+	 * Metodo utilizado para obter a quantidade de rejeicoes de um post do
+	 * usuario.
 	 * 
 	 * @param indexPost
 	 * @return
 	 */
-	
+
 	public int getRejeicoesDoPost(int indexPost) {
 		return this.posts.get(indexPost).getRejeicoes();
 	}
-	
+
 	/**
 	 * Metodo utilizado para obter a mensagem do post, a mensagem eh igual ao
 	 * texto do post juntamente com as midias.
@@ -470,7 +481,7 @@ public class Usuario implements Friendship, Comparable<Usuario> {
 	public void setPops(int pops) {
 		this.pops = pops;
 	}
-	
+
 	/**
 	 * Metodo utilizado para adicionar pops ao usuario para fins de testes.
 	 * 
@@ -503,7 +514,7 @@ public class Usuario implements Friendship, Comparable<Usuario> {
 			popsAcumulados = popsAcumulados + post.getPopularidade();
 		}
 		this.pops = popsAcumulados;
-	} 
+	}
 
 	/**
 	 * Metodo utilizado para alterar a data de nascimento do usuario.
@@ -520,7 +531,7 @@ public class Usuario implements Friendship, Comparable<Usuario> {
 		String saida = "Usuario: " + this.nome + EOL + "Email: " + this.email;
 		return saida;
 	}
- 
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -528,7 +539,7 @@ public class Usuario implements Friendship, Comparable<Usuario> {
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		return result;
 	}
- 
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Usuario) {
@@ -592,7 +603,7 @@ public class Usuario implements Friendship, Comparable<Usuario> {
 		return null;
 	}
 
-	// Beginning of Interaction
+	// Interaction
 
 	/**
 	 * Metodo utilizado para curtir um post.
@@ -629,6 +640,47 @@ public class Usuario implements Friendship, Comparable<Usuario> {
 			return -1;
 		}
 
+	}
+
+	// Feed
+
+	public void ordenaPosts() {
+		Collections.sort(this.posts);
+	}
+
+	public List<Post> fornecePosts() {
+		this.ordenaPosts();
+		List<Post> postsARetornar = new ArrayList<Post>();
+		int quantidadeDePostsPelaPopularidade = this.popularidade
+				.quantidadeDePosts();
+
+		for (int i = 0; i < quantidadeDePostsPelaPopularidade; i++) {
+			postsARetornar.add(this.posts.get(i));
+
+		}
+		return postsARetornar;
+
+	}
+
+	public void adicionaPostsAoFeed() {
+		for (Usuario amigo : this.amigos) {
+			for (Post postDoAmigo : amigo.fornecePosts()) {
+				this.feed.adicionaPostAoFeed(postDoAmigo);
+			}
+
+		}
+	}
+	
+	public void atualizaFeed(String ordenacao) {
+		if (ordenacao.equals("Data")) {
+			this.feed.atualizaFeedPorData();
+		} else {
+			this.feed.atualizaPorPopularidade();
+		}
+	}
+	
+	public void atualizaFeed() {
+		this.feed.atualizaFeed();
 	}
 
 }

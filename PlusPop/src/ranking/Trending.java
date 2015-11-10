@@ -1,11 +1,10 @@
 package ranking;
 
-import interaction.Post;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import post.Post;
 import exceptions.AtualizaTrendingException;
 
 public class Trending {

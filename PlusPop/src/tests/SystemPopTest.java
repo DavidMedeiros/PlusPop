@@ -1,7 +1,5 @@
 package tests;
 
-import interaction.Post;
-
 import java.text.ParseException;
 
 import manager.SystemPop;
@@ -10,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import post.Post;
 import user.UsuarioFactory;
 import exceptions.EntradaException;
 

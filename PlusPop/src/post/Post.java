@@ -1,13 +1,17 @@
-package interaction;
+package post;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import media.MidiaPost;
 import util.UtilPost;
 import exceptions.EntradaException;
 
-public class Post {
+public class Post implements Comparable<Post>{
 
 	private int curtidas;
 	private int rejeicoes;
@@ -195,7 +199,7 @@ public class Post {
 	}
 
 	/**
-	 * Metodo utilizado para verificar se já tem epicwin na lista de hashtags do trending.
+	 * Metodo utilizado para verificar se jï¿½ tem epicwin na lista de hashtags do trending.
 	 * @param epic
 	 * @return
 	 */
@@ -395,6 +399,28 @@ public class Post {
 		}
 
 		return (hashtags.substring(0, hashtags.length() - 1));
+	}
+
+	@Override
+	public int compareTo(Post postDoAmigo) {
+		DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		try {
+			Date minhaData = formatter.parse(this.data);
+			Date dataPostAmigo = formatter.parse(postDoAmigo.getData());
+			
+			if (minhaData.compareTo(dataPostAmigo) == 1) {
+				return 1;
+				
+			} else if (minhaData.compareTo(dataPostAmigo) == -1) {
+				return -1;
+			}
+			
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		return 0;
+		
 	}
 
 }

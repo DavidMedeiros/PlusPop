@@ -1,5 +1,7 @@
 package interaction;
 
+import post.Post;
+
 public class IconePOP implements Interacao {
 	@Override
 	public void curtir(Post post) {
@@ -20,5 +22,10 @@ public class IconePOP implements Interacao {
 	@Override
 	public String toString() {
 		return "Icone Pop";
+	}
+
+	@Override
+	public int quantidadeDePosts() {
+		return 6;
 	}
 }
