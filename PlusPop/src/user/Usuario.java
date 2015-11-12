@@ -480,6 +480,7 @@ public class Usuario implements Friendship, Comparable<Usuario> {
 
 	public void setPops(int pops) {
 		this.pops = pops;
+		atualizaPopularidade();
 	}
 
 	/**

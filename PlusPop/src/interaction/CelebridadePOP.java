@@ -6,20 +6,24 @@ import java.util.Date;
 import post.Post;
 
 public class CelebridadePOP implements Interacao {
+	
+	public static final int QUANTIDADE_DE_POPS_NORMAL = 25;
+	public static final int QUANTIDADE_DE_POPS_RECENTE = 10;
+	
 	@Override
 	public void curtir(Post post) {
-		post.addPopularidade(25);
+		post.addPopularidade(QUANTIDADE_DE_POPS_NORMAL);
 
 		if (postRecente(post.getDataFormatada())) {
-			post.addPopularidade(10);
+			post.addPopularidade(QUANTIDADE_DE_POPS_RECENTE);
 		}
 	}
 
 	@Override
 	public void rejeitar(Post post) {
-		post.removePopularidade(25);
+		post.removePopularidade(QUANTIDADE_DE_POPS_NORMAL);
 		if (!postRecente(post.getDataFormatada())) {
-			post.removePopularidade(10);
+			post.removePopularidade(QUANTIDADE_DE_POPS_RECENTE);
 		}
 	}
 

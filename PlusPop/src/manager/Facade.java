@@ -62,7 +62,8 @@ public class Facade {
 	}
 
 	public String atualizaTrendingTopics() throws LogicaException {
-		return systemPop.atualizaTrending(3);
+		int quantidadeDeHashtagsDoTrending = 3;
+		return systemPop.atualizaTrending(quantidadeDeHashtagsDoTrending);
 	}
 	
 	public void criaPost(String mensagem, String data) throws EntradaException,

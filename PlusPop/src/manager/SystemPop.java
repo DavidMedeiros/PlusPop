@@ -430,7 +430,7 @@ public class SystemPop {
 				sb.append("; ");
 				ordem++;
 			}
-
+			// TODO refatoramento
 		} else {
 			for (int i = this.usuariosCadastrados.size() - 1; i > this.usuariosCadastrados
 					.size() - 4; i--) {
@@ -468,7 +468,7 @@ public class SystemPop {
 				sb.append(usuarioPop.getPops());
 				sb.append("; ");
 			}
-
+			// TODO refatoramento
 		} else {
 			for (int i = 0; i < 3; i++) {
 				Usuario usuarioPop = this.usuariosCadastrados.get(i);
