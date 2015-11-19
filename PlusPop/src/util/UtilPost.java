@@ -80,7 +80,7 @@ public class UtilPost {
 			}
 		}
 	}
-
+	
 	/**
 	 * Metodo utilizado para validar uma mensagem passada.
 	 * 
@@ -179,4 +179,52 @@ public class UtilPost {
 		}
 	}
 
+	public static String getAudio(List<MidiaPost> listaDeMidia) {
+		StringBuilder sb = new StringBuilder();
+		String space = " ";
+		for (MidiaPost audio : listaDeMidia) {
+			if (audio instanceof Audio) {
+				sb.append(audio.getCaminho());
+				sb.append(space);
+			}
+		}
+		return sb.toString();
+
+	}
+	
+	public static String getImagem(List<MidiaPost> listaDeMidia) {
+		StringBuilder sb = new StringBuilder();
+		String space = " ";
+		for (MidiaPost imagem : listaDeMidia) {
+			if (imagem instanceof Imagem) {
+				sb.append(imagem.getCaminho());
+				sb.append(space);
+			}
+		}
+		return sb.toString();
+	}
+
+	public static String getVideo(List<MidiaPost> listaDeMidia) {
+		StringBuilder sb = new StringBuilder();
+		String space = " ";
+		for (MidiaPost video : listaDeMidia) {
+			if (video instanceof Video) {
+				sb.append(video.getCaminho());
+				sb.append(space);
+			}
+		}
+		return sb.toString();		
+	}
+	
+	public static String getHashtagsSemVirgula(List<String> listaDeHashtags) {
+		StringBuilder sb = new StringBuilder();
+		String space = " ";
+		for (String hashtag : listaDeHashtags) {
+			sb.append(hashtag);
+			sb.append(space);
+
+		}
+		return sb.toString();
+	}
+	
 }

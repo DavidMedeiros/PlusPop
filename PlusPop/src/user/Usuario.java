@@ -1,5 +1,14 @@
 package user;
 
+import interaction.CelebridadePOP;
+import interaction.IconePOP;
+import interaction.Interacao;
+import interaction.Normal;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,13 +20,11 @@ import java.util.List;
 import post.Feed;
 import post.Post;
 import util.UtilUsuario;
+import exceptions.BaixarPostException;
 import exceptions.EntradaException;
+import exceptions.LogicaException;
 import friendship.Friendship;
 import friendship.Notificacao;
-import interaction.CelebridadePOP;
-import interaction.IconePOP;
-import interaction.Interacao;
-import interaction.Normal;
 
 public class Usuario implements Friendship, Comparable<Usuario> {
 
@@ -649,15 +656,16 @@ public class Usuario implements Friendship, Comparable<Usuario> {
 		Collections.sort(this.posts);
 	}
 
-	public List<Post> fornecePosts() {
+	public List<Post> fornecePosts() {		
 		this.ordenaPosts();
 		List<Post> postsARetornar = new ArrayList<Post>();
 		int quantidadeDePostsPelaPopularidade = this.popularidade
 				.quantidadeDePosts();
-
+	
 		for (int i = 0; i < quantidadeDePostsPelaPopularidade; i++) {
 			postsARetornar.add(this.posts.get(i));
 		}
+		
 		return postsARetornar;
 	}
 
@@ -679,5 +687,33 @@ public class Usuario implements Friendship, Comparable<Usuario> {
 	
 	public List<Post> getFeed() {
 		return this.feed.getPosts();
+	}
+
+	public void baixaPosts() throws LogicaException {
+		
+		if (this.posts.isEmpty()) {
+			throw new BaixarPostException("O usuario nao possui posts.");
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		String nomeDoArquivo = UtilUsuario.converteEmailParaNomeDeArquivo(this.email);
+		
+		File arquivo = new File(nomeDoArquivo);
+		PrintWriter out;
+		
+		try {
+			out = new PrintWriter(new FileWriter(arquivo));
+			
+			for (int i = 0; i < this.posts.size(); i++) {
+				sb.append(posts.get(i).formataPostsParaSalvar(i+1));
+			}
+			
+			String postFormatado = sb.toString().substring(0, sb.toString().length() - 5);
+			
+			out.write(postFormatado);
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

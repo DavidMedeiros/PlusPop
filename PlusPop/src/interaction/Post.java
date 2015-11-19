@@ -1,19 +1,13 @@
-package post;
+package interaction;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import media.Audio;
-import media.Imagem;
 import media.MidiaPost;
 import util.UtilPost;
 import exceptions.EntradaException;
 
-public class Post implements Comparable<Post> {
+public class Post {
 
 	private int curtidas;
 	private int rejeicoes;
@@ -181,45 +175,41 @@ public class Post implements Comparable<Post> {
 	public void setPopularidade(int popularidade) {
 		this.popularidade = popularidade;
 	}
-
+	
 	/**
 	 * Metodo utilizado para alterar o valor de epicwin.
-	 * 
 	 * @param valor
 	 */
-
+	
 	public void setEpicWin(boolean valor) {
 		this.temEpicWin = valor;
 	}
 
 	/**
 	 * Metodo utilizado para alterar o valor de epicfail.
-	 * 
 	 * @param valor
 	 */
-
+	
 	public void setEpicFail(boolean valor) {
 		this.temEpicFail = valor;
 	}
 
 	/**
-	 * Metodo utilizado para verificar se jï¿½ tem epicwin na lista de hashtags
-	 * do trending.
-	 * 
+	 * Metodo utilizado para verificar se já tem epicwin na lista de hashtags do trending.
 	 * @param epic
 	 * @return
 	 */
-
+	
 	public boolean temEpic(String epic) {
 		if (epic.equals("#epicwin")) {
 			return temEpicWin;
 		} else if (epic.equals("#epicfail")) {
 			return temEpicFail;
 		}
-
+		
 		return false;
 	}
-
+	
 	/**
 	 * Metodo utilizado para obter um determinado conteudo do post.
 	 * 
@@ -353,7 +343,7 @@ public class Post implements Comparable<Post> {
 	 * 
 	 * @param novaHashtag
 	 */
-
+	
 	public void addHashTagAMensagem(String novaHashtag) {
 		mensagem += " " + novaHashtag;
 	}
@@ -378,7 +368,7 @@ public class Post implements Comparable<Post> {
 	public String getData() {
 		return data;
 	}
-
+	
 	/**
 	 * Metodo utilizado para obter a data formatada de um post.
 	 * 
@@ -407,69 +397,4 @@ public class Post implements Comparable<Post> {
 		return (hashtags.substring(0, hashtags.length() - 1));
 	}
 
-	@Override
-	public int compareTo(Post postDoAmigo) {
-		DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
-		try {
-			Date minhaData = formatter.parse(this.data);
-			Date dataPostAmigo = formatter.parse(postDoAmigo.getData());
-
-			if (minhaData == dataPostAmigo) {
-				return 0;
-
-			} else if (minhaData.compareTo(dataPostAmigo) == -1) {
-				return 1;
-			}
-
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		return -1;
-
-	}
-
-	public String getHashtagsSemVirgula() {
-		return UtilPost.getHashtagsSemVirgula(listaDeHashtags);
-	}
-	
-	public String getAudio() {
-		return UtilPost.getAudio(listaDeMidia);
-	}
-
-	public String getImagem() {
-		return UtilPost.getImagem(listaDeMidia);
-	}
-	
-	public String getVideo() {
-		return UtilPost.getVideo(listaDeMidia);
-	}
-	
-	public String formataPostsParaSalvar(int ordemDeCriacao) {
-		String EOL = System.getProperty("line.separator");
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append("Post #" + ordemDeCriacao + " - " + getData() + EOL);
-		sb.append("Conteudo:" + EOL);
-		if (!getTexto().isEmpty())
-			sb.append(getTexto() + EOL);
-		if (!getImagem().isEmpty())
-			sb.append(getImagem() + EOL);
-		if (!getAudio().isEmpty())
-			sb.append(getAudio() + EOL);
-		if (!getVideo().isEmpty())
-			sb.append(getVideo() + EOL);
-		if (!getHashtagsSemVirgula().isEmpty())
-			sb.append(getHashtagsSemVirgula() + EOL);
-		sb.append("+Pop: " + getPopularidade() + EOL);
-		sb.append(EOL);
-		sb.append(EOL);
-		
-		return sb.toString();
-	}
-
-	@Override
-	public String toString() {
-		return getPostFormatado();
-	}
 }

@@ -1,5 +1,8 @@
 package manager;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,7 +15,6 @@ import user.Usuario;
 import user.UsuarioFactory;
 import util.UtilUsuario;
 import exceptions.AtualizaRankingException;
-import exceptions.AtualizaTrendingException;
 import exceptions.AtualizacaoPerfilException;
 import exceptions.CadastroDeUsuariosException;
 import exceptions.ConsultaDePopsException;
@@ -1017,17 +1019,19 @@ public class SystemPop {
 
 	public Post getPostFeedNoticiasRecentes(int indiceDoPost) {
 		ordenaFeed("Data");
-		System.out.println(usuarioLogado.getFeed());
 		return this.usuarioLogado.getFeed().get(indiceDoPost);
 	}
 	
 	public Post getPostFeedNoticiasMaisPopulares(int indiceDoPost) {
 		ordenaFeed("Popularidade");
-		System.out.println(usuarioLogado.getFeed());
 		return this.usuarioLogado.getFeed().get(indiceDoPost);
 	}
 	
 	public void atualizaFeed() {
 		this.usuarioLogado.atualizaFeed();
+	}
+		
+	public void baixaPosts() throws LogicaException {
+		usuarioLogado.baixaPosts();
 	}
 }

@@ -151,4 +151,13 @@ public class UtilUsuario {
 		
 		return true;
 	}
+	
+	public static String converteEmailParaNomeDeArquivo(String email) {
+		StringBuilder sb = new StringBuilder();
+		
+		String emailToString = email.replace("@", "[at]").replace(".", "");
+		sb.append("./arquivos/posts_" + emailToString + ".txt");
+
+		return sb.toString();
+	}
 }

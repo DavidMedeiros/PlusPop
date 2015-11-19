@@ -182,16 +182,21 @@ public class Facade {
 		this.systemPop.atualizaFeed();
 	}
 	
+	public void baixaPosts() throws LogicaException {
+		this.systemPop.baixaPosts();
+	}
+	
 	public static void main(String[] args) {
 		args = new String[] { "manager.Facade",
-				"teste_aceitacao/usecase_1.txt",
-				"teste_aceitacao/usecase_2.txt",
-				"teste_aceitacao/usecase_3.txt",
-				"teste_aceitacao/usecase_4.txt",
-				"teste_aceitacao/usecase_5.txt",
-				"teste_aceitacao/usecase_6.txt",
-				"teste_aceitacao/usecase_7.txt",
-				"teste_aceitacao/usecase_8.txt"};
+				"testes/usecase_1.txt",
+				"testes/usecase_2.txt",
+				"testes/usecase_3.txt",
+				"testes/usecase_4.txt",
+				"testes/usecase_5.txt",
+				"testes/usecase_6.txt",
+				"testes/usecase_7.txt",
+				"testes/usecase_8.txt",
+				"testes/usecase_9.txt"};
 
 		EasyAccept.main(args);
 	}

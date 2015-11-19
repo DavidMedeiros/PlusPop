@@ -18,7 +18,10 @@ public class Feed {
 	}
 	
 	public void ordenaPorData() {
+		// Do post mais recente para o post mais antigo.
 		Collections.sort(this.posts);
+		// Do post mais antigo para o mais recente.
+		Collections.reverse(this.posts);
 	}
 	
 	public void ordenaPorPopularidade() {
