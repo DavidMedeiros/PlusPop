@@ -5,6 +5,7 @@ import post.Post;
 public class IconePOP implements Interacao {
 	
 	public static final int QUANTIDADE_DE_POPS_NORMAL = 50;
+	public static final int QUANTIDADE_DE_POSTS_FORNECIDOS = 6;
 	public static final String HASHTAG_CURTIR = "#epicwin";
 	public static final String HASHTAG_REJEITAR = "#epicfail";
 	
@@ -31,6 +32,6 @@ public class IconePOP implements Interacao {
 
 	@Override
 	public int quantidadeDePosts() {
-		return 6;
+		return QUANTIDADE_DE_POSTS_FORNECIDOS;
 	}
 }

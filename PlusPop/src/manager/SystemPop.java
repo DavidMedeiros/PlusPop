@@ -1011,10 +1011,22 @@ public class SystemPop {
 		return this.usuarioLogado.getAmigos().size();
 	}
 
-	public void atualizaFeed(String ordenacao) {
-		this.usuarioLogado.atualizaFeed(ordenacao);
+	public void ordenaFeed(String ordenacao) {
+		this.usuarioLogado.ordenaFeed(ordenacao);
 	}
 
+	public Post getPostFeedNoticiasRecentes(int indiceDoPost) {
+		ordenaFeed("Data");
+		System.out.println(usuarioLogado.getFeed());
+		return this.usuarioLogado.getFeed().get(indiceDoPost);
+	}
+	
+	public Post getPostFeedNoticiasMaisPopulares(int indiceDoPost) {
+		ordenaFeed("Popularidade");
+		System.out.println(usuarioLogado.getFeed());
+		return this.usuarioLogado.getFeed().get(indiceDoPost);
+	}
+	
 	public void atualizaFeed() {
 		this.usuarioLogado.atualizaFeed();
 	}

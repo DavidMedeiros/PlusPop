@@ -5,6 +5,7 @@ import post.Post;
 public class Normal implements Interacao {
 	
 	public static final int QUANTIDADE_DE_POPS = 10;
+	public static final int QUANTIDADE_DE_POSTS_FORNECIDOS = 2;
 	
 	@Override
 	public void curtir(Post post) {
@@ -23,7 +24,7 @@ public class Normal implements Interacao {
 
 	@Override
 	public int quantidadeDePosts() {
-		return 2;
+		return QUANTIDADE_DE_POSTS_FORNECIDOS;
 	}
 
 }

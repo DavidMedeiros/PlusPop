@@ -657,31 +657,27 @@ public class Usuario implements Friendship, Comparable<Usuario> {
 
 		for (int i = 0; i < quantidadeDePostsPelaPopularidade; i++) {
 			postsARetornar.add(this.posts.get(i));
-
 		}
 		return postsARetornar;
-
 	}
 
-	public void adicionaPostsAoFeed() {
+	public void atualizaFeed() {
 		for (Usuario amigo : this.amigos) {
 			for (Post postDoAmigo : amigo.fornecePosts()) {
 				this.feed.adicionaPostAoFeed(postDoAmigo);
 			}
-
 		}
 	}
 	
-	public void atualizaFeed(String ordenacao) {
-		if (ordenacao.equals("Data")) {
-			this.feed.atualizaFeedPorData();
-		} else {
-			this.feed.atualizaPorPopularidade();
+	public void ordenaFeed(String ordenacao) {
+		if (ordenacao.equalsIgnoreCase("data")) {
+			this.feed.ordenaPorData();
+		} else if (ordenacao.equalsIgnoreCase("popularidade")){
+			this.feed.ordenaPorPopularidade();
 		}
 	}
 	
-	public void atualizaFeed() {
-		this.feed.atualizaFeed();
+	public List<Post> getFeed() {
+		return this.feed.getPosts();
 	}
-
 }

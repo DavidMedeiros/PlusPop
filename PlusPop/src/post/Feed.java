@@ -37,18 +37,8 @@ public class Feed {
 			
 		});
 	}
-	
-	public void atualizaFeedPorData() {
-		this.ordenaPorData();
-	}
-	
-	public void atualizaPorPopularidade() {
-		this.ordenaPorPopularidade();
-	}
-	
-	public void atualizaFeed() {
-		this.atualizaFeedPorData();
-		this.atualizaPorPopularidade();
-	}
 
+	public List<Post> getPosts() {
+		return posts;
+	}
 }

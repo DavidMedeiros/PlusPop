@@ -1,6 +1,10 @@
-/manager/
-/user/
+/exceptions/
+/friendship/
 /interaction/
+/manager/
+/media/
 /post/
 /ranking/
 /tests/
+/user/
+/util/

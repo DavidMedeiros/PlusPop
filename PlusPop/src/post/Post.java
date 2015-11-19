@@ -11,7 +11,7 @@ import media.MidiaPost;
 import util.UtilPost;
 import exceptions.EntradaException;
 
-public class Post implements Comparable<Post>{
+public class Post implements Comparable<Post> {
 
 	private int curtidas;
 	private int rejeicoes;
@@ -179,41 +179,45 @@ public class Post implements Comparable<Post>{
 	public void setPopularidade(int popularidade) {
 		this.popularidade = popularidade;
 	}
-	
+
 	/**
 	 * Metodo utilizado para alterar o valor de epicwin.
+	 * 
 	 * @param valor
 	 */
-	
+
 	public void setEpicWin(boolean valor) {
 		this.temEpicWin = valor;
 	}
 
 	/**
 	 * Metodo utilizado para alterar o valor de epicfail.
+	 * 
 	 * @param valor
 	 */
-	
+
 	public void setEpicFail(boolean valor) {
 		this.temEpicFail = valor;
 	}
 
 	/**
-	 * Metodo utilizado para verificar se j� tem epicwin na lista de hashtags do trending.
+	 * Metodo utilizado para verificar se j� tem epicwin na lista de hashtags do
+	 * trending.
+	 * 
 	 * @param epic
 	 * @return
 	 */
-	
+
 	public boolean temEpic(String epic) {
 		if (epic.equals("#epicwin")) {
 			return temEpicWin;
 		} else if (epic.equals("#epicfail")) {
 			return temEpicFail;
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Metodo utilizado para obter um determinado conteudo do post.
 	 * 
@@ -347,7 +351,7 @@ public class Post implements Comparable<Post>{
 	 * 
 	 * @param novaHashtag
 	 */
-	
+
 	public void addHashTagAMensagem(String novaHashtag) {
 		mensagem += " " + novaHashtag;
 	}
@@ -372,7 +376,7 @@ public class Post implements Comparable<Post>{
 	public String getData() {
 		return data;
 	}
-	
+
 	/**
 	 * Metodo utilizado para obter a data formatada de um post.
 	 * 
@@ -403,24 +407,46 @@ public class Post implements Comparable<Post>{
 
 	@Override
 	public int compareTo(Post postDoAmigo) {
-		DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
 		try {
 			Date minhaData = formatter.parse(this.data);
 			Date dataPostAmigo = formatter.parse(postDoAmigo.getData());
-			
-			if (minhaData.compareTo(dataPostAmigo) == 1) {
-				return 1;
-				
+
+			if (minhaData == dataPostAmigo) {
+				return 0;
+
 			} else if (minhaData.compareTo(dataPostAmigo) == -1) {
-				return -1;
+				return 1;
 			}
-			
+
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
-		return 0;
-		
+
+		return -1;
+
 	}
 
+	public String getHashtagsSemVirgula() {
+		StringBuilder sb = new StringBuilder();
+		String space = " ";
+		for (String hashtag : this.listaDeHashtags) {
+			sb.append(hashtag);
+			sb.append(space);
+
+		}
+		return sb.toString();
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		String space = " ";
+		sb.append(this.texto);
+		sb.append(space);
+		sb.append(this.getHashtagsSemVirgula());
+		sb.append("(" + this.getDataFormatada() + ")");
+
+		return sb.toString();
+	}
 }

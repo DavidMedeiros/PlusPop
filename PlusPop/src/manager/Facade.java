@@ -2,6 +2,7 @@ package manager;
 
 import java.text.ParseException;
 
+import post.Post;
 import user.Usuario;
 import easyaccept.EasyAccept;
 import exceptions.EntradaException;
@@ -165,10 +166,18 @@ public class Facade {
 		return this.systemPop.getQtdRejeicoesDoPost(post);
 	}
 	
-	public void atualizaFeed(String ordenacao) {
-		this.systemPop.atualizaFeed(ordenacao);
+	public void ordenaFeed(String ordenacao) {
+		this.systemPop.ordenaFeed(ordenacao);
 	}
 	
+	public Post getPostFeedNoticiasRecentes(int indiceDoPost) {
+		return this.systemPop.getPostFeedNoticiasRecentes(indiceDoPost);
+	}
+	
+	public Post getPostFeedNoticiasMaisPopulares(int indiceDoPost) {
+		return this.systemPop.getPostFeedNoticiasMaisPopulares(indiceDoPost);
+	}
+		
 	public void atualizaFeed() {
 		this.systemPop.atualizaFeed();
 	}
@@ -181,7 +190,8 @@ public class Facade {
 				"teste_aceitacao/usecase_4.txt",
 				"teste_aceitacao/usecase_5.txt",
 				"teste_aceitacao/usecase_6.txt",
-				"teste_aceitacao/usecase_7.txt"};
+				"teste_aceitacao/usecase_7.txt",
+				"teste_aceitacao/usecase_8.txt"};
 
 		EasyAccept.main(args);
 	}

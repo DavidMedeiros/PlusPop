@@ -9,6 +9,7 @@ public class CelebridadePOP implements Interacao {
 	
 	public static final int QUANTIDADE_DE_POPS_NORMAL = 25;
 	public static final int QUANTIDADE_DE_POPS_RECENTE = 10;
+	public static final int QUANTIDADE_DE_POSTS_FORNECIDOS = 4;
 	
 	@Override
 	public void curtir(Post post) {
@@ -45,7 +46,7 @@ public class CelebridadePOP implements Interacao {
 
 	@Override
 	public int quantidadeDePosts() {
-		return 4;
+		return QUANTIDADE_DE_POSTS_FORNECIDOS;
 	}
 	
 	
