@@ -24,4 +24,4 @@ Conteudo:
 Preview do meu novo single:
 <audio>audio/in_the_hills.mp3</audio> 
 #PaperWedding #InTheHills 
-+Pop: 0
++Pop:

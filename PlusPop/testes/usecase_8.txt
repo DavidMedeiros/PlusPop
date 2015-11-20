@@ -119,3 +119,5 @@ expect "Tiraram meu trono! Voces me pagam! #partiu #exilio (1889-11-17 04:30:00)
 expect "Gente eh ela, minha filha, Lindalva. #vivaLindalva #epicfail (2004-12-18 12:15:00)" getPostFeedNoticiasMaisPopulares post=0
 
 logout
+
+fechaSistema

@@ -41,7 +41,7 @@ public class SystemPop {
 
 	/**
 	 * Construtor da classe SystemPop. Classe essa que funciona como Controller,
-	 * fazendo toda a comunica��o com a fa�ade;
+	 * fazendo toda a comunicacao com a facade;
 	 *
 	 */
 
@@ -70,15 +70,15 @@ public class SystemPop {
 				e.printStackTrace();
 			}
 		}
-		
+
 	}
 
 	/**
-	 * Metodo utilizado para fechar o sistema, so eh poss�vel fechar o sistema
+	 * Metodo utilizado para fechar o sistema, so eh possivel fechar o sistema
 	 * caso haja algum usuario logado.
 	 * 
 	 * @throws LogicaException
-	 *             - Lan�ada quando n�o h� usuario logado.
+	 *             - Lancadada quando nao ha usuario logado.
 	 */
 
 	public void fechaSistema() throws LogicaException {
@@ -110,17 +110,18 @@ public class SystemPop {
 	 * @return
 	 * @throws EntradaException
 	 * @throws ParseException
-	 * @throws EntradaException 
+	 * @throws EntradaException
 	 */
 
 	public String cadastraUsuario(String nome, String email, String senha,
-			String dataDeNascimento, String foto) throws ParseException, EntradaException {
+			String dataDeNascimento, String foto) throws ParseException,
+			EntradaException {
 
 		Usuario novoUsuario;
-		
+
 		try {
-			novoUsuario = this.usuarioFactory.criaUsuario(nome, email,
-					senha, dataDeNascimento, foto);
+			novoUsuario = this.usuarioFactory.criaUsuario(nome, email, senha,
+					dataDeNascimento, foto);
 		} catch (EntradaException e) {
 			throw new CadastroDeUsuariosException(e.getMessage());
 		}
@@ -136,7 +137,7 @@ public class SystemPop {
 
 	/**
 	 * Metodo utilizado para cadastro de um novo usuario no sistema utilizando
-	 * uma foto padr�o.
+	 * uma foto padrao.
 	 * 
 	 * @param nome
 	 * @param email
@@ -145,17 +146,17 @@ public class SystemPop {
 	 * @return
 	 * @throws EntradaException
 	 * @throws ParseException
-	 * @throws EntradaException 
+	 * @throws EntradaException
 	 */
 
 	public String cadastraUsuario(String nome, String email, String senha,
 			String dataDeNascimento) throws ParseException, EntradaException {
 
 		Usuario novoUsuario;
-		
+
 		try {
-			novoUsuario = this.usuarioFactory.criaUsuario(nome, email,
-					senha, dataDeNascimento);
+			novoUsuario = this.usuarioFactory.criaUsuario(nome, email, senha,
+					dataDeNascimento);
 		} catch (EntradaException e) {
 			throw new CadastroDeUsuariosException(e.getMessage());
 		}
@@ -243,13 +244,13 @@ public class SystemPop {
 			throws EntradaException, ParseException {
 
 		atributo = atributo.toLowerCase();
-		
+
 		try {
 			verificaSeHaUsuarioLogado();
 		} catch (Exception e) {
 			throw new AtualizacaoPerfilException(e.getMessage());
 		}
-		
+
 		if (atributo.equals("nome")) {
 			atualizaNomePerfil(valor);
 		} else if (atributo.equals("e-mail")) {
@@ -330,7 +331,7 @@ public class SystemPop {
 
 	private void atualizaDataPerfil(String valor) throws EntradaException,
 			ParseException {
-	
+
 		try {
 			usuarioLogado.setDataDeNascimento(valor);
 		} catch (Exception e) {
@@ -390,7 +391,7 @@ public class SystemPop {
 
 	public void criaPost(String mensagem, String data) throws LogicaException,
 			EntradaException {
-		
+
 		try {
 			verificaSeHaUsuarioLogado();
 		} catch (Exception e) {
@@ -468,7 +469,6 @@ public class SystemPop {
 				sb.append("; ");
 				ordem++;
 			}
-			// TODO refatoramento
 		} else {
 			for (int i = this.usuariosCadastrados.size() - 1; i > this.usuariosCadastrados
 					.size() - 4; i--) {
@@ -506,7 +506,6 @@ public class SystemPop {
 				sb.append(usuarioPop.getPops());
 				sb.append("; ");
 			}
-			// TODO refatoramento
 		} else {
 			for (int i = 0; i < 3; i++) {
 				Usuario usuarioPop = this.usuariosCadastrados.get(i);
@@ -673,7 +672,7 @@ public class SystemPop {
 	 */
 
 	public boolean verificaSeHaUsuarioLogado() throws LogicaException {
-		
+
 		if (usuarioLogado == null) {
 			throw new LogicaException("Nenhum usuarix esta logadx no +pop.");
 		}
@@ -902,6 +901,14 @@ public class SystemPop {
 		amigo.addNotificacao(getMsgRejeita(amigo, indice));
 	}
 
+	/**
+	 * Metodo utilizado para adicionar hashtag #epicWin ou #epicFail ao
+	 * trending.
+	 * 
+	 * @param epic
+	 * @param postDoAmigo
+	 */
+
 	private void adicionaHashtagEpicAoTrending(String epic, Post postDoAmigo) {
 		if (this.usuarioLogado.getPopularidade().equals("Icone Pop")) {
 			HashtagTrending hashtagEpic = new HashtagTrending(epic);
@@ -1046,27 +1053,66 @@ public class SystemPop {
 		return this.usuarioLogado.getAmigos().size();
 	}
 
+	/**
+	 * Metodo utilizado para ordenar o feed, a ordenacao eh passada por
+	 * parametro.
+	 * 
+	 * @param ordenacao
+	 */
+
 	public void ordenaFeed(String ordenacao) {
 		this.usuarioLogado.ordenaFeed(ordenacao);
 	}
+
+	/**
+	 * Metodo utilizado para obter o feed de noticias, atualizado por posts
+	 * recentes.
+	 * 
+	 * @param indiceDoPost
+	 * @return
+	 */
 
 	public Post getPostFeedNoticiasRecentes(int indiceDoPost) {
 		ordenaFeed("Data");
 		return this.usuarioLogado.getFeed().get(indiceDoPost);
 	}
 
+	/**
+	 * Metodo utilizado para obter o feed de noticias, atualizado por
+	 * popularidade dos posts.
+	 * 
+	 * @param indiceDoPost
+	 * @return
+	 */
+
 	public Post getPostFeedNoticiasMaisPopulares(int indiceDoPost) {
 		ordenaFeed("Popularidade");
 		return this.usuarioLogado.getFeed().get(indiceDoPost);
 	}
 
+	/**
+	 * Metodo utilizado para atualizar os posts do feed.
+	 */
+
 	public void atualizaFeed() {
 		this.usuarioLogado.atualizaFeed();
 	}
 
+	/**
+	 * Metodo utilizado para fazer o download de posts para o sistema.
+	 * 
+	 * @throws LogicaException
+	 */
+
 	public void baixaPosts() throws LogicaException {
 		usuarioLogado.baixaPosts();
 	}
+
+	/**
+	 * Metodo utilizado para obter a quantidade de posts do usuario logado.
+	 * 
+	 * @return
+	 */
 
 	public int getTotalPosts() {
 		return usuarioLogado.getTotalPosts();

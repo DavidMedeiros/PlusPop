@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import media.MidiaPost;
+import user.Usuario;
 import util.UtilPost;
 import exceptions.EntradaException;
 
@@ -203,8 +204,8 @@ public class Post implements Comparable<Post>, Serializable {
 	}
 
 	/**
-	 * Metodo utilizado para verificar se j� tem epicwin na lista de hashtags
-	 * do trending.
+	 * Metodo utilizado para verificar se ja tem epicwin na lista de hashtags do
+	 * trending.
 	 * 
 	 * @param epic
 	 * @return
@@ -407,6 +408,98 @@ public class Post implements Comparable<Post>, Serializable {
 		return (hashtags.substring(0, hashtags.length() - 1));
 	}
 
+	/**
+	 * Metodo utilizado para obter uma string de hashtags, separadas por
+	 * espacos.
+	 * 
+	 * @return
+	 */
+
+	public String getHashtagsSemVirgula() {
+		return UtilPost.getHashtagsSemVirgula(listaDeHashtags);
+	}
+
+	/**
+	 * Metodo utilizado para obter uma string do caminho dos audios de um post
+	 * separadas por espaco.
+	 * 
+	 * @return
+	 */
+
+	public String getAudio() {
+		return UtilPost.getMidia(listaDeMidia, "audio");
+	}
+
+	/**
+	 * Metodo utilizado para obter uma string do caminho das imagens de um post
+	 * separadas por espaco.
+	 * 
+	 * @return
+	 */
+
+	public String getImagem() {
+		return UtilPost.getMidia(listaDeMidia, "imagem");
+	}
+
+	/**
+	 * Metodo utilizado para obter uma string do caminho dos videos de um post
+	 * separadas por espaco.
+	 * 
+	 * @return
+	 */
+
+	public String getVideo() {
+		return UtilPost.getMidia(listaDeMidia, "video");
+	}
+
+	/**
+	 * Metodo utilizado para criar uma string com a formatacao de um post.
+	 * 
+	 * @param ordemDeCriacao
+	 * @return
+	 */
+
+	public String formataPostsParaSalvar(int ordemDeCriacao) {
+		String EOL = System.getProperty("line.separator");
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("Post #" + ordemDeCriacao + " - " + getData() + EOL);
+		sb.append("Conteudo:" + EOL);
+		if (!getTexto().isEmpty())
+			sb.append(getTexto() + EOL);
+		if (!getImagem().isEmpty())
+			sb.append(getImagem() + EOL);
+		if (!getAudio().isEmpty())
+			sb.append(getAudio() + EOL);
+		if (!getVideo().isEmpty())
+			sb.append(getVideo() + EOL);
+		if (!getHashtagsSemVirgula().isEmpty())
+			sb.append(getHashtagsSemVirgula() + EOL);
+		sb.append("+Pop: " + getPopularidade() + EOL);
+		sb.append(EOL);
+		sb.append(EOL);
+
+		return sb.toString();
+	}
+
+	/**
+	 * Metodo utilizado para obter o toString do post, o to string eh retornado
+	 * seguindo o padrao: mensagem original (contendo hashtags e midia)
+	 * juntamente com a data formatada.
+	 * 
+	 */
+
+	@Override
+	public String toString() {
+		return getPostFormatado();
+	}
+
+	/**
+	 * Metodo utilizado para comparacao de dois posts, um post eh comparado ao
+	 * outro atraves da data, sendo dos posts mais recentes para os posts menos
+	 * recentes.
+	 */
+
 	@Override
 	public int compareTo(Post postDoAmigo) {
 		DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
@@ -426,50 +519,34 @@ public class Post implements Comparable<Post>, Serializable {
 		}
 
 		return -1;
-
 	}
 
-	public String getHashtagsSemVirgula() {
-		return UtilPost.getHashtagsSemVirgula(listaDeHashtags);
-	}
-	
-	public String getAudio() {
-		return UtilPost.getAudio(listaDeMidia);
-	}
-
-	public String getImagem() {
-		return UtilPost.getImagem(listaDeMidia);
-	}
-	
-	public String getVideo() {
-		return UtilPost.getVideo(listaDeMidia);
-	}
-	
-	public String formataPostsParaSalvar(int ordemDeCriacao) {
-		String EOL = System.getProperty("line.separator");
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append("Post #" + ordemDeCriacao + " - " + getData() + EOL);
-		sb.append("Conteudo:" + EOL);
-		if (!getTexto().isEmpty())
-			sb.append(getTexto() + EOL);
-		if (!getImagem().isEmpty())
-			sb.append(getImagem() + EOL);
-		if (!getAudio().isEmpty())
-			sb.append(getAudio() + EOL);
-		if (!getVideo().isEmpty())
-			sb.append(getVideo() + EOL);
-		if (!getHashtagsSemVirgula().isEmpty())
-			sb.append(getHashtagsSemVirgula() + EOL);
-		sb.append("+Pop: " + getPopularidade() + EOL);
-		sb.append(EOL);
-		sb.append(EOL);
-		
-		return sb.toString();
-	}
+	/**
+	 * Metodo utilizado para verificar se dois posts sao iguais.
+	 * 
+	 */
 
 	@Override
-	public String toString() {
-		return getPostFormatado();
+	public boolean equals(Object obj) {
+		if (obj instanceof Post) {
+			Post outroPost = (Post) obj;
+			return this.getPostFormatado().equals(outroPost.getPostFormatado());
+		}
+		return false;
 	}
+
+	/**
+	 * Metodo hashcode
+	 */
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((data == null) ? 0 : data.hashCode());
+		result = prime * result
+				+ ((mensagem == null) ? 0 : mensagem.hashCode());
+		return result;
+	}
+
 }

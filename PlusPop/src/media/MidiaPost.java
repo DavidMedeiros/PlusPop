@@ -37,7 +37,7 @@ public class MidiaPost implements Serializable {
 	 * 
 	 * @return
 	 */
-	
+
 	public String getCaminho() {
 		return caminhoDaMidia;
 	}

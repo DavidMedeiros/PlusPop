@@ -11,7 +11,7 @@ import exceptions.AtualizaTrendingException;
 public class Trending implements Serializable {
 
 	private static final long serialVersionUID = 9195306211275058892L;
-	
+
 	public List<HashtagTrending> hashtagsDoSistema;
 
 	/**
@@ -63,10 +63,11 @@ public class Trending implements Serializable {
 	 * 
 	 * @param quantidadeTrends
 	 * @return
-	 * @throws AtualizaTrendingException 
+	 * @throws AtualizaTrendingException
 	 */
 
-	public String getTopHashtags(int quantidadeTrends) throws AtualizaTrendingException {
+	public String getTopHashtags(int quantidadeTrends)
+			throws AtualizaTrendingException {
 
 		ordenaHashtags();
 

@@ -2,8 +2,9 @@ package ranking;
 
 import java.io.Serializable;
 
-public class HashtagTrending implements Comparable<HashtagTrending>, Serializable {
- 
+public class HashtagTrending implements Comparable<HashtagTrending>,
+		Serializable {
+
 	private static final long serialVersionUID = -6473854293350961764L;
 	public String hashtag;
 	public int ocorrencia;
@@ -63,6 +64,10 @@ public class HashtagTrending implements Comparable<HashtagTrending>, Serializabl
 		}
 	}
 
+	/**
+	 * Metodo Hashcode.
+	 */
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -70,6 +75,11 @@ public class HashtagTrending implements Comparable<HashtagTrending>, Serializabl
 		result = prime * result + ((hashtag == null) ? 0 : hashtag.hashCode());
 		return result;
 	}
+
+	/**
+	 * Metodo utilizado para verificar quando duas Hashtags sao iguais, atraves
+	 * do nome.
+	 */
 
 	@Override
 	public boolean equals(Object obj) {

@@ -57,7 +57,8 @@ public class Usuario implements Friendship, Comparable<Usuario>, Serializable {
 	 */
 
 	public Usuario(String nome, String email, String senha,
-			String dataDeNascimento, String foto) throws ParseException, EntradaException {
+			String dataDeNascimento, String foto) throws ParseException,
+			EntradaException {
 
 		UtilUsuario.validaNome(nome);
 		UtilUsuario.validaDataNascimento(dataDeNascimento);
@@ -178,7 +179,7 @@ public class Usuario implements Friendship, Comparable<Usuario>, Serializable {
 	 * Metodo utilizado para alterar o email do usuario.
 	 * 
 	 * @param novoEmail
-	 * @throws EntradaException 
+	 * @throws EntradaException
 	 */
 
 	public void setEmail(String novoEmail) throws EntradaException {
@@ -200,7 +201,7 @@ public class Usuario implements Friendship, Comparable<Usuario>, Serializable {
 	 * Metodo utilizado para alterar a senha do usuario.
 	 * 
 	 * @param novaSenha
-	 * @throws EntradaException 
+	 * @throws EntradaException
 	 */
 
 	public void setSenha(String novaSenha) throws EntradaException {
@@ -222,7 +223,7 @@ public class Usuario implements Friendship, Comparable<Usuario>, Serializable {
 	 * Metodo utilizado para alterar o nome do usuario.
 	 * 
 	 * @param novoNome
-	 * @throws EntradaException 
+	 * @throws EntradaException
 	 */
 
 	public void setNome(String novoNome) throws EntradaException {
@@ -246,7 +247,7 @@ public class Usuario implements Friendship, Comparable<Usuario>, Serializable {
 	 * 
 	 * @param novaDataDeNascimento
 	 * @throws ParseException
-	 * @throws EntradaException 
+	 * @throws EntradaException
 	 */
 
 	public void setDataDeNascimento(String novaDataDeNascimento)
@@ -269,7 +270,7 @@ public class Usuario implements Friendship, Comparable<Usuario>, Serializable {
 	 * Metodo utilizado para alterar a foto do usuario.
 	 * 
 	 * @param novaFoto
-	 * @throws EntradaException 
+	 * @throws EntradaException
 	 */
 
 	public void setFoto(String novaFoto) throws EntradaException {
@@ -545,30 +546,7 @@ public class Usuario implements Friendship, Comparable<Usuario>, Serializable {
 		this.dataDeNascimento = dataDeNascimento;
 	}
 
-	public String toString() {
-		String EOL = System.getProperty("line.separator");
-		String saida = "Usuario: " + this.nome + EOL + "Email: " + this.email;
-		return saida;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof Usuario) {
-			Usuario outroUsuario = (Usuario) obj;
-			return this.email.equals(outroUsuario.getEmail());
-		}
-		return false;
-	}
-
-	// Implementation of Friendship interface;
+	// Implementacao de Friendship interface;
 
 	/**
 	 * Metodo utilizado para adicionar um amigo a lista de amigos.
@@ -622,7 +600,7 @@ public class Usuario implements Friendship, Comparable<Usuario>, Serializable {
 		return null;
 	}
 
-	// Interaction
+	// Implementacao de Interacao
 
 	/**
 	 * Metodo utilizado para curtir um post.
@@ -648,6 +626,164 @@ public class Usuario implements Friendship, Comparable<Usuario>, Serializable {
 		post.rejeitar();
 	}
 
+	// Feed
+
+	/**
+	 * Metodo utilizado para ordenar os posts do usuario pela data de criacao.
+	 * Da mais para a menos recente.
+	 */
+
+	public void ordenaPosts() {
+		Collections.sort(this.posts);
+	}
+
+	/**
+	 * Metodo utilizado para que o usuario forneca seus posts ao feed. De acordo
+	 * com o tipo de popularidade, a quantidade de posts fornecidos ao feed eh
+	 * alterada.
+	 * 
+	 * @return
+	 */
+
+	public List<Post> fornecePosts() {
+		this.ordenaPosts();
+		List<Post> postsARetornar = new ArrayList<Post>();
+		int quantidadeDePostsPelaPopularidade = this.popularidade
+				.quantidadeDePosts();
+
+		for (int i = 0; i < quantidadeDePostsPelaPopularidade; i++) {
+			postsARetornar.add(this.posts.get(i));
+		}
+
+		return postsARetornar;
+	}
+
+	/**
+	 * Metodo utilizado para atualizar o feed.
+	 */
+
+	public void atualizaFeed() {
+		for (Usuario amigo : this.amigos) {
+			for (Post postDoAmigo : amigo.fornecePosts()) {
+				this.feed.adicionaPostAoFeed(postDoAmigo);
+			}
+		}
+	}
+
+	/**
+	 * Metodo utilizado para ordenar um post. De acordo com o parametro passado,
+	 * a ordenacao eh realizada de forma diferente.
+	 * 
+	 * @param ordenacao
+	 */
+
+	public void ordenaFeed(String ordenacao) {
+		if (ordenacao.equalsIgnoreCase("data")) {
+			this.feed.ordenaPorData();
+		} else if (ordenacao.equalsIgnoreCase("popularidade")) {
+			this.feed.ordenaPorPopularidade();
+		}
+	}
+
+	/**
+	 * Metodo utilizado para obter a lista de posts do feed.
+	 * 
+	 * @return
+	 */
+
+	public List<Post> getFeed() {
+		return this.feed.getPosts();
+	}
+
+	/**
+	 * Metodo utilizado para fazer donwload dos posts do usuario para a memoria.
+	 * 
+	 * @throws LogicaException
+	 */
+
+	public void baixaPosts() throws LogicaException {
+
+		if (this.posts.isEmpty()) {
+			throw new BaixarPostException("O usuario nao possui posts.");
+		}
+
+		StringBuilder sb = new StringBuilder();
+		String nomeDoArquivo = UtilUsuario
+				.converteEmailParaNomeDeArquivo(this.email);
+
+		File arquivo = new File(nomeDoArquivo);
+		PrintWriter out;
+
+		try {
+			out = new PrintWriter(new FileWriter(arquivo));
+
+			for (int i = 0; i < this.posts.size(); i++) {
+				sb.append(posts.get(i).formataPostsParaSalvar(i + 1));
+			}
+
+			String postFormatado = sb.toString().substring(0,
+					sb.toString().length() - 5);
+
+			out.write(postFormatado);
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Metodo utilizado para obter a quantidade de posts do usuario.
+	 * 
+	 * @return
+	 */
+
+	public int getTotalPosts() {
+		return this.posts.size();
+	}
+
+	/**
+	 * Metodo utilizado para obter o toString do usuario, o to string eh
+	 * retornado seguindo o padrao: Usuario: nome ; Email: email
+	 * 
+	 */
+
+	@Override
+	public String toString() {
+		String EOL = System.getProperty("line.separator");
+		String saida = "Usuario: " + this.nome + EOL + "Email: " + this.email;
+		return saida;
+	}
+
+	/**
+	 * Metodo HashCode
+	 */
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		return result;
+	}
+
+	/**
+	 * Metodo utilizado para comparar se dois usuarios sao iguais.
+	 */
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Usuario) {
+			Usuario outroUsuario = (Usuario) obj;
+			return this.email.equals(outroUsuario.getEmail());
+		}
+		return false;
+	}
+
+	/**
+	 * Metodo utilizado para comparar usuarios por pops, o email eh utilizado
+	 * como criterio de desempate.
+	 */
+
 	@Override
 	public int compareTo(Usuario novoUsuario) {
 
@@ -659,76 +795,5 @@ public class Usuario implements Friendship, Comparable<Usuario>, Serializable {
 			return -1;
 		}
 
-	}
-
-	// Feed
-
-	public void ordenaPosts() {
-		Collections.sort(this.posts);
-	}
-
-	public List<Post> fornecePosts() {		
-		this.ordenaPosts();
-		List<Post> postsARetornar = new ArrayList<Post>();
-		int quantidadeDePostsPelaPopularidade = this.popularidade
-				.quantidadeDePosts();
-	
-		for (int i = 0; i < quantidadeDePostsPelaPopularidade; i++) {
-			postsARetornar.add(this.posts.get(i));
-		}
-		
-		return postsARetornar;
-	}
-
-	public void atualizaFeed() {
-		for (Usuario amigo : this.amigos) {
-			for (Post postDoAmigo : amigo.fornecePosts()) {
-				this.feed.adicionaPostAoFeed(postDoAmigo);
-			}
-		}
-	}
-	
-	public void ordenaFeed(String ordenacao) {
-		if (ordenacao.equalsIgnoreCase("data")) {
-			this.feed.ordenaPorData();
-		} else if (ordenacao.equalsIgnoreCase("popularidade")){
-			this.feed.ordenaPorPopularidade();
-		}
-	}
-	
-	public List<Post> getFeed() {
-		return this.feed.getPosts();
-	}
-
-	public void baixaPosts() throws LogicaException {
-		
-		if (this.posts.isEmpty()) {
-			throw new BaixarPostException("O usuario nao possui posts.");
-		}
-		
-		StringBuilder sb = new StringBuilder();
-		String nomeDoArquivo = UtilUsuario.converteEmailParaNomeDeArquivo(this.email);
-		
-		File arquivo = new File(nomeDoArquivo);
-		PrintWriter out;
-		
-		try {
-			out = new PrintWriter(new FileWriter(arquivo));
-			
-			for (int i = 0; i < this.posts.size(); i++) {
-				sb.append(posts.get(i).formataPostsParaSalvar(i+1));
-			}
-			
-			String postFormatado = sb.toString().substring(0, sb.toString().length() - 5);
-			
-			out.write(postFormatado);
-			out.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public int getTotalPosts() {
-		return this.posts.size();
 	}
 }

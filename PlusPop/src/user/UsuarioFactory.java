@@ -22,7 +22,7 @@ public class UsuarioFactory {
 	public Usuario criaUsuario(String nome, String email, String senha,
 			String dataDeNascimento, String foto) throws ParseException,
 			EntradaException {
-		
+
 		Usuario novoUsuario = new Usuario(nome, email, senha, dataDeNascimento,
 				foto);
 		return novoUsuario;

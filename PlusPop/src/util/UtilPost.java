@@ -64,7 +64,8 @@ public class UtilPost {
 	 * @param conteudoDoPost
 	 */
 
-	public static void filtraMidia(String mensagem, List<MidiaPost> conteudoDoPost) {
+	public static void filtraMidia(String mensagem,
+			List<MidiaPost> conteudoDoPost) {
 		String[] palavras = mensagem.split(" ");
 
 		for (String palavra : palavras) {
@@ -80,7 +81,7 @@ public class UtilPost {
 			}
 		}
 	}
-	
+
 	/**
 	 * Metodo utilizado para validar uma mensagem passada.
 	 * 
@@ -89,7 +90,8 @@ public class UtilPost {
 	 */
 
 	public static void validaMensagem(String mensagem) throws EntradaException {
-		if (mensagem.equals("") || mensagem.trim().equals("")  || mensagem == null) {
+		if (mensagem.equals("") || mensagem.trim().equals("")
+				|| mensagem == null) {
 			throw new CriaPostException("A mensagem nao pode ser vazia");
 		}
 	}
@@ -101,8 +103,7 @@ public class UtilPost {
 	 * @throws EntradaException
 	 */
 
-	public static void validaTexto(String texto)
-			throws EntradaException {
+	public static void validaTexto(String texto) throws EntradaException {
 		if (texto.length() >= 200) {
 			throw new CriaPostException(
 					"O limite maximo da mensagem sao 200 caracteres.");
@@ -130,27 +131,28 @@ public class UtilPost {
 	}
 
 	/**
-	 * Recebe mensagem original e separa em uma mensagem com hashtags, para que possa ser analisada.
-	 *  
+	 * Recebe mensagem original e separa em uma mensagem com hashtags, para que
+	 * possa ser analisada.
+	 * 
 	 * @param mensagem
 	 * @return
 	 */
-	
+
 	private static String separaTextoHashtags(String mensagem) {
 		String textoDeHashtags = mensagem.substring(mensagem.indexOf("#"),
 				mensagem.length());
-		
+
 		return textoDeHashtags;
 	}
-	
+
 	/**
 	 * Valida se a data de criacao do post esta correta.
+	 * 
 	 * @param dataDeNascimento
 	 * @throws EntradaException
 	 */
-	
-	public static void validaDataPost(String dataPost)
-			throws EntradaException {
+
+	public static void validaDataPost(String dataPost) throws EntradaException {
 		if (dataPost.equals("") || dataPost.trim().equals("")
 				|| dataPost == null) {
 			throw new CriaPostException("Data nao existe.");
@@ -167,7 +169,7 @@ public class UtilPost {
 	 * @param dataStr
 	 * @return
 	 */
-	
+
 	public static boolean dataEhValida(String dataStr) {
 		DateFormat dataFormatter = new SimpleDateFormat("dd/MM/yyyy");
 		dataFormatter.setLenient(false);
@@ -179,43 +181,47 @@ public class UtilPost {
 		}
 	}
 
-	public static String getAudio(List<MidiaPost> listaDeMidia) {
-		StringBuilder sb = new StringBuilder();
-		String space = " ";
-		for (MidiaPost audio : listaDeMidia) {
-			if (audio instanceof Audio) {
-				sb.append(audio.getCaminho());
-				sb.append(space);
-			}
-		}
-		return sb.toString();
+	/**
+	 * Metodo utilizado para obter uma string do caminho das midias de um post
+	 * separadas por espaco.
+	 * 
+	 * @return
+	 */
 
-	}
-	
-	public static String getImagem(List<MidiaPost> listaDeMidia) {
+	public static String getMidia(List<MidiaPost> listaDeMidia,
+			String tipoDeMidia) {
 		StringBuilder sb = new StringBuilder();
 		String space = " ";
-		for (MidiaPost imagem : listaDeMidia) {
-			if (imagem instanceof Imagem) {
-				sb.append(imagem.getCaminho());
-				sb.append(space);
+
+		for (MidiaPost midia : listaDeMidia) {
+			if (tipoDeMidia.equalsIgnoreCase("audio")) {
+				if (midia instanceof Audio) {
+					sb.append(midia.getCaminho());
+					sb.append(space);
+				}
+			} else if (tipoDeMidia.equalsIgnoreCase("imagem")) {
+				if (midia instanceof Imagem) {
+					sb.append(midia.getCaminho());
+					sb.append(space);
+				}
+			} else if (tipoDeMidia.equalsIgnoreCase("imagem")) {
+				if (midia instanceof Video) {
+					sb.append(midia.getCaminho());
+					sb.append(space);
+				}
 			}
 		}
+
 		return sb.toString();
 	}
 
-	public static String getVideo(List<MidiaPost> listaDeMidia) {
-		StringBuilder sb = new StringBuilder();
-		String space = " ";
-		for (MidiaPost video : listaDeMidia) {
-			if (video instanceof Video) {
-				sb.append(video.getCaminho());
-				sb.append(space);
-			}
-		}
-		return sb.toString();		
-	}
-	
+	/**
+	 * Metodo utilizado para obter uma string de hashtags separadas por espaco.
+	 * 
+	 * @param listaDeHashtags
+	 * @return
+	 */
+
 	public static String getHashtagsSemVirgula(List<String> listaDeHashtags) {
 		StringBuilder sb = new StringBuilder();
 		String space = " ";
@@ -226,5 +232,5 @@ public class UtilPost {
 		}
 		return sb.toString();
 	}
-	
+
 }

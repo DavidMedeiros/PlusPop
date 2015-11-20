@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import exceptions.CadastroDeUsuariosException;
 import exceptions.EntradaException;
 
 public class UtilUsuario {
@@ -33,8 +32,7 @@ public class UtilUsuario {
 	 * @throws EntradaException
 	 */
 
-	public static void validaStringEmail(String email)
-			throws EntradaException {
+	public static void validaStringEmail(String email) throws EntradaException {
 		if (!validaEmails(email)) {
 			throw new EntradaException("Formato de e-mail esta invalido.");
 		}
@@ -47,15 +45,14 @@ public class UtilUsuario {
 	 * @throws EntradaException
 	 */
 
-	public static void validaSenha(String senha)
-			throws EntradaException {
+	public static void validaSenha(String senha) throws EntradaException {
 		if (senha == null || senha.equals("") || senha.trim().equals("")) {
 			throw new EntradaException("Senha dx usuarix nao pode ser vazia.");
 		}
 	}
 
 	/**
-	 * Metodo utilizado para validar uma data de nascimento. 
+	 * Metodo utilizado para validar uma data de nascimento.
 	 * 
 	 * @param dataDeNascimento
 	 * @throws EntradaException
@@ -63,8 +60,7 @@ public class UtilUsuario {
 
 	public static void validaDataNascimento(String dataDeNascimento)
 			throws EntradaException {
-		
-		
+
 		if (dataDeNascimento == null || dataDeNascimento.equals("")
 				|| dataDeNascimento.trim().equals("")) {
 			throw new EntradaException("Data nao existe.");
@@ -80,7 +76,8 @@ public class UtilUsuario {
 	}
 
 	/**
-	 * Metodo utilizado para validar emails, encapsulado para melhorar a legibilidade.
+	 * Metodo utilizado para validar emails, encapsulado para melhorar a
+	 * legibilidade.
 	 * 
 	 * @param email
 	 * @return
@@ -144,20 +141,22 @@ public class UtilUsuario {
 		if (!data.matches("([0-9]{2})/([0-9]{2})/([0-9]{4})")) {
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
-	 * Metodo utilizado para converter um email para um formato de nome de arquivo.
-	 * ex: email: david@gmail.com  -> ./arquivos/posts_david[at]gmailcom.txt
+	 * Metodo utilizado para converter um email para um formato de nome de
+	 * arquivo. ex: email: david@gmail.com ->
+	 * ./arquivos/posts_david[at]gmailcom.txt
+	 * 
 	 * @param email
 	 * @return
 	 */
-	
+
 	public static String converteEmailParaNomeDeArquivo(String email) {
 		StringBuilder sb = new StringBuilder();
-		
+
 		String emailToString = email.replace("@", "[at]").replace(".", "");
 		sb.append("./arquivos/posts_" + emailToString + ".txt");
 
