@@ -721,8 +721,7 @@ public class Usuario implements Friendship, Comparable<Usuario>, Serializable {
 				sb.append(posts.get(i).formataPostsParaSalvar(i + 1));
 			}
 
-			String postFormatado = sb.toString().substring(0,
-					sb.toString().length() - 5);
+			String postFormatado = sb.toString().trim();
 
 			out.write(postFormatado);
 			out.close();
