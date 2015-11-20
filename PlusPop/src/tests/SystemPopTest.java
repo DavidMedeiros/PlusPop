@@ -207,7 +207,7 @@ public class SystemPopTest {
 			//NAO DEVE CHEGAR AQUI
 			Assert.fail();
 		} catch (EntradaException | ParseException e) {
-			Assert.assertEquals("Nao eh possivel atualizar um perfil. Nenhum usuarix esta logadx no +pop.", e.getMessage());
+			Assert.assertEquals("Erro na atualizacao de perfil. Nenhum usuarix esta logadx no +pop.", e.getMessage());
 		}
 	}
 }

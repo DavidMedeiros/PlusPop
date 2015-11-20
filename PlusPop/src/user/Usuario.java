@@ -57,14 +57,13 @@ public class Usuario implements Friendship, Comparable<Usuario>, Serializable {
 	 */
 
 	public Usuario(String nome, String email, String senha,
-			String dataDeNascimento, String foto) throws ParseException,
-			EntradaException {
+			String dataDeNascimento, String foto) throws ParseException, EntradaException {
 
-		UtilUsuario.validaNomeCadastro(nome);
-		UtilUsuario.validaDataCadastro(dataDeNascimento);
-		UtilUsuario.validaEmailCadastro(email);
-		UtilUsuario.validaSenhaCadastro(senha);
-		UtilUsuario.validaFotoCadastro(foto);
+		UtilUsuario.validaNome(nome);
+		UtilUsuario.validaDataNascimento(dataDeNascimento);
+		UtilUsuario.validaStringEmail(email);
+		UtilUsuario.validaSenha(senha);
+		UtilUsuario.validaFoto(foto);
 
 		this.email = email;
 		this.senha = senha;
@@ -84,10 +83,10 @@ public class Usuario implements Friendship, Comparable<Usuario>, Serializable {
 	public Usuario(String nome, String email, String senha,
 			String dataDeNascimento) throws ParseException, EntradaException {
 
-		UtilUsuario.validaNomeCadastro(nome);
-		UtilUsuario.validaDataCadastro(dataDeNascimento);
-		UtilUsuario.validaEmailCadastro(email);
-		UtilUsuario.validaSenhaCadastro(senha);
+		UtilUsuario.validaNome(nome);
+		UtilUsuario.validaDataNascimento(dataDeNascimento);
+		UtilUsuario.validaStringEmail(email);
+		UtilUsuario.validaSenha(senha);
 
 		this.email = email;
 		this.senha = senha;
@@ -179,9 +178,11 @@ public class Usuario implements Friendship, Comparable<Usuario>, Serializable {
 	 * Metodo utilizado para alterar o email do usuario.
 	 * 
 	 * @param novoEmail
+	 * @throws EntradaException 
 	 */
 
-	public void setEmail(String novoEmail) {
+	public void setEmail(String novoEmail) throws EntradaException {
+		UtilUsuario.validaStringEmail(novoEmail);
 		this.email = novoEmail;
 	}
 
@@ -199,9 +200,11 @@ public class Usuario implements Friendship, Comparable<Usuario>, Serializable {
 	 * Metodo utilizado para alterar a senha do usuario.
 	 * 
 	 * @param novaSenha
+	 * @throws EntradaException 
 	 */
 
-	public void setSenha(String novaSenha) {
+	public void setSenha(String novaSenha) throws EntradaException {
+		UtilUsuario.validaSenha(novaSenha);
 		this.senha = novaSenha;
 	}
 
@@ -219,9 +222,11 @@ public class Usuario implements Friendship, Comparable<Usuario>, Serializable {
 	 * Metodo utilizado para alterar o nome do usuario.
 	 * 
 	 * @param novoNome
+	 * @throws EntradaException 
 	 */
 
-	public void setNome(String novoNome) {
+	public void setNome(String novoNome) throws EntradaException {
+		UtilUsuario.validaNome(novoNome);
 		this.nome = novoNome;
 	}
 
@@ -241,10 +246,12 @@ public class Usuario implements Friendship, Comparable<Usuario>, Serializable {
 	 * 
 	 * @param novaDataDeNascimento
 	 * @throws ParseException
+	 * @throws EntradaException 
 	 */
 
 	public void setDataDeNascimento(String novaDataDeNascimento)
-			throws ParseException {
+			throws ParseException, EntradaException {
+		UtilUsuario.validaDataNascimento(novaDataDeNascimento);
 		this.dataDeNascimento = formataDataDeNascimento(novaDataDeNascimento);
 	}
 
@@ -262,9 +269,11 @@ public class Usuario implements Friendship, Comparable<Usuario>, Serializable {
 	 * Metodo utilizado para alterar a foto do usuario.
 	 * 
 	 * @param novaFoto
+	 * @throws EntradaException 
 	 */
 
-	public void setFoto(String novaFoto) {
+	public void setFoto(String novaFoto) throws EntradaException {
+		UtilUsuario.validaFoto(novaFoto);
 		this.foto = novaFoto;
 	}
 

@@ -13,77 +13,74 @@ import exceptions.EntradaException;
 public class UtilUsuario {
 
 	/**
-	 * Metodo utilizado para validar o nome do usuario que será cadastrado.
+	 * Metodo utilizado para validar algum nome.
 	 * 
 	 * @param nome
 	 * @throws EntradaException
 	 */
 
-	public static void validaNomeCadastro(String nome) throws EntradaException {
+	public static void validaNome(String nome) throws EntradaException {
 		if (nome == null || nome.equals("") || nome.trim().equals("")) {
-			throw new CadastroDeUsuariosException(
-					"Nome dx usuarix nao pode ser vazio.");
+			throw new EntradaException("Nome dx usuarix nao pode ser vazio.");
 		}
 	}
 
 	/**
 	 * 
-	 * Metodo utilizado para validar o email do usuario que será cadastrado.
+	 * Metodo utilizado para validar emails.
 	 * 
 	 * @param email
 	 * @throws EntradaException
 	 */
 
-	public static void validaEmailCadastro(String email)
+	public static void validaStringEmail(String email)
 			throws EntradaException {
 		if (!validaEmails(email)) {
-			throw new CadastroDeUsuariosException(
-					"Formato de e-mail esta invalido.");
+			throw new EntradaException("Formato de e-mail esta invalido.");
 		}
 	}
 
 	/**
-	 * Metodo utilizado para validar a senha do usuario que será cadastrado.
+	 * Metodo utilizado para validar uma senha.
 	 * 
 	 * @param senha
 	 * @throws EntradaException
 	 */
 
-	public static void validaSenhaCadastro(String senha)
+	public static void validaSenha(String senha)
 			throws EntradaException {
 		if (senha == null || senha.equals("") || senha.trim().equals("")) {
-			throw new CadastroDeUsuariosException(
-					"Senha dx usuarix nao pode ser vazia.");
+			throw new EntradaException("Senha dx usuarix nao pode ser vazia.");
 		}
 	}
 
 	/**
-	 * Metodo utilizado para validar a data de nascimento do usuario que será
-	 * cadastrado.
+	 * Metodo utilizado para validar uma data de nascimento. 
 	 * 
 	 * @param dataDeNascimento
 	 * @throws EntradaException
 	 */
 
-	public static void validaDataCadastro(String dataDeNascimento)
+	public static void validaDataNascimento(String dataDeNascimento)
 			throws EntradaException {
+		
+		
 		if (dataDeNascimento == null || dataDeNascimento.equals("")
 				|| dataDeNascimento.trim().equals("")) {
-			throw new CadastroDeUsuariosException("Data nao existe.");
+			throw new EntradaException("Data nao existe.");
 		}
 
 		if (!validaFormatoDeData(dataDeNascimento)) {
-			throw new CadastroDeUsuariosException(
-					"Formato de data esta invalida.");
+			throw new EntradaException("Formato de data esta invalida.");
 		}
 
 		if (!dataEhValida(dataDeNascimento)) {
-			throw new CadastroDeUsuariosException("Data nao existe.");
+			throw new EntradaException("Data nao existe.");
 		}
 	}
 
 	/**
-	 * Metodo utilizado para validar emails.
+	 * Metodo utilizado para validar emails, encapsulado para melhorar a legibilidade.
 	 * 
 	 * @param email
 	 * @return
@@ -112,10 +109,9 @@ public class UtilUsuario {
 	 * @throws EntradaException
 	 */
 
-	public static void validaFotoCadastro(String foto) throws EntradaException {
+	public static void validaFoto(String foto) throws EntradaException {
 		if (foto == null || foto.equals("") || foto.trim().equals("")) {
-			throw new CadastroDeUsuariosException(
-					"Foto dx usuarix nao pode ser vazia.");
+			throw new EntradaException("Foto dx usuarix nao pode ser vazia.");
 		}
 	}
 
@@ -151,6 +147,13 @@ public class UtilUsuario {
 		
 		return true;
 	}
+	
+	/**
+	 * Metodo utilizado para converter um email para um formato de nome de arquivo.
+	 * ex: email: david@gmail.com  -> ./arquivos/posts_david[at]gmailcom.txt
+	 * @param email
+	 * @return
+	 */
 	
 	public static String converteEmailParaNomeDeArquivo(String email) {
 		StringBuilder sb = new StringBuilder();

@@ -15,11 +15,11 @@ import ranking.HashtagTrending;
 import ranking.Trending;
 import user.Usuario;
 import user.UsuarioFactory;
-import util.UtilUsuario;
 import exceptions.AtualizaRankingException;
 import exceptions.AtualizacaoPerfilException;
 import exceptions.CadastroDeUsuariosException;
 import exceptions.ConsultaDePopsException;
+import exceptions.CriaPostException;
 import exceptions.CurtePostException;
 import exceptions.EntradaException;
 import exceptions.FecharSistemaException;
@@ -28,6 +28,7 @@ import exceptions.LoginDeUsuariosException;
 import exceptions.LogoutDeUsuariosException;
 import exceptions.NotificacoesException;
 import exceptions.RejeitaPostException;
+import exceptions.RequisicaoPostException;
 import exceptions.SenhaProtegidaException;
 import exceptions.UsuarioNaoEncontradoException;
 
@@ -109,14 +110,20 @@ public class SystemPop {
 	 * @return
 	 * @throws EntradaException
 	 * @throws ParseException
+	 * @throws EntradaException 
 	 */
 
 	public String cadastraUsuario(String nome, String email, String senha,
-			String dataDeNascimento, String foto) throws EntradaException,
-			ParseException {
+			String dataDeNascimento, String foto) throws ParseException, EntradaException {
 
-		Usuario novoUsuario = this.usuarioFactory.criaUsuario(nome, email,
-				senha, dataDeNascimento, foto);
+		Usuario novoUsuario;
+		
+		try {
+			novoUsuario = this.usuarioFactory.criaUsuario(nome, email,
+					senha, dataDeNascimento, foto);
+		} catch (EntradaException e) {
+			throw new CadastroDeUsuariosException(e.getMessage());
+		}
 
 		if (!this.usuariosCadastrados.contains(novoUsuario)) {
 			adicionarUsuario(novoUsuario);
@@ -138,13 +145,20 @@ public class SystemPop {
 	 * @return
 	 * @throws EntradaException
 	 * @throws ParseException
+	 * @throws EntradaException 
 	 */
 
 	public String cadastraUsuario(String nome, String email, String senha,
-			String dataDeNascimento) throws EntradaException, ParseException {
+			String dataDeNascimento) throws ParseException, EntradaException {
 
-		Usuario novoUsuario = this.usuarioFactory.criaUsuario(nome, email,
-				senha, dataDeNascimento);
+		Usuario novoUsuario;
+		
+		try {
+			novoUsuario = this.usuarioFactory.criaUsuario(nome, email,
+					senha, dataDeNascimento);
+		} catch (EntradaException e) {
+			throw new CadastroDeUsuariosException(e.getMessage());
+		}
 
 		if (!this.usuariosCadastrados.contains(novoUsuario)) {
 			adicionarUsuario(novoUsuario);
@@ -204,9 +218,10 @@ public class SystemPop {
 
 	public boolean logout() throws EntradaException {
 
-		if (usuarioLogado == null) {
-			throw new LogoutDeUsuariosException(
-					"Nenhum usuarix esta logadx no +pop.");
+		try {
+			verificaSeHaUsuarioLogado();
+		} catch (Exception e) {
+			throw new LogoutDeUsuariosException(e.getMessage());
 		}
 
 		this.usuarioLogado = null;
@@ -228,11 +243,14 @@ public class SystemPop {
 			throws EntradaException, ParseException {
 
 		atributo = atributo.toLowerCase();
-
-		if (getUsuarioLogado() == null) {
-			throw new AtualizacaoPerfilException(
-					"Nenhum usuarix esta logadx no +pop.");
-		} else if (atributo.equals("nome")) {
+		
+		try {
+			verificaSeHaUsuarioLogado();
+		} catch (Exception e) {
+			throw new AtualizacaoPerfilException(e.getMessage());
+		}
+		
+		if (atributo.equals("nome")) {
 			atualizaNomePerfil(valor);
 		} else if (atributo.equals("e-mail")) {
 			atualizaEmailPerfil(valor);
@@ -258,9 +276,10 @@ public class SystemPop {
 
 		atributo = atributo.toLowerCase();
 
-		if (getUsuarioLogado() == null) {
-			throw new AtualizacaoPerfilException(
-					"Nenhum usuarix esta logadx no +pop.");
+		try {
+			verificaSeHaUsuarioLogado();
+		} catch (Exception e) {
+			throw new AtualizacaoPerfilException(e.getMessage());
 		}
 
 		if (atributo.equals("senha")) {
@@ -277,11 +296,11 @@ public class SystemPop {
 	 */
 
 	private void atualizaNomePerfil(String valor) throws EntradaException {
-		if (valor == null || valor.equals("") || valor.trim().equals("")) {
-			throw new AtualizacaoPerfilException(
-					"Nome dx usuarix nao pode ser vazio.");
+		try {
+			usuarioLogado.setNome(valor);
+		} catch (Exception e) {
+			throw new AtualizacaoPerfilException(e.getMessage());
 		}
-		usuarioLogado.setNome(valor);
 	}
 
 	/**
@@ -293,11 +312,11 @@ public class SystemPop {
 	 */
 
 	private void atualizaEmailPerfil(String valor) throws EntradaException {
-		if (!UtilUsuario.validaEmails(valor)) {
-			throw new AtualizacaoPerfilException(
-					"Formato de e-mail esta invalido.");
+		try {
+			usuarioLogado.setEmail(valor);
+		} catch (Exception e) {
+			throw new AtualizacaoPerfilException(e.getMessage());
 		}
-		usuarioLogado.setEmail(valor);
 	}
 
 	/**
@@ -311,20 +330,12 @@ public class SystemPop {
 
 	private void atualizaDataPerfil(String valor) throws EntradaException,
 			ParseException {
-		if (valor == null || valor.equals("") || valor.trim().equals("")) {
-			throw new AtualizacaoPerfilException("Data nao existe.");
+	
+		try {
+			usuarioLogado.setDataDeNascimento(valor);
+		} catch (Exception e) {
+			throw new AtualizacaoPerfilException(e.getMessage());
 		}
-
-		if (!UtilUsuario.validaFormatoDeData(valor)) {
-			throw new AtualizacaoPerfilException(
-					"Formato de data esta invalida.");
-		}
-
-		if (!UtilUsuario.dataEhValida(valor)) {
-			throw new AtualizacaoPerfilException("Data nao existe.");
-		}
-
-		usuarioLogado.setDataDeNascimento(valor);
 	}
 
 	/**
@@ -336,11 +347,11 @@ public class SystemPop {
 	 */
 
 	private void atualizaFotoPerfil(String valor) throws EntradaException {
-		if (valor == null || valor.equals("") || valor.trim().equals("")) {
-			throw new AtualizacaoPerfilException(
-					"Foto dx usuarix nao pode ser vazia.");
+		try {
+			usuarioLogado.setFoto(valor);
+		} catch (Exception e) {
+			throw new AtualizacaoPerfilException(e.getMessage());
 		}
-		usuarioLogado.setFoto(valor);
 	}
 
 	/**
@@ -349,17 +360,18 @@ public class SystemPop {
 	 * 
 	 * @param valor
 	 * @param velhaSenha
-	 * @throws AtualizacaoPerfilException
+	 * @throws EntradaException
 	 */
 
 	private void atualizaSenhaPerfil(String valor, String velhaSenha)
-			throws AtualizacaoPerfilException {
-		if (valor == null || valor.equals("") || valor.trim().equals("")) {
-			throw new AtualizacaoPerfilException(
-					"Senha dx usuarix nao pode ser vazia.");
-		}
+			throws EntradaException {
+
 		if (usuarioLogado.getSenha().equals(velhaSenha)) {
-			usuarioLogado.setSenha(valor);
+			try {
+				usuarioLogado.setSenha(valor);
+			} catch (EntradaException e) {
+				throw new AtualizacaoPerfilException(e.getMessage());
+			}
 		} else {
 			throw new AtualizacaoPerfilException(
 					"A senha fornecida esta incorreta.");
@@ -378,9 +390,11 @@ public class SystemPop {
 
 	public void criaPost(String mensagem, String data) throws LogicaException,
 			EntradaException {
-		if (usuarioLogado == null) {
-			throw new LogicaException(
-					"Nao eh possivel criar o post. Nenhum usuarix esta logadx no +pop.");
+		
+		try {
+			verificaSeHaUsuarioLogado();
+		} catch (Exception e) {
+			throw new CriaPostException(e.getMessage());
 		}
 
 		Post novoPost = usuarioLogado.criarPost(mensagem, data);
@@ -585,8 +599,7 @@ public class SystemPop {
 		verificaSeHaUsuarioLogado();
 
 		if (post < 0) {
-			throw new LogicaException(
-					"Requisicao invalida. O indice deve ser maior ou igual a zero.");
+			throw new RequisicaoPostException();
 		} else if (post >= usuarioLogado.getPosts().size()) {
 			throw new LogicaException("Post #" + post
 					+ " nao existe. Usuarix possui apenas "
@@ -608,8 +621,7 @@ public class SystemPop {
 		verificaSeHaUsuarioLogado();
 
 		if (post < 0) {
-			throw new LogicaException(
-					"Requisicao invalida. O indice deve ser maior ou igual a zero.");
+			throw new RequisicaoPostException();
 		} else if (post >= usuarioLogado.getPosts().size()) {
 			throw new LogicaException("Post #" + post
 					+ " nao existe. Usuarix possui apenas "
@@ -661,6 +673,7 @@ public class SystemPop {
 	 */
 
 	public boolean verificaSeHaUsuarioLogado() throws LogicaException {
+		
 		if (usuarioLogado == null) {
 			throw new LogicaException("Nenhum usuarix esta logadx no +pop.");
 		}
@@ -814,8 +827,7 @@ public class SystemPop {
 		List<String> conteudosDoPost = usuarioLogado.getConteudoPost(post);
 
 		if (indice < 0) {
-			throw new LogicaException(
-					"Requisicao invalida. O indice deve ser maior ou igual a zero.");
+			throw new RequisicaoPostException();
 		}
 
 		if (indice >= conteudosDoPost.size()) {

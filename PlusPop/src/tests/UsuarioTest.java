@@ -44,7 +44,7 @@ public class UsuarioTest {
 			// NAO DEVE CHEGAR AQUI
 			Assert.fail();
 		} catch (ParseException | EntradaException e) {
-			Assert.assertEquals("Erro no cadastro de Usuarios. Nome dx usuarix nao pode ser vazio.", e.getMessage());
+			Assert.assertEquals("Nome dx usuarix nao pode ser vazio.", e.getMessage());
 		}
 				
 		try {
@@ -52,7 +52,7 @@ public class UsuarioTest {
 			// NAO DEVE CHEGAR AQUI
 			Assert.fail();
 		} catch (ParseException | EntradaException e) {
-			Assert.assertEquals("Erro no cadastro de Usuarios. Formato de e-mail esta invalido.", e.getMessage());
+			Assert.assertEquals("Formato de e-mail esta invalido.", e.getMessage());
 		}
 		
 		try {
@@ -60,7 +60,7 @@ public class UsuarioTest {
 			// NAO DEVE CHEGAR AQUI
 			Assert.fail();
 		} catch (ParseException | EntradaException e) {
-			Assert.assertEquals("Erro no cadastro de Usuarios. Formato de e-mail esta invalido.", e.getMessage());
+			Assert.assertEquals("Formato de e-mail esta invalido.", e.getMessage());
 		}
 		
 		try {
@@ -68,7 +68,7 @@ public class UsuarioTest {
 			// NAO DEVE CHEGAR AQUI
 			Assert.fail();
 		} catch (ParseException | EntradaException e) {
-			Assert.assertEquals("Erro no cadastro de Usuarios. Formato de e-mail esta invalido.", e.getMessage());
+			Assert.assertEquals("Formato de e-mail esta invalido.", e.getMessage());
 		}
 		
 		try {
@@ -76,7 +76,7 @@ public class UsuarioTest {
 			// NAO DEVE CHEGAR AQUI
 			Assert.fail();
 		} catch (ParseException | EntradaException e) {
-			Assert.assertEquals("Erro no cadastro de Usuarios. Senha dx usuarix nao pode ser vazia.", e.getMessage());
+			Assert.assertEquals("Senha dx usuarix nao pode ser vazia.", e.getMessage());
 		}
 		
 		try {
@@ -84,7 +84,7 @@ public class UsuarioTest {
 			// NAO DEVE CHEGAR AQUI
 			Assert.fail();
 		} catch (ParseException | EntradaException e) {
-			Assert.assertEquals("Erro no cadastro de Usuarios. Formato de data esta invalida.", e.getMessage());
+			Assert.assertEquals("Formato de data esta invalida.", e.getMessage());
 		}
 		
 		try {
@@ -92,7 +92,7 @@ public class UsuarioTest {
 			// NAO DEVE CHEGAR AQUI
 			Assert.fail();
 		} catch (ParseException | EntradaException e) {
-			Assert.assertEquals("Erro no cadastro de Usuarios. Data nao existe.", e.getMessage());
+			Assert.assertEquals("Data nao existe.", e.getMessage());
 		}
 		
 		try {
@@ -100,7 +100,7 @@ public class UsuarioTest {
 			// NAO DEVE CHEGAR AQUI
 			Assert.fail();
 		} catch (ParseException | EntradaException e) {
-			Assert.assertEquals("Erro no cadastro de Usuarios. Formato de data esta invalida.", e.getMessage());
+			Assert.assertEquals("Formato de data esta invalida.", e.getMessage());
 		}
 		
 		try {
@@ -108,7 +108,7 @@ public class UsuarioTest {
 			// NAO DEVE CHEGAR AQUI
 			Assert.fail();
 		} catch (ParseException | EntradaException e) {
-			Assert.assertEquals("Erro no cadastro de Usuarios. Formato de data esta invalida.", e.getMessage());
+			Assert.assertEquals("Formato de data esta invalida.", e.getMessage());
 		}
 		
 		try {
@@ -116,7 +116,7 @@ public class UsuarioTest {
 			// NAO DEVE CHEGAR AQUI
 			Assert.fail();
 		} catch (ParseException | EntradaException e) {
-			Assert.assertEquals("Erro no cadastro de Usuarios. Foto dx usuarix nao pode ser vazia.", e.getMessage());
+			Assert.assertEquals("Foto dx usuarix nao pode ser vazia.", e.getMessage());
 		}
 	}
 
