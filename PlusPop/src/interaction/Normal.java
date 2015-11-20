@@ -1,9 +1,12 @@
 package interaction;
 
+import java.io.Serializable;
+
 import post.Post;
 
-public class Normal implements Interacao {
+public class Normal implements Interacao, Serializable{
 	
+	private static final long serialVersionUID = -5854941684563562545L;
 	public static final int QUANTIDADE_DE_POPS = 10;
 	public static final int QUANTIDADE_DE_POSTS_FORNECIDOS = 2;
 	

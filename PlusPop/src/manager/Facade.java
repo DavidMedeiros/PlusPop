@@ -97,6 +97,10 @@ public class Facade {
 		return this.systemPop.getPost(atributo, post);
 	}
 	
+	public int getTotalPosts() {
+		return this.systemPop.getTotalPosts();
+	}
+	
 	public String getConteudoPost(int indice, int post) throws LogicaException {
 		return this.systemPop.getConteudoPost(indice, post);
 	}
@@ -196,7 +200,8 @@ public class Facade {
 				"testes/usecase_6.txt",
 				"testes/usecase_7.txt",
 				"testes/usecase_8.txt",
-				"testes/usecase_9.txt"};
+				"testes/usecase_9.txt",
+				"testes/usecase_10.txt"};
 
 		EasyAccept.main(args);
 	}

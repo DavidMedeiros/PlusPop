@@ -1,7 +1,9 @@
 package manager;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -50,12 +52,24 @@ public class SystemPop {
 	}
 
 	/**
-	 * Metodo que sera utilizado para carregar/armazenar os dados do sistema nos
-	 * arquivos de dados.
+	 * Metodo utilizado para carregar os dados do sistema presentes nos arquivos
+	 * de dados.
 	 */
 
 	public void iniciaSistema() {
+		File arquivo = new File("arquivos/usuariosCadastrados.dat");
+		if (arquivo.exists()) {
+			try {
+				FileInputStream fluxo = new FileInputStream(arquivo);
+				ObjectInputStream in = new ObjectInputStream(fluxo);
+				this.usuariosCadastrados = (List<Usuario>) in.readObject();
 
+				in.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
 	}
 
 	/**
@@ -68,7 +82,17 @@ public class SystemPop {
 
 	public void fechaSistema() throws LogicaException {
 		if (usuarioLogado == null) {
-			// fechar sistema
+			File arquivo = new File("arquivos/usuariosCadastrados.dat");
+			try {
+				FileOutputStream fluxo = new FileOutputStream(arquivo);
+				ObjectOutputStream out = new ObjectOutputStream(fluxo);
+
+				out.writeObject(this.usuariosCadastrados);
+
+				out.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		} else {
 			throw new FecharSistemaException();
 		}
@@ -288,8 +312,7 @@ public class SystemPop {
 	private void atualizaDataPerfil(String valor) throws EntradaException,
 			ParseException {
 		if (valor == null || valor.equals("") || valor.trim().equals("")) {
-			throw new AtualizacaoPerfilException(
-					"Data nao existe.");
+			throw new AtualizacaoPerfilException("Data nao existe.");
 		}
 
 		if (!UtilUsuario.validaFormatoDeData(valor)) {
@@ -298,8 +321,7 @@ public class SystemPop {
 		}
 
 		if (!UtilUsuario.dataEhValida(valor)) {
-			throw new AtualizacaoPerfilException(
-					"Data nao existe.");
+			throw new AtualizacaoPerfilException("Data nao existe.");
 		}
 
 		usuarioLogado.setDataDeNascimento(valor);
@@ -366,12 +388,12 @@ public class SystemPop {
 
 	}
 
-	/** 
+	/**
 	 * Metodo utilizado para atualizar o trending tops de hashtags.
 	 * 
 	 * @param quantidadeTrends
 	 * @return
-	 * @throws LogicaException 
+	 * @throws LogicaException
 	 */
 
 	public String atualizaTrending(int quantidadeTrends) throws LogicaException {
@@ -384,7 +406,7 @@ public class SystemPop {
 	 * @return
 	 * @throws LogicaException
 	 */
-	
+
 	private String getRankingDeUsuarios() throws LogicaException {
 		return getMaisPops() + getMenosPops();
 	}
@@ -395,7 +417,7 @@ public class SystemPop {
 	 * @return
 	 * @throws LogicaException
 	 */
-	
+
 	public String atualizaRanking() throws LogicaException {
 		return getRankingDeUsuarios();
 	}
@@ -404,7 +426,7 @@ public class SystemPop {
 	 * Metodo utilizado para ordenar a lista de usuarios cadastrados, a partir
 	 * da quantidade de pops.
 	 */
-	
+
 	private void ordenaUsuarioCadastrados() {
 		Collections.sort(this.usuariosCadastrados);
 	}
@@ -415,7 +437,7 @@ public class SystemPop {
 	 * @return
 	 * @throws LogicaException
 	 */
-	
+
 	private String getMaisPops() throws LogicaException {
 		StringBuilder sb = new StringBuilder();
 		ordenaUsuarioCadastrados();
@@ -454,7 +476,7 @@ public class SystemPop {
 	 * @return
 	 * @throws LogicaException
 	 */
-	
+
 	private String getMenosPops() throws LogicaException {
 		StringBuilder sb = new StringBuilder();
 		ordenaUsuarioCadastrados();
@@ -491,7 +513,7 @@ public class SystemPop {
 	 * @param pops
 	 * @throws LogicaException
 	 */
-	
+
 	public void adicionaPops(int pops) throws LogicaException {
 		verificaSeHaUsuarioLogado();
 		usuarioLogado.adicionaPopsMagico(pops);
@@ -504,7 +526,7 @@ public class SystemPop {
 	 * @return
 	 * @throws LogicaException
 	 */
-	
+
 	public String getPopularidade() throws LogicaException {
 		verificaSeHaUsuarioLogado();
 		return usuarioLogado.getPopularidade();
@@ -517,20 +539,19 @@ public class SystemPop {
 	 * @return
 	 * @throws LogicaException
 	 */
-	
+
 	public int getPopsPost(int post) throws LogicaException {
 		verificaSeHaUsuarioLogado();
 		return usuarioLogado.getPopsPost(post);
 	}
 
 	/**
-	 * Metodo utilizado para obter a popularidade de um usuario. Ex: Icone
-	 * Pop.
+	 * Metodo utilizado para obter a popularidade de um usuario. Ex: Icone Pop.
 	 * 
 	 * @return
 	 * @throws LogicaException
 	 */
-	
+
 	public int getPopsUsuario(String emailDoUsuario) throws LogicaException {
 		if (!(usuarioLogado == null)) {
 			throw new ConsultaDePopsException("Um usuarix ainda esta logadx.");
@@ -546,7 +567,7 @@ public class SystemPop {
 	 * @return
 	 * @throws LogicaException
 	 */
-	
+
 	public int getPopsUsuario() throws LogicaException {
 		verificaSeHaUsuarioLogado();
 		return usuarioLogado.getPops();
@@ -559,7 +580,7 @@ public class SystemPop {
 	 * @return
 	 * @throws LogicaException
 	 */
-	
+
 	public int getQtdCurtidasDoPost(int post) throws LogicaException {
 		verificaSeHaUsuarioLogado();
 
@@ -582,7 +603,7 @@ public class SystemPop {
 	 * @return
 	 * @throws LogicaException
 	 */
-	
+
 	public int getQtdRejeicoesDoPost(int post) throws LogicaException {
 		verificaSeHaUsuarioLogado();
 
@@ -816,7 +837,7 @@ public class SystemPop {
 
 	public void curtirPost(String emailAmigo, int indice)
 			throws LogicaException {
-		
+
 		Usuario amigo = buscarUsuario(emailAmigo);
 
 		if (usuarioLogado.buscaAmigo(emailAmigo) == null) {
@@ -856,7 +877,7 @@ public class SystemPop {
 	public void rejeitarPost(String emailAmigo, int indice)
 			throws LogicaException {
 		Usuario amigo = buscarUsuario(emailAmigo);
-		
+
 		if (usuarioLogado.buscaAmigo(emailAmigo) == null) {
 			throw new RejeitaPostException("O usuario nao eh seu amigo.");
 		}
@@ -1021,17 +1042,21 @@ public class SystemPop {
 		ordenaFeed("Data");
 		return this.usuarioLogado.getFeed().get(indiceDoPost);
 	}
-	
+
 	public Post getPostFeedNoticiasMaisPopulares(int indiceDoPost) {
 		ordenaFeed("Popularidade");
 		return this.usuarioLogado.getFeed().get(indiceDoPost);
 	}
-	
+
 	public void atualizaFeed() {
 		this.usuarioLogado.atualizaFeed();
 	}
-		
+
 	public void baixaPosts() throws LogicaException {
 		usuarioLogado.baixaPosts();
+	}
+
+	public int getTotalPosts() {
+		return usuarioLogado.getTotalPosts();
 	}
 }

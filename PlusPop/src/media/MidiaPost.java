@@ -1,7 +1,10 @@
 package media;
 
-public class MidiaPost {
+import java.io.Serializable;
 
+public class MidiaPost implements Serializable {
+
+	private static final long serialVersionUID = 3128437258594231485L;
 	protected String caminhoDaMidia;
 	protected String caminhoDaMidiaFiltrado;
 

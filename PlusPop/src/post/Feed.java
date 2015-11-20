@@ -1,12 +1,14 @@
 package post;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class Feed {
-	
+public class Feed implements Serializable{
+ 
+	private static final long serialVersionUID = 3123381443407710780L;
 	private List<Post> posts;
 	
 	public Feed() {

@@ -1,7 +1,10 @@
 package ranking;
 
-public class HashtagTrending implements Comparable<HashtagTrending> {
+import java.io.Serializable;
 
+public class HashtagTrending implements Comparable<HashtagTrending>, Serializable {
+ 
+	private static final long serialVersionUID = -6473854293350961764L;
 	public String hashtag;
 	public int ocorrencia;
 

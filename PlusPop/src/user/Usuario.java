@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,8 +27,9 @@ import exceptions.LogicaException;
 import friendship.Friendship;
 import friendship.Notificacao;
 
-public class Usuario implements Friendship, Comparable<Usuario> {
+public class Usuario implements Friendship, Comparable<Usuario>, Serializable {
 
+	private static final long serialVersionUID = 2318452896369602166L;
 	private String email;
 	private String senha;
 	private String nome;
@@ -715,5 +717,9 @@ public class Usuario implements Friendship, Comparable<Usuario> {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public int getTotalPosts() {
+		return this.posts.size();
 	}
 }

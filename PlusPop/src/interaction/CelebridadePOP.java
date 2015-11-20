@@ -5,8 +5,9 @@ import java.util.Date;
 
 import post.Post;
 
-public class CelebridadePOP implements Interacao {
-	
+public class CelebridadePOP implements Interacao{
+ 
+	private static final long serialVersionUID = -8381008848667561146L;
 	public static final int QUANTIDADE_DE_POPS_NORMAL = 25;
 	public static final int QUANTIDADE_DE_POPS_RECENTE = 10;
 	public static final int QUANTIDADE_DE_POSTS_FORNECIDOS = 4;

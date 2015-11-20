@@ -1,8 +1,10 @@
 package interaction;
 
+import java.io.Serializable;
+
 import post.Post;
 
-public interface Interacao {
+public interface Interacao extends Serializable {
 	
 	public void curtir (Post post);
 	

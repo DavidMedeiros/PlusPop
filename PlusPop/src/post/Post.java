@@ -1,5 +1,6 @@
 package post;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -7,14 +8,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import media.Audio;
-import media.Imagem;
 import media.MidiaPost;
 import util.UtilPost;
 import exceptions.EntradaException;
 
-public class Post implements Comparable<Post> {
+public class Post implements Comparable<Post>, Serializable {
 
+	private static final long serialVersionUID = 2795631734532719915L;
 	private int curtidas;
 	private int rejeicoes;
 	private int popularidade;

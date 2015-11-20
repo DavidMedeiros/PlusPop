@@ -1,5 +1,6 @@
 package ranking;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -7,8 +8,10 @@ import java.util.List;
 import post.Post;
 import exceptions.AtualizaTrendingException;
 
-public class Trending {
+public class Trending implements Serializable {
 
+	private static final long serialVersionUID = 9195306211275058892L;
+	
 	public List<HashtagTrending> hashtagsDoSistema;
 
 	/**

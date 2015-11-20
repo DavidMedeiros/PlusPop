@@ -1,10 +1,12 @@
 package friendship;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Notificacao {
+public class Notificacao implements Serializable {
 
+	private static final long serialVersionUID = 6046880156117943468L;
 	private List<String> notificacoes;
 
 	/**
